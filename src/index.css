@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+header {
+  @apply w-full flex flex-row items-center py-3 px-10 border-b border-slate-300;
+}
+
+.logoGrp {
+  @apply w-[150px] flex flex-row items-center gap-2 mr-20;
+}
+
+.inputGrp {
+  @apply flex flex-row items-center gap-2 bg-slate-200 rounded-lg px-2;
+}
+
+.profileGrp {
+  @apply flex flex-row items-center gap-2;
+}
+
+.profileName {
+  @apply capitalize font-semibold;
+}
+
+/* MENU */
+.menuCollection {
+  @apply flex flex-col gap-2 items-start;
+}
+
+.menuGrp {
+  @apply flex flex-row gap-2 p-2 rounded-md;
+}
+
+/* STATS SECTION */
+.statsCardGrp {
+  @apply flex flex-row gap-5 items-center;
+}
+
+.statsCard {
+  @apply w-[208px] flex flex-col gap-2 p-5 rounded-md bg-white;
+}
+
+.statsHeading {
+  @apply text-sm;
+}
+
+.statsCardNumGrp {
+  @apply flex flex-row justify-between items-end;
+}
+
+.statsNum {
+  @apply text-lg font-semibold;
+}
+
+.bottomStatsCard {
+  @apply flex flex-row gap-2 items-center text-xs;
+}
+
+/* chart group */
+.requestBox {
+  @apply p-3 bg-white rounded-md;
+}
+
+.requestTextGrp {
+  @apply flex flex-row justify-between py-2 border-b border-slate-300;
+}
+
+.requestText {
+  @apply capitalize;
+}
+
+.requestNum {
+  @apply font-semibold;
+}
