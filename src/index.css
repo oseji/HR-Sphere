@@ -1,6 +1,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@font-face {
+  font-family: Poppins;
+  src: url("/fonts/Poppins-Regular.ttf");
+}
+
+.App {
+  @apply font-Poppins text-[#6F6F6F];
+}
 
 header {
   @apply w-full flex flex-row items-center py-3 px-10 border-b border-slate-300;
@@ -11,24 +19,28 @@ header {
 }
 
 .inputGrp {
-  @apply flex flex-row items-center gap-2 bg-slate-200 rounded-lg px-2;
+  @apply w-[380px] flex flex-row items-center gap-2 border border-slate-300 rounded-lg p-1;
 }
 
 .profileGrp {
-  @apply flex flex-row items-center gap-2;
+  @apply flex flex-row items-center gap-2 cursor-pointer;
 }
 
 .profileName {
-  @apply capitalize font-semibold;
+  @apply capitalize font-semibold text-sm text-black;
 }
 
 /* MENU */
 .menuCollection {
-  @apply flex flex-col gap-2 items-start;
+  @apply flex flex-col gap-1 items-start;
 }
 
 .menuGrp {
-  @apply flex flex-row gap-2 p-2 rounded-md;
+  @apply w-[256px] flex flex-row gap-4 p-2 rounded-md cursor-pointer;
+}
+
+.activeMenuGrp {
+  @apply bg-green-100 font-semibold text-black;
 }
 
 /* STATS SECTION */
@@ -37,7 +49,7 @@ header {
 }
 
 .statsCard {
-  @apply w-[208px] flex flex-col gap-2 p-5 rounded-md bg-white;
+  @apply w-full flex flex-col gap-2 p-5 rounded-md bg-white;
 }
 
 .statsHeading {
@@ -49,7 +61,7 @@ header {
 }
 
 .statsNum {
-  @apply text-lg font-semibold;
+  @apply text-lg font-semibold text-black;
 }
 
 .bottomStatsCard {
@@ -57,12 +69,28 @@ header {
 }
 
 /* chart group */
+.chartGrp {
+  @apply flex flex-row gap-5;
+}
+
+.chartBox {
+  @apply w-[450px] bg-white p-3 rounded-md;
+}
+
+.chartHeadingGrp {
+  @apply flex flex-row items-center justify-between mb-5;
+}
+
+#chartSelection {
+  @apply p-1 border border-slate-300 rounded-md text-sm outline-0;
+}
+
 .requestBox {
-  @apply p-3 bg-white rounded-md;
+  @apply w-[280px] p-3 bg-white rounded-md;
 }
 
 .requestTextGrp {
-  @apply flex flex-row justify-between py-2 border-b border-slate-300;
+  @apply flex flex-row justify-between py-3;
 }
 
 .requestText {

@@ -12,7 +12,7 @@ function App() {
       <header>
         <div className="logoGrp">
           <img src={logo} alt="logo" />
-          <h1 className="font-bold">HR Sphere</h1>
+          <h1 className="font-bold text-black">HR Sphere</h1>
         </div>
 
         <div className="w-full flex flex-row items-center justify-between">
@@ -21,7 +21,7 @@ function App() {
             <input
               type="text"
               placeholder="Search"
-              className="p-1 bg-transparent outline-0"
+              className="bg-transparent outline-0 placeholder:text-sm"
             />
           </div>
 
