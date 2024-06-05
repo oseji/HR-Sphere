@@ -67,7 +67,7 @@ const Menu = () => {
   }, [clickedMenu]);
 
   return (
-    <section className=" flex flex-col justify-between py-5 px-3">
+    <section className=" flex flex-col justify-between py-5 px-3 bg-white">
       <div className="menuCollection">
         <div
           className="menuGrp activeMenuGrp"

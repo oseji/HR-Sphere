@@ -7,11 +7,11 @@
 }
 
 .App {
-  @apply font-Poppins text-[#6F6F6F];
+  @apply font-Poppins text-[#6F6F6F] bg-[#ECECEC];
 }
 
 header {
-  @apply w-full flex flex-row items-center py-3 px-10 border-b border-slate-300;
+  @apply w-full flex flex-row items-center py-3 px-10 border-b border-slate-300 bg-white;
 }
 
 .logoGrp {
@@ -19,7 +19,7 @@ header {
 }
 
 .inputGrp {
-  @apply w-[380px] flex flex-row items-center gap-2 border border-slate-300 rounded-lg p-1;
+  @apply w-[380px] flex flex-row items-center gap-2 border border-slate-300 rounded p-1;
 }
 
 .profileGrp {
@@ -36,7 +36,7 @@ header {
 }
 
 .menuGrp {
-  @apply w-[256px] flex flex-row gap-4 p-2 rounded-md cursor-pointer;
+  @apply w-[256px] flex flex-row gap-4 p-2 rounded cursor-pointer text-sm;
 }
 
 .activeMenuGrp {
@@ -49,11 +49,11 @@ header {
 }
 
 .statsCard {
-  @apply w-full flex flex-col gap-2 p-5 rounded-md bg-white;
+  @apply w-full flex flex-col gap-2 p-5 rounded bg-white;
 }
 
 .statsHeading {
-  @apply text-sm;
+  @apply text-xs;
 }
 
 .statsCardNumGrp {
@@ -68,25 +68,33 @@ header {
   @apply flex flex-row gap-2 items-center text-xs;
 }
 
+.bottomText {
+  @apply text-[10px];
+}
+
 /* chart group */
 .chartGrp {
-  @apply flex flex-row gap-5;
+  @apply flex flex-row gap-4;
 }
 
 .chartBox {
-  @apply w-[450px] bg-white p-3 rounded-md;
+  @apply w-[450px] bg-white p-3 rounded;
 }
 
 .chartHeadingGrp {
-  @apply flex flex-row items-center justify-between mb-5;
+  @apply flex flex-row items-center justify-between mb-3 text-sm;
 }
 
 #chartSelection {
-  @apply p-1 border border-slate-300 rounded-md text-sm outline-0;
+  @apply p-1 border border-slate-300 rounded text-sm outline-0;
+}
+
+.barChartInfo {
+  @apply flex flex-row justify-center items-center gap-5;
 }
 
 .requestBox {
-  @apply w-[280px] p-3 bg-white rounded-md;
+  @apply w-[280px] p-3 bg-white rounded text-sm;
 }
 
 .requestTextGrp {
@@ -99,4 +107,41 @@ header {
 
 .requestNum {
   @apply font-semibold;
+}
+
+/* table group */
+.tableGrp {
+  @apply text-sm bg-white p-3 rounded flex flex-col gap-5;
+}
+
+.tableGrpHeader {
+  @apply flex flex-row justify-between items-center;
+}
+
+.tableSearchGrp {
+  @apply flex flex-row items-center gap-2 border border-slate-300 rounded p-1;
+}
+
+.tableFilterGrp {
+  @apply flex flex-row gap-7 justify-start items-center;
+}
+
+.tableFilter {
+  @apply p-1 border border-slate-300 rounded text-sm outline-0;
+}
+
+th {
+  @apply py-2 text-start capitalize;
+}
+
+tr {
+  @apply border-b border-slate-300;
+}
+
+td {
+  @apply py-3 capitalize;
+}
+
+.employeeName {
+  @apply flex flex-row items-center gap-2 font-semibold text-black;
 }

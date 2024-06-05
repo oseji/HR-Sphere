@@ -1,10 +1,13 @@
-import { BarChart, Bar, Rectangle, XAxis, Tooltip, Legend } from "recharts";
+import { BarChart, Bar, Rectangle, XAxis, Tooltip } from "recharts";
 
 import userIcon from "./assets/stats user icon.svg";
 import jobIcon from "./assets/stats resignation icon.svg";
 import folderIcon from "./assets/stats folder icon.svg";
 import upGrowth from "./assets/up growth.svg";
 import downGrowth from "./assets/down growth.svg";
+import searchIcon from "./assets/circum_search.png";
+
+import avatarImg from "./assets/avatarImg.png";
 
 const Stats = () => {
   type chartDataType = {
@@ -12,7 +15,6 @@ const Stats = () => {
     RetentionRate: number;
     TurnoverRate: number;
   };
-
   const chartData: chartDataType[] = [
     {
       name: "2020",
@@ -41,8 +43,88 @@ const Stats = () => {
     },
   ];
 
+  type employeeOverviewType = {
+    name: string;
+    jobTitle: string;
+    department: string;
+    email: string;
+    status: string;
+  };
+  const employeeOverview: { [key: string]: employeeOverviewType } = {
+    willJohn: {
+      name: "will john",
+      jobTitle: "product designer",
+      department: "product",
+      email: "willjohn@gmail.com",
+      status: "on site",
+    },
+    jessicaReel: {
+      name: "jessica reel",
+      jobTitle: "product manager",
+      department: "product",
+      email: "jessicaforeel@gmail.com",
+      status: "remote",
+    },
+    ronaldRichard: {
+      name: "ronald richard",
+      jobTitle: "front-end engineer",
+      department: "engineering",
+      email: "ronrich@yahoo.com",
+      status: "remote",
+    },
+    estherHoward: {
+      name: "esther howard",
+      jobTitle: "back-end engineer",
+      department: "engineering",
+      email: "estward@gmail.com",
+      status: "remote",
+    },
+    arleneMccoy: {
+      name: "arlene mccoy",
+      jobTitle: "product designer",
+      department: "product",
+      email: "mcarlene@gmail.com",
+      status: "on site",
+    },
+    floydMiles: {
+      name: "floyd miles",
+      jobTitle: "fullstack engineer",
+      department: "engineering",
+      email: "floydmi@gmail.com",
+      status: "on site",
+    },
+    janeCooper: {
+      name: "jane cooper",
+      jobTitle: "product manager",
+      department: "product",
+      email: "jacoop@outlook.com",
+      status: "on site",
+    },
+    marvinMckinney: {
+      name: "marvin mcckinney",
+      jobTitle: "product designer",
+      department: "product",
+      email: "willjohn@gmail.com",
+      status: "remote",
+    },
+    cameronWilliamson: {
+      name: "cameron williamson",
+      jobTitle: "HR",
+      department: "HR",
+      email: "cameronwilliamson@gmail.com",
+      status: "on site",
+    },
+    devonLane: {
+      name: "devon lane",
+      jobTitle: "devOps engineer",
+      department: "devOps",
+      email: "devonLane@yahoo.com",
+      status: "remote",
+    },
+  };
+
   return (
-    <section className="flex flex-col gap-5 bg-slate-300 p-5">
+    <section className="flex flex-col gap-3 p-3">
       <div className="statsCardGrp">
         <div className="statsCard">
           <p className="statsHeading">Employees</p>
@@ -116,7 +198,7 @@ const Stats = () => {
 
           <BarChart
             width={432}
-            height={230}
+            height={190}
             data={chartData}
             margin={{
               top: 40,
@@ -128,7 +210,6 @@ const Stats = () => {
             <XAxis dataKey="name" className="font-bold text-black" />
 
             <Tooltip />
-            <Legend />
 
             <Bar
               dataKey="RetentionRate"
@@ -141,6 +222,18 @@ const Stats = () => {
               activeBar={<Rectangle fill="#05B587" stroke="white" />}
             />
           </BarChart>
+
+          <div className="barChartInfo">
+            <div className="flex flex-row items-center gap-2">
+              <span className="p-2 rounded bg-[#095256]"></span>
+              <div className="text-sm">Retention Rate</div>
+            </div>
+
+            <div className="flex flex-row items-center gap-2">
+              <span className="p-2 rounded bg-[#06D6A0]"></span>
+              <div className="text-sm">Turnover Rate</div>
+            </div>
+          </div>
         </div>
 
         <div className="requestBox">
@@ -169,6 +262,96 @@ const Stats = () => {
             <p className="requestNum">1</p>
           </div>
         </div>
+      </div>
+
+      <div className="tableGrp">
+        <div className="tableGrpHeader">
+          <h1 className="text-black font-semibold">Employees</h1>
+
+          <div className="tableSearchGrp">
+            <img src={searchIcon} alt="search icon" className="h-5" />
+            <input
+              type="text"
+              placeholder="Search"
+              className="bg-transparent outline-0 text-sm placeholder:text-sm"
+            />
+          </div>
+        </div>
+
+        <div className="tableFilterGrp">
+          <select className="tableFilter">
+            <option value="All employees">All employees</option>
+            <option value="All employees">All employees</option>
+          </select>
+
+          <select className="tableFilter">
+            <option value="All job titles">All job titles</option>
+            <option value="All job titles">All job titles</option>
+          </select>
+
+          <select className="tableFilter">
+            <option value="All departments">All departments</option>
+            <option value="All departments">All departments</option>
+          </select>
+        </div>
+
+        <table className="text-xs">
+          <thead>
+            <tr>
+              <th>employee</th>
+              <th>job title</th>
+              <th>department</th>
+              <th>email</th>
+              <th>status</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td className="employeeName">
+                <img src={avatarImg} alt="profile image" />
+                <p> {employeeOverview.willJohn.name}</p>
+              </td>
+              <td>{employeeOverview.willJohn.jobTitle}</td>
+              <td>{employeeOverview.willJohn.department}</td>
+              <td>{employeeOverview.willJohn.email}</td>
+              <td>{employeeOverview.willJohn.status}</td>
+            </tr>
+
+            <tr>
+              <td className="employeeName">
+                <img src={avatarImg} alt="profile image" />
+                <p> {employeeOverview.jessicaReel.name}</p>
+              </td>
+              <td>{employeeOverview.jessicaReel.jobTitle}</td>
+              <td>{employeeOverview.jessicaReel.department}</td>
+              <td>{employeeOverview.jessicaReel.email}</td>
+              <td>{employeeOverview.jessicaReel.status}</td>
+            </tr>
+
+            <tr>
+              <td className="employeeName">
+                <img src={avatarImg} alt="profile image" />
+                <p> {employeeOverview.ronaldRichard.name}</p>
+              </td>
+              <td>{employeeOverview.ronaldRichard.jobTitle}</td>
+              <td>{employeeOverview.ronaldRichard.department}</td>
+              <td>{employeeOverview.ronaldRichard.email}</td>
+              <td>{employeeOverview.ronaldRichard.status}</td>
+            </tr>
+
+            <tr>
+              <td className="employeeName">
+                <img src={avatarImg} alt="profile image" />
+                <p> {employeeOverview.estherHoward.name}</p>
+              </td>
+              <td>{employeeOverview.estherHoward.jobTitle}</td>
+              <td>{employeeOverview.estherHoward.department}</td>
+              <td>{employeeOverview.estherHoward.email}</td>
+              <td>{employeeOverview.estherHoward.status}</td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </section>
   );

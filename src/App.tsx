@@ -1,5 +1,6 @@
 import Menu from "./Menu";
 import Stats from "./Stats";
+import Schedule from "./Schedule";
 
 import logo from "./assets/logo.png";
 import searchIcon from "./assets/circum_search.png";
@@ -21,7 +22,7 @@ function App() {
             <input
               type="text"
               placeholder="Search"
-              className="bg-transparent outline-0 placeholder:text-sm"
+              className="bg-transparent outline-0 text-sm placeholder:text-sm"
             />
           </div>
 
@@ -43,6 +44,7 @@ function App() {
       <main className="flex flex-row">
         <Menu></Menu>
         <Stats></Stats>
+        <Schedule></Schedule>
       </main>
     </div>
   );
