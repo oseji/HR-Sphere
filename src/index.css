@@ -8,7 +8,7 @@
 }
 
 .App {
-  @apply font-Poppins text-[#6F6F6F] bg-[#ECECEC];
+  @apply font-Poppins text-[#6F6F6F] bg-[#ECECEC] max-w-[100vw];
 }
 
 header {
@@ -44,9 +44,14 @@ header {
   @apply bg-green-100 font-semibold text-black;
 }
 
+/* MAIN SCREEN */
+.mainScreen {
+  @apply flex flex-row;
+}
+
 /* STATS SECTION */
 .statsCardGrp {
-  @apply flex flex-row gap-5 items-center;
+  @apply flex flex-row gap-3 items-center;
 }
 
 .statsCard {
@@ -75,7 +80,7 @@ header {
 
 /* chart group */
 .chartGrp {
-  @apply flex flex-row gap-4;
+  @apply flex flex-row gap-3;
 }
 
 .chartBox {
@@ -128,7 +133,7 @@ header {
 }
 
 .tableFilter {
-  @apply p-1 border border-slate-300 rounded text-sm outline-0;
+  @apply p-1 border border-slate-300 rounded text-sm outline-0 capitalize;
 }
 
 th {
@@ -149,5 +154,5 @@ td {
 
 /* SCHEDULE */
 .calendarHeading {
-  @apply flex flex-row justify-between items-center;
+  @apply flex flex-row justify-between items-center mb-5;
 }

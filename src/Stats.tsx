@@ -49,6 +49,7 @@ const Stats = () => {
     department: string;
     email: string;
     status: string;
+    statusColor: string;
   };
   const employeeOverview: { [key: string]: employeeOverviewType } = {
     willJohn: {
@@ -57,6 +58,7 @@ const Stats = () => {
       department: "product",
       email: "willjohn@gmail.com",
       status: "on site",
+      statusColor: "text-[#047E04]",
     },
     jessicaReel: {
       name: "jessica reel",
@@ -64,6 +66,7 @@ const Stats = () => {
       department: "product",
       email: "jessicaforeel@gmail.com",
       status: "remote",
+      statusColor: "text-[#EF5F04]",
     },
     ronaldRichard: {
       name: "ronald richard",
@@ -71,6 +74,7 @@ const Stats = () => {
       department: "engineering",
       email: "ronrich@yahoo.com",
       status: "remote",
+      statusColor: "text-[#EF5F04]",
     },
     estherHoward: {
       name: "esther howard",
@@ -78,6 +82,7 @@ const Stats = () => {
       department: "engineering",
       email: "estward@gmail.com",
       status: "remote",
+      statusColor: "text-[#EF5F04]",
     },
     arleneMccoy: {
       name: "arlene mccoy",
@@ -85,6 +90,7 @@ const Stats = () => {
       department: "product",
       email: "mcarlene@gmail.com",
       status: "on site",
+      statusColor: "text-[#047E04]",
     },
     floydMiles: {
       name: "floyd miles",
@@ -92,6 +98,7 @@ const Stats = () => {
       department: "engineering",
       email: "floydmi@gmail.com",
       status: "on site",
+      statusColor: "text-[#047E04]",
     },
     janeCooper: {
       name: "jane cooper",
@@ -99,6 +106,7 @@ const Stats = () => {
       department: "product",
       email: "jacoop@outlook.com",
       status: "on site",
+      statusColor: "text-[#047E04]",
     },
     marvinMckinney: {
       name: "marvin mcckinney",
@@ -106,6 +114,7 @@ const Stats = () => {
       department: "product",
       email: "willjohn@gmail.com",
       status: "remote",
+      statusColor: "text-[#EF5F04]",
     },
     cameronWilliamson: {
       name: "cameron williamson",
@@ -113,6 +122,7 @@ const Stats = () => {
       department: "HR",
       email: "cameronwilliamson@gmail.com",
       status: "on site",
+      statusColor: "text-[#047E04]",
     },
     devonLane: {
       name: "devon lane",
@@ -120,11 +130,12 @@ const Stats = () => {
       department: "devOps",
       email: "devonLane@yahoo.com",
       status: "remote",
+      statusColor: "text-[#EF5F04]",
     },
   };
 
   return (
-    <section className="flex flex-col gap-3 p-3">
+    <section className="flex flex-col gap-3 p-3 max-w-[759px]">
       <div className="statsCardGrp">
         <div className="statsCard">
           <p className="statsHeading">Employees</p>
@@ -161,6 +172,7 @@ const Stats = () => {
             <p className="bottomText">-5.4% vs previous month</p>
           </div>
         </div>
+
         <div className="statsCard">
           <p className="statsHeading">New Applicants</p>
 
@@ -281,17 +293,22 @@ const Stats = () => {
         <div className="tableFilterGrp">
           <select className="tableFilter">
             <option value="All employees">All employees</option>
-            <option value="All employees">All employees</option>
+            <option value="remote">Remote</option>
+            <option value="on site">on site employees</option>
           </select>
 
           <select className="tableFilter">
             <option value="All job titles">All job titles</option>
-            <option value="All job titles">All job titles</option>
+            <option value="front-end engineer">front-end engineer</option>
+            <option value="back-end engineer">back-end engineer</option>
+            <option value="product manager">product manager</option>
+            <option value="product designer">product designer</option>
           </select>
 
           <select className="tableFilter">
             <option value="All departments">All departments</option>
-            <option value="All departments">All departments</option>
+            <option value="engineering">engineering</option>
+            <option value="product">product</option>
           </select>
         </div>
 
@@ -315,7 +332,9 @@ const Stats = () => {
               <td>{employeeOverview.willJohn.jobTitle}</td>
               <td>{employeeOverview.willJohn.department}</td>
               <td>{employeeOverview.willJohn.email}</td>
-              <td>{employeeOverview.willJohn.status}</td>
+              <td className={employeeOverview.willJohn.statusColor}>
+                {employeeOverview.willJohn.status}
+              </td>
             </tr>
 
             <tr>
@@ -326,7 +345,9 @@ const Stats = () => {
               <td>{employeeOverview.jessicaReel.jobTitle}</td>
               <td>{employeeOverview.jessicaReel.department}</td>
               <td>{employeeOverview.jessicaReel.email}</td>
-              <td>{employeeOverview.jessicaReel.status}</td>
+              <td className={employeeOverview.jessicaReel.statusColor}>
+                {employeeOverview.jessicaReel.status}
+              </td>
             </tr>
 
             <tr>
@@ -337,7 +358,9 @@ const Stats = () => {
               <td>{employeeOverview.ronaldRichard.jobTitle}</td>
               <td>{employeeOverview.ronaldRichard.department}</td>
               <td>{employeeOverview.ronaldRichard.email}</td>
-              <td>{employeeOverview.ronaldRichard.status}</td>
+              <td className={employeeOverview.ronaldRichard.statusColor}>
+                {employeeOverview.ronaldRichard.status}
+              </td>
             </tr>
 
             <tr>
@@ -348,7 +371,9 @@ const Stats = () => {
               <td>{employeeOverview.estherHoward.jobTitle}</td>
               <td>{employeeOverview.estherHoward.department}</td>
               <td>{employeeOverview.estherHoward.email}</td>
-              <td>{employeeOverview.estherHoward.status}</td>
+              <td className={employeeOverview.estherHoward.statusColor}>
+                {employeeOverview.estherHoward.status}
+              </td>
             </tr>
           </tbody>
         </table>

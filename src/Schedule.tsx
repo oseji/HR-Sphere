@@ -7,7 +7,7 @@ const Schedule = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
 
   return (
-    <section className="bg-white rounded w-full my-3 mx-1.5 p-3 text-sm">
+    <section className="bg-white rounded max-w-fit my-3 p-3 text-sm">
       <div className="calendarHeading">
         <div className="flex flex-row items-center gap-2">
           <img src={calndarIcon} alt="calendar" />
@@ -23,7 +23,7 @@ const Schedule = () => {
         mode="single"
         selected={date}
         onSelect={setDate}
-        className="rounded-md border"
+        className="rounded-md border "
       />
     </section>
   );

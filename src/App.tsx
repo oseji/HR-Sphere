@@ -43,8 +43,11 @@ function App() {
 
       <main className="flex flex-row">
         <Menu></Menu>
-        <Stats></Stats>
-        <Schedule></Schedule>
+
+        <div className="mainScreen">
+          <Stats></Stats>
+          <Schedule></Schedule>
+        </div>
       </main>
     </div>
   );
