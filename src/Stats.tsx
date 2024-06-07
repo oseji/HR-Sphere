@@ -1,4 +1,5 @@
 import { BarChart, Bar, Rectangle, XAxis, Tooltip } from "recharts";
+import { ChangeEvent, useState, useEffect } from "react";
 
 import userIcon from "./assets/stats user icon.svg";
 import jobIcon from "./assets/stats resignation icon.svg";
@@ -8,6 +9,16 @@ import downGrowth from "./assets/down growth.svg";
 import searchIcon from "./assets/circum_search.png";
 
 import avatarImg from "./assets/avatarImg.png";
+import cameron from "./assets/cameron.png";
+import devon from "./assets/devon.png";
+import esther from "./assets/esther.png";
+import floyd from "./assets/floyd.png";
+import jane from "./assets/jane.png";
+import marvin from "./assets/marvin.png";
+import arlene from "./assets/arlene.png";
+import ronald from "./assets/ronald.png";
+import jessica from "./assets/jessica.png";
+import will from "./assets/will.png";
 
 const Stats = () => {
   type chartDataType = {
@@ -43,8 +54,12 @@ const Stats = () => {
     },
   ];
 
+  const [chartYears, setChartYears] = useState<number>(5);
+  const [currentChartData, setCurrentChartData] = useState(chartData);
+
   type employeeOverviewType = {
     name: string;
+    img: string;
     jobTitle: string;
     department: string;
     email: string;
@@ -54,6 +69,7 @@ const Stats = () => {
   const employeeOverview: { [key: string]: employeeOverviewType } = {
     willJohn: {
       name: "will john",
+      img: will,
       jobTitle: "product designer",
       department: "product",
       email: "willjohn@gmail.com",
@@ -62,6 +78,7 @@ const Stats = () => {
     },
     jessicaReel: {
       name: "jessica reel",
+      img: jessica,
       jobTitle: "product manager",
       department: "product",
       email: "jessicaforeel@gmail.com",
@@ -70,6 +87,7 @@ const Stats = () => {
     },
     ronaldRichard: {
       name: "ronald richard",
+      img: ronald,
       jobTitle: "front-end engineer",
       department: "engineering",
       email: "ronrich@yahoo.com",
@@ -78,6 +96,7 @@ const Stats = () => {
     },
     estherHoward: {
       name: "esther howard",
+      img: esther,
       jobTitle: "back-end engineer",
       department: "engineering",
       email: "estward@gmail.com",
@@ -86,6 +105,7 @@ const Stats = () => {
     },
     arleneMccoy: {
       name: "arlene mccoy",
+      img: arlene,
       jobTitle: "product designer",
       department: "product",
       email: "mcarlene@gmail.com",
@@ -94,6 +114,7 @@ const Stats = () => {
     },
     floydMiles: {
       name: "floyd miles",
+      img: floyd,
       jobTitle: "fullstack engineer",
       department: "engineering",
       email: "floydmi@gmail.com",
@@ -102,6 +123,7 @@ const Stats = () => {
     },
     janeCooper: {
       name: "jane cooper",
+      img: jane,
       jobTitle: "product manager",
       department: "product",
       email: "jacoop@outlook.com",
@@ -110,6 +132,7 @@ const Stats = () => {
     },
     marvinMckinney: {
       name: "marvin mcckinney",
+      img: marvin,
       jobTitle: "product designer",
       department: "product",
       email: "willjohn@gmail.com",
@@ -118,6 +141,7 @@ const Stats = () => {
     },
     cameronWilliamson: {
       name: "cameron williamson",
+      img: cameron,
       jobTitle: "HR",
       department: "HR",
       email: "cameronwilliamson@gmail.com",
@@ -126,6 +150,7 @@ const Stats = () => {
     },
     devonLane: {
       name: "devon lane",
+      img: devon,
       jobTitle: "devOps engineer",
       department: "devOps",
       email: "devonLane@yahoo.com",
@@ -133,6 +158,52 @@ const Stats = () => {
       statusColor: "text-[#EF5F04]",
     },
   };
+
+  const [sliceIndexes, setSliceIndexes] = useState({ start: 0, end: 5 });
+
+  const toggleChartData = (e: ChangeEvent<HTMLSelectElement>) => {
+    const yearVal = e.target.value;
+
+    setChartYears((prev) => {
+      let year = prev;
+
+      if (yearVal === "5") {
+        year = 5;
+      } else if (yearVal === "4") {
+        year = 4;
+      } else if (yearVal === "3") {
+        year = 3;
+      } else if (yearVal === "2") {
+        year = 2;
+      } else if (yearVal === "1") {
+        year = 1;
+      }
+
+      return year;
+    });
+  };
+
+  useEffect(() => {
+    setCurrentChartData((prev) => {
+      let chart = prev;
+
+      if (chartYears === 5) {
+        chart = chartData;
+      } else if (chartYears === 4) {
+        chart = chartData.slice(1, 5);
+      } else if (chartYears === 3) {
+        chart = chartData.slice(2, 5);
+      } else if (chartYears === 3) {
+        chart = chartData.slice(3, 5);
+      } else if (chartYears === 2) {
+        chart = chartData.slice(-2);
+      } else if (chartYears === 1) {
+        chart = chartData.slice(-1);
+      }
+
+      return chart;
+    });
+  }, [chartYears]);
 
   return (
     <section className="flex flex-col gap-3 p-3 max-w-[759px]">
@@ -199,19 +270,19 @@ const Stats = () => {
               Retention & Turnover Rate
             </h1>
 
-            <select id="chartSelection">
-              <option value="">Last 5 years</option>
-              <option value="">Last 4 years</option>
-              <option value="">Last 3 years</option>
-              <option value="">Last 2 years</option>
-              <option value="">Last 1 year</option>
+            <select id="chartSelection" onChange={toggleChartData}>
+              <option value="5">Last 5 years</option>
+              <option value="4">Last 4 years</option>
+              <option value="3">Last 3 years</option>
+              <option value="2">Last 2 years</option>
+              <option value="1">Last 1 year</option>
             </select>
           </div>
 
           <BarChart
             width={432}
             height={190}
-            data={chartData}
+            data={currentChartData}
             margin={{
               top: 40,
               right: 30,
@@ -324,59 +395,38 @@ const Stats = () => {
           </thead>
 
           <tbody>
-            <tr>
-              <td className="employeeName">
-                <img src={avatarImg} alt="profile image" />
-                <p> {employeeOverview.willJohn.name}</p>
-              </td>
-              <td>{employeeOverview.willJohn.jobTitle}</td>
-              <td>{employeeOverview.willJohn.department}</td>
-              <td>{employeeOverview.willJohn.email}</td>
-              <td className={employeeOverview.willJohn.statusColor}>
-                {employeeOverview.willJohn.status}
-              </td>
-            </tr>
-
-            <tr>
-              <td className="employeeName">
-                <img src={avatarImg} alt="profile image" />
-                <p> {employeeOverview.jessicaReel.name}</p>
-              </td>
-              <td>{employeeOverview.jessicaReel.jobTitle}</td>
-              <td>{employeeOverview.jessicaReel.department}</td>
-              <td>{employeeOverview.jessicaReel.email}</td>
-              <td className={employeeOverview.jessicaReel.statusColor}>
-                {employeeOverview.jessicaReel.status}
-              </td>
-            </tr>
-
-            <tr>
-              <td className="employeeName">
-                <img src={avatarImg} alt="profile image" />
-                <p> {employeeOverview.ronaldRichard.name}</p>
-              </td>
-              <td>{employeeOverview.ronaldRichard.jobTitle}</td>
-              <td>{employeeOverview.ronaldRichard.department}</td>
-              <td>{employeeOverview.ronaldRichard.email}</td>
-              <td className={employeeOverview.ronaldRichard.statusColor}>
-                {employeeOverview.ronaldRichard.status}
-              </td>
-            </tr>
-
-            <tr>
-              <td className="employeeName">
-                <img src={avatarImg} alt="profile image" />
-                <p> {employeeOverview.estherHoward.name}</p>
-              </td>
-              <td>{employeeOverview.estherHoward.jobTitle}</td>
-              <td>{employeeOverview.estherHoward.department}</td>
-              <td>{employeeOverview.estherHoward.email}</td>
-              <td className={employeeOverview.estherHoward.statusColor}>
-                {employeeOverview.estherHoward.status}
-              </td>
-            </tr>
+            {Object.values(employeeOverview)
+              .slice(sliceIndexes.start, sliceIndexes.end)
+              .map((value, index) => (
+                <tr key={index}>
+                  <td className="employeeName">
+                    <img src={value.img} alt="profile image" />
+                    <p> {value.name}</p>
+                  </td>
+                  <td>{value.jobTitle}</td>
+                  <td>{value.department}</td>
+                  <td>{value.email}</td>
+                  <td className={value.statusColor}>{value.status}</td>
+                </tr>
+              ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="employeeSort">
+        <button
+          className="employeeSortBtn"
+          onClick={() => setSliceIndexes({ start: 0, end: 5 })}
+        >
+          Prev
+        </button>
+
+        <button
+          className="employeeSortBtn"
+          onClick={() => setSliceIndexes({ start: 5, end: 10 })}
+        >
+          Next
+        </button>
       </div>
     </section>
   );

@@ -152,6 +152,14 @@ td {
   @apply flex flex-row items-center gap-2 font-semibold text-black;
 }
 
+.employeeSort {
+  @apply flex flex-row justify-between items-center text-xs;
+}
+
+.employeeSortBtn {
+  @apply bg-[#095256] text-white px-3 py-1.5 rounded-md hover:scale-110 transition ease-in-out duration-150;
+}
+
 /* SCHEDULE */
 .calendarHeading {
   @apply flex flex-row justify-between items-center mb-5;
