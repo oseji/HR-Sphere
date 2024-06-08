@@ -1,4 +1,4 @@
-import { SyntheticEvent, useRef, useState, useEffect } from "react";
+import { SyntheticEvent, useRef } from "react";
 
 import iconHome from "./assets/octicon_home-24.svg";
 import iconUsers from "./assets/mynaui_users-group.svg";
@@ -21,50 +21,19 @@ const Menu = () => {
     useRef<HTMLDivElement>(null),
   ];
 
-  const [clickedMenu, setClickedMenu] = useState<number>(0);
-
   const toggleMenuClass = (e: SyntheticEvent) => {
-    const clicked = e.currentTarget.getAttribute("data-value");
-    let menuNum = clicked;
-
-    setClickedMenu((prev) => {
-      let newNum = prev;
-
-      if (menuNum === "1") {
-        newNum = 1;
-      } else if (menuNum === "2") {
-        newNum = 2;
-      } else if (menuNum === "3") {
-        newNum = 3;
-      } else if (menuNum === "4") {
-        newNum = 4;
-      } else if (menuNum === "5") {
-        newNum = 5;
-      } else if (menuNum === "6") {
-        newNum = 6;
-      } else if (menuNum === "7") {
-        newNum = 7;
-      } else if (menuNum === "8") {
-        newNum = 8;
-      }
-
-      return newNum;
-    });
-  };
-
-  useEffect(() => {
-    console.log(clickedMenu);
+    const clicked = Number(e.currentTarget.getAttribute("data-value"));
 
     menuRefs.forEach((element, index) => {
-      const target = element.current;
+      const menu = element.current;
 
-      if (index + 1 === clickedMenu) {
-        target?.classList.add("activeMenuGrp");
+      if (index === clicked) {
+        menu?.classList.add("activeMenuGrp");
       } else {
-        target?.classList.remove("activeMenuGrp");
+        menu?.classList.remove("activeMenuGrp");
       }
     });
-  }, [clickedMenu]);
+  };
 
   return (
     <section className=" flex flex-col justify-between py-5 px-3 bg-white">
@@ -72,7 +41,7 @@ const Menu = () => {
         <div
           className="menuGrp activeMenuGrp"
           ref={menuRefs[0]}
-          data-value="1"
+          data-value="0"
           onClick={toggleMenuClass}
         >
           <img src={iconHome} alt="home icon" />
@@ -81,7 +50,7 @@ const Menu = () => {
         <div
           className="menuGrp"
           ref={menuRefs[1]}
-          data-value="2"
+          data-value="1"
           onClick={toggleMenuClass}
         >
           <img src={iconUsers} alt="profile icon" />
@@ -90,7 +59,7 @@ const Menu = () => {
         <div
           className="menuGrp"
           ref={menuRefs[2]}
-          data-value="3"
+          data-value="2"
           onClick={toggleMenuClass}
         >
           <img src={iconPerformance} alt="performance icon" />
@@ -99,7 +68,7 @@ const Menu = () => {
         <div
           className="menuGrp"
           ref={menuRefs[3]}
-          data-value="4"
+          data-value="3"
           onClick={toggleMenuClass}
         >
           <img src={iconPayroll} alt="payroll icon" />
@@ -108,7 +77,7 @@ const Menu = () => {
         <div
           className="menuGrp"
           ref={menuRefs[4]}
-          data-value="5"
+          data-value="4"
           onClick={toggleMenuClass}
         >
           <img src={iconFolder} alt="folder icon" />
@@ -120,7 +89,7 @@ const Menu = () => {
         <div
           className="menuGrp"
           ref={menuRefs[5]}
-          data-value="6"
+          data-value="5"
           onClick={toggleMenuClass}
         >
           <img src={iconHelp} alt="help icon" />
@@ -129,7 +98,7 @@ const Menu = () => {
         <div
           className="menuGrp"
           ref={menuRefs[6]}
-          data-value="7"
+          data-value="6"
           onClick={toggleMenuClass}
         >
           <img src={iconSettings} alt="settings icon" />
@@ -138,7 +107,7 @@ const Menu = () => {
         <div
           className="menuGrp"
           ref={menuRefs[7]}
-          data-value="8"
+          data-value="7"
           onClick={toggleMenuClass}
         >
           <img src={iconLogout} alt="log out icon" />

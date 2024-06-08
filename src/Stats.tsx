@@ -1,5 +1,11 @@
 import { BarChart, Bar, Rectangle, XAxis, Tooltip } from "recharts";
-import { ChangeEvent, useState, useEffect } from "react";
+import {
+  ChangeEvent,
+  useState,
+  useEffect,
+  useRef,
+  SyntheticEvent,
+} from "react";
 
 import userIcon from "./assets/stats user icon.svg";
 import jobIcon from "./assets/stats resignation icon.svg";
@@ -183,6 +189,25 @@ const Stats = () => {
     });
   };
 
+  const employeeSortBtnRefs = [
+    useRef<HTMLButtonElement>(null),
+    useRef<HTMLButtonElement>(null),
+  ];
+
+  const toggleActivePageClass = (e: SyntheticEvent<HTMLButtonElement>) => {
+    const clicked = Number(e.currentTarget.value);
+
+    employeeSortBtnRefs.forEach((element, index) => {
+      const btn = element.current;
+
+      if (index === clicked) {
+        btn?.classList.add("activeSortBtn");
+      } else {
+        btn?.classList.remove("activeSortBtn");
+      }
+    });
+  };
+
   useEffect(() => {
     setCurrentChartData((prev) => {
       let chart = prev;
@@ -206,7 +231,7 @@ const Stats = () => {
   }, [chartYears]);
 
   return (
-    <section className="flex flex-col gap-3 p-3 max-w-[759px]">
+    <section className="flex flex-col gap-3 p-3 max-w-[730px]">
       <div className="statsCardGrp">
         <div className="statsCard">
           <p className="statsHeading">Employees</p>
@@ -415,17 +440,27 @@ const Stats = () => {
 
       <div className="employeeSort">
         <button
-          className="employeeSortBtn"
-          onClick={() => setSliceIndexes({ start: 0, end: 5 })}
+          className={`employeeSortBtn activeSortBtn`}
+          onClick={(e) => {
+            setSliceIndexes({ start: 0, end: 5 });
+            toggleActivePageClass(e);
+          }}
+          ref={employeeSortBtnRefs[0]}
+          value={0}
         >
-          Prev
+          1
         </button>
 
         <button
-          className="employeeSortBtn"
-          onClick={() => setSliceIndexes({ start: 5, end: 10 })}
+          className={`employeeSortBtn`}
+          onClick={(e) => {
+            setSliceIndexes({ start: 5, end: 10 });
+            toggleActivePageClass(e);
+          }}
+          ref={employeeSortBtnRefs[1]}
+          value={1}
         >
-          Next
+          2
         </button>
       </div>
     </section>

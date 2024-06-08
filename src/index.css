@@ -153,11 +153,15 @@ td {
 }
 
 .employeeSort {
-  @apply flex flex-row justify-between items-center text-xs;
+  @apply flex flex-row justify-center items-center gap-5 text-xs;
 }
 
 .employeeSortBtn {
-  @apply bg-[#095256] text-white px-3 py-1.5 rounded-md hover:scale-110 transition ease-in-out duration-150;
+  @apply bg-white px-3 py-1.5 rounded-md hover:scale-110 transition ease-in-out duration-150;
+}
+
+.activeSortBtn {
+  @apply bg-[#095256] text-white;
 }
 
 /* SCHEDULE */
