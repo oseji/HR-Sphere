@@ -1,6 +1,8 @@
+import { Route, Switch } from "react-router-dom";
+
 import Menu from "./Menu";
-import Stats from "./Stats";
-import Schedule from "./Schedule";
+import Overview from "./Overview";
+import Performance from "./Performance";
 
 import logo from "./assets/logo.png";
 import searchIcon from "./assets/circum_search.png";
@@ -44,10 +46,10 @@ function App() {
       <main className="flex flex-row">
         <Menu></Menu>
 
-        <div className="mainScreen">
-          <Stats></Stats>
-          <Schedule></Schedule>
-        </div>
+        <Switch>
+          <Route exact path="/" component={Overview}></Route>
+          <Route path="/Performance" component={Performance}></Route>
+        </Switch>
       </main>
     </div>
   );

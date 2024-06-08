@@ -11,6 +11,22 @@
   @apply font-Poppins text-[#6F6F6F] bg-[#ECECEC] max-w-[100vw];
 }
 
+.screenSection {
+  @apply min-h-screen p-3;
+}
+
+.overviewSection {
+  @apply flex flex-row;
+}
+
+.performanceSection {
+  @apply flex flex-row gap-3 text-sm;
+}
+
+select {
+  @apply cursor-pointer outline-0 p-1 border border-slate-300 rounded;
+}
+
 header {
   @apply w-full flex flex-row items-center py-3 px-10 border-b border-slate-300 bg-white;
 }
@@ -42,11 +58,6 @@ header {
 
 .activeMenuGrp {
   @apply bg-green-100 font-semibold text-black;
-}
-
-/* MAIN SCREEN */
-.mainScreen {
-  @apply flex flex-row;
 }
 
 /* STATS SECTION */
@@ -91,9 +102,9 @@ header {
   @apply flex flex-row items-center justify-between mb-3 text-sm;
 }
 
-#chartSelection {
+/* #chartSelection {
   @apply p-1 border border-slate-300 rounded text-sm outline-0;
-}
+} */
 
 .barChartInfo {
   @apply flex flex-row justify-center items-center gap-5;
@@ -167,4 +178,14 @@ td {
 /* SCHEDULE */
 .calendarHeading {
   @apply flex flex-row justify-between items-center mb-5;
+}
+
+/* PERFORMANCE SCREEN */
+.totalEmployeeChart,
+.keyIndicatorsChart {
+  @apply p-3 rounded bg-white;
+}
+
+.totalEmployeeChart {
+  @apply overflow-hidden;
 }
