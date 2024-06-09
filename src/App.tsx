@@ -47,8 +47,13 @@ function App() {
         <Menu></Menu>
 
         <Switch>
-          <Route exact path="/" component={Overview}></Route>
-          <Route path="/Performance" component={Performance}></Route>
+          <Route exact path="/">
+            <Overview></Overview>
+          </Route>
+
+          <Route path="/Performance">
+            <Performance></Performance>
+          </Route>
         </Switch>
       </main>
     </div>

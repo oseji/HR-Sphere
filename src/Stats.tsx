@@ -7,6 +7,8 @@ import {
   SyntheticEvent,
 } from "react";
 
+import { employeeOverview, chartData } from "./types";
+
 import userIcon from "./assets/stats user icon.svg";
 import jobIcon from "./assets/stats resignation icon.svg";
 import folderIcon from "./assets/stats folder icon.svg";
@@ -14,156 +16,9 @@ import upGrowth from "./assets/up growth.svg";
 import downGrowth from "./assets/down growth.svg";
 import searchIcon from "./assets/circum_search.png";
 
-import avatarImg from "./assets/avatarImg.png";
-import cameron from "./assets/cameron.png";
-import devon from "./assets/devon.png";
-import esther from "./assets/esther.png";
-import floyd from "./assets/floyd.png";
-import jane from "./assets/jane.png";
-import marvin from "./assets/marvin.png";
-import arlene from "./assets/arlene.png";
-import ronald from "./assets/ronald.png";
-import jessica from "./assets/jessica.png";
-import will from "./assets/will.png";
-
 const Stats = () => {
-  type chartDataType = {
-    name: string;
-    RetentionRate: number;
-    TurnoverRate: number;
-  };
-  const chartData: chartDataType[] = [
-    {
-      name: "2020",
-      RetentionRate: 75,
-      TurnoverRate: 20,
-    },
-    {
-      name: "2021",
-      RetentionRate: 45,
-      TurnoverRate: 55,
-    },
-    {
-      name: "2022",
-      RetentionRate: 35,
-      TurnoverRate: 65,
-    },
-    {
-      name: "2023",
-      RetentionRate: 40,
-      TurnoverRate: 60,
-    },
-    {
-      name: "2024",
-      RetentionRate: 20,
-      TurnoverRate: 80,
-    },
-  ];
-
   const [chartYears, setChartYears] = useState<number>(5);
   const [currentChartData, setCurrentChartData] = useState(chartData);
-
-  type employeeOverviewType = {
-    name: string;
-    img: string;
-    jobTitle: string;
-    department: string;
-    email: string;
-    status: string;
-    statusColor: string;
-  };
-  const employeeOverview: { [key: string]: employeeOverviewType } = {
-    willJohn: {
-      name: "will john",
-      img: will,
-      jobTitle: "product designer",
-      department: "product",
-      email: "willjohn@gmail.com",
-      status: "on site",
-      statusColor: "text-[#047E04]",
-    },
-    jessicaReel: {
-      name: "jessica reel",
-      img: jessica,
-      jobTitle: "product manager",
-      department: "product",
-      email: "jessicaforeel@gmail.com",
-      status: "remote",
-      statusColor: "text-[#EF5F04]",
-    },
-    ronaldRichard: {
-      name: "ronald richard",
-      img: ronald,
-      jobTitle: "front-end engineer",
-      department: "engineering",
-      email: "ronrich@yahoo.com",
-      status: "remote",
-      statusColor: "text-[#EF5F04]",
-    },
-    estherHoward: {
-      name: "esther howard",
-      img: esther,
-      jobTitle: "back-end engineer",
-      department: "engineering",
-      email: "estward@gmail.com",
-      status: "remote",
-      statusColor: "text-[#EF5F04]",
-    },
-    arleneMccoy: {
-      name: "arlene mccoy",
-      img: arlene,
-      jobTitle: "product designer",
-      department: "product",
-      email: "mcarlene@gmail.com",
-      status: "on site",
-      statusColor: "text-[#047E04]",
-    },
-    floydMiles: {
-      name: "floyd miles",
-      img: floyd,
-      jobTitle: "fullstack engineer",
-      department: "engineering",
-      email: "floydmi@gmail.com",
-      status: "on site",
-      statusColor: "text-[#047E04]",
-    },
-    janeCooper: {
-      name: "jane cooper",
-      img: jane,
-      jobTitle: "product manager",
-      department: "product",
-      email: "jacoop@outlook.com",
-      status: "on site",
-      statusColor: "text-[#047E04]",
-    },
-    marvinMckinney: {
-      name: "marvin mcckinney",
-      img: marvin,
-      jobTitle: "product designer",
-      department: "product",
-      email: "willjohn@gmail.com",
-      status: "remote",
-      statusColor: "text-[#EF5F04]",
-    },
-    cameronWilliamson: {
-      name: "cameron williamson",
-      img: cameron,
-      jobTitle: "HR",
-      department: "HR",
-      email: "cameronwilliamson@gmail.com",
-      status: "on site",
-      statusColor: "text-[#047E04]",
-    },
-    devonLane: {
-      name: "devon lane",
-      img: devon,
-      jobTitle: "devOps engineer",
-      department: "devOps",
-      email: "devonLane@yahoo.com",
-      status: "remote",
-      statusColor: "text-[#EF5F04]",
-    },
-  };
 
   const [sliceIndexes, setSliceIndexes] = useState({ start: 0, end: 5 });
 
