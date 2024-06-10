@@ -7,8 +7,8 @@ import Payroll from "./Payroll";
 
 import logo from "./assets/logo.png";
 import searchIcon from "./assets/circum_search.png";
-import bellIcon from "./assets/basil_notification-outline.png";
-import avatar from "./assets/avatar.png";
+import bellIcon from "./assets/bellIcon.svg";
+import avatar from "./assets/stephanie.jpg";
 
 function App() {
   return (
@@ -33,11 +33,11 @@ function App() {
             <img
               src={bellIcon}
               alt="bell icon"
-              className="border border-slate-300 rounded-full p-1.5"
+              className="border border-slate-300 rounded-full py-1.5 px-2.5 w-9"
             />
 
             <div className="profileGrp">
-              <img src={avatar} alt="profile image" />
+              <img src={avatar} alt="profile image" className="w-8" />
               <div className="profileName">stephanie ukwade</div>
             </div>
           </div>

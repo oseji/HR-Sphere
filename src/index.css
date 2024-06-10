@@ -57,7 +57,7 @@ header {
 }
 
 .profileName {
-  @apply capitalize font-semibold text-sm text-black;
+  @apply capitalize text-sm text-black;
 }
 
 /* MENU */
@@ -128,11 +128,11 @@ header {
 }
 
 .requestText {
-  @apply capitalize;
+  @apply capitalize text-xs;
 }
 
 .requestNum {
-  @apply font-semibold;
+  @apply font-semibold text-sm;
 }
 
 /* table group */
@@ -189,6 +189,13 @@ td {
 
 .totalEmployeeChart {
   @apply overflow-hidden;
+}
+
+.labelContainer {
+  @apply flex flex-row items-center gap-2 text-[10px];
+}
+.colorBox {
+  @apply h-3 w-3 rounded;
 }
 
 .efficiencyTextGrp {

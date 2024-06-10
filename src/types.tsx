@@ -40,6 +40,13 @@ export type pieChartData = {
   value: number;
 };
 
+export type keyIndicatorDataType = {
+  month: string;
+  val1: number;
+  val2: number;
+  val3: number;
+};
+
 // CONST
 
 export const employeeOverview: { [key: string]: employeeOverviewType } = {
@@ -261,4 +268,43 @@ export const data: pieChartData[] = [
 export const efficiencyData: pieChartData[] = [
   { name: "efficient", value: 80 },
   { name: "notEfficient", value: 20 },
+];
+
+export const keyIndicator: keyIndicatorDataType[] = [
+  {
+    month: "Jan",
+    val1: 100,
+    val2: 75,
+    val3: 25,
+  },
+  {
+    month: "Feb",
+    val1: 85,
+    val2: 66,
+    val3: 72,
+  },
+  {
+    month: "Mar",
+    val1: 95,
+    val2: 53,
+    val3: 44,
+  },
+  {
+    month: "Apr",
+    val1: 29,
+    val2: 63,
+    val3: 95,
+  },
+  {
+    month: "May",
+    val1: 60,
+    val2: 96,
+    val3: 28,
+  },
+  {
+    month: "Jun",
+    val1: 84,
+    val2: 39,
+    val3: 49,
+  },
 ];

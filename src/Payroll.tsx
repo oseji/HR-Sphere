@@ -8,10 +8,10 @@ const Payroll = () => {
   return (
     <section className="screenSection w-full">
       <div className="payrollTable">
-        <div className="p-2 border-b border-slate-300 flex flex-row justify-between items-center">
-          <select className="cursor-pointer outline-0 p-2 border border-slate-300 text-[#6F6F6F] rounded capitalize text-sm;">
-            <option value="">Payroll for feburary 2024</option>
-            <option value="">Payroll for janurary 2024</option>
+        <div className="pb-2 border-b border-slate-300 flex flex-row justify-between items-center">
+          <select className="cursor-pointer outline-0 p-2  rounded capitalize text-base text-black border-none">
+            <option value="">Payroll for february 2024</option>
+            <option value="">Payroll for january 2024</option>
             <option value="">Payroll for december 2023</option>
           </select>
 
@@ -49,7 +49,7 @@ const Payroll = () => {
           <img
             src={filterIcon}
             alt="filter icon"
-            className="p-2 border border-slate-300 rounded-md cursor-pointer"
+            className="p-2 border border-slate-300 rounded-md "
           />
         </div>
 

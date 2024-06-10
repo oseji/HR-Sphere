@@ -186,13 +186,13 @@ const Stats = () => {
 
           <div className="barChartInfo">
             <div className="flex flex-row items-center gap-2">
-              <span className="p-2 rounded bg-[#095256]"></span>
-              <div className="text-sm">Retention Rate</div>
+              <span className="h-3 w-3 rounded bg-[#095256]"></span>
+              <div className="text-[10px]">Retention Rate</div>
             </div>
 
             <div className="flex flex-row items-center gap-2">
-              <span className="p-2 rounded bg-[#06D6A0]"></span>
-              <div className="text-sm">Turnover Rate</div>
+              <span className="h-3 w-3 rounded bg-[#06D6A0]"></span>
+              <div className="text-[10px]">Turnover Rate</div>
             </div>
           </div>
         </div>

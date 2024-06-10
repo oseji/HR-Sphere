@@ -1,20 +1,13 @@
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
 
-// import {
-//   Label,
-//   LineChart,
-//   Line,
-//   CartesianGrid,
-//   XAxis,
-//   YAxis,
-//   Tooltip,
-//   ReferenceArea,
-// } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 
-import { data, efficiencyData, employeeOverview } from "./types";
+import { data, efficiencyData, employeeOverview, keyIndicator } from "./types";
+
 import { useState, useRef, SyntheticEvent } from "react";
 
 import eomImg from "./assets/employee of the month.png";
+import upArrow from "./assets/up growth.svg";
 
 const Performance = () => {
   const COLORS = ["#06D6A0", "#095256"];
@@ -72,19 +65,19 @@ const Performance = () => {
 
             <div className="barChartInfo text-[10px] mt-5">
               <div className="flex flex-row items-center gap-2">
-                <span className="p-2 rounded bg-[#095256]"></span>
+                <span className="h-3 w-3 rounded bg-[#095256]"></span>
                 <div>Contract staff</div>
               </div>
 
               <div className="flex flex-row items-center gap-2">
-                <span className="p-2 rounded bg-[#06D6A0]"></span>
+                <span className="h-3 w-3 rounded bg-[#06D6A0]"></span>
                 <div>Full time staff</div>
               </div>
             </div>
           </div>
 
           <div className="keyIndicatorsChart w-[466px]">
-            <div className="flex flex-row items-center justify-between text-black">
+            <div className="flex flex-row items-center justify-between text-black mb-5">
               <h2 className="boxHeading">Key Performance Indicators</h2>
 
               <select className="capitalize">
@@ -92,6 +85,36 @@ const Performance = () => {
                 <option value="product">product</option>
                 <option value="engineering">engineering</option>
               </select>
+            </div>
+
+            <ResponsiveContainer height={200} width="100%">
+              <LineChart data={keyIndicator} margin={{ right: 25, top: 10 }}>
+                <XAxis dataKey="month" className="text-xs" />
+                <YAxis dataKey="val1" className="text-xs" />
+                <Line
+                  type="monotone"
+                  dataKey="val1"
+                  stroke="#A5A5F9"
+                  activeDot={{ r: 8 }}
+                />
+                <Line type="monotone" dataKey="val2" stroke="#FFED4B" />
+                <Line type="monotone" dataKey="val3" stroke="#990EE1" />
+              </LineChart>
+            </ResponsiveContainer>
+
+            <div className="flex flex-row items-center justify-center gap-5">
+              <div className="labelContainer">
+                <div className="colorBox bg-[#A5A5F9]"></div>
+                <p className="labelText">Monthly Active Users (MAUs)</p>
+              </div>
+              <div className="labelContainer">
+                <div className="colorBox bg-[#FFED4B]"></div>
+                <p className="labelText">Customer Satisfaction</p>
+              </div>
+              <div className="labelContainer">
+                <div className="colorBox bg-[#990EE1]"></div>
+                <p className="labelText">Churn Rate</p>
+              </div>
             </div>
           </div>
         </div>
@@ -192,10 +215,10 @@ const Performance = () => {
         <div className="teamEfficiencyGrp ">
           <h2 className="boxHeading">Team Efficiency</h2>
 
-          <PieChart width={250} height={200}>
+          <PieChart width={260} height={150} className="mx-auto">
             <Pie
               data={efficiencyData}
-              cx={125}
+              cx={130}
               cy={100}
               startAngle={180}
               endAngle={0}
@@ -213,6 +236,15 @@ const Performance = () => {
               ))}
             </Pie>
           </PieChart>
+
+          <div className="text-center relative bottom-16">
+            <p className="text-black font-semibold text-xl">80%</p>
+
+            <div className="flex flex-row justify-center gap-1 text-xs">
+              <img src={upArrow} alt="growth icon" />
+              <p>+9.0% increase</p>
+            </div>
+          </div>
 
           <div className="efficiencyTextGrp">
             <h2 className="boxHeading">Great Job!</h2>
