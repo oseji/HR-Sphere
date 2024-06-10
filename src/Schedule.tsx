@@ -11,7 +11,7 @@ const Schedule = () => {
       <div className="calendarHeading">
         <div className="flex flex-row items-center gap-2">
           <img src={calndarIcon} alt="calendar" />
-          <p className="text-black font-semibold">Schedule</p>
+          <p className="boxHeading">Schedule</p>
         </div>
 
         <button className="text-white px-3 py-1.5 bg-[#095256] rounded-lg">

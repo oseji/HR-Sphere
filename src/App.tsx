@@ -3,6 +3,7 @@ import { Route, Switch } from "react-router-dom";
 import Menu from "./Menu";
 import Overview from "./Overview";
 import Performance from "./Performance";
+import Payroll from "./Payroll";
 
 import logo from "./assets/logo.png";
 import searchIcon from "./assets/circum_search.png";
@@ -47,13 +48,11 @@ function App() {
         <Menu></Menu>
 
         <Switch>
-          <Route exact path="/">
-            <Overview></Overview>
-          </Route>
+          <Route exact path="/" component={Overview} />
 
-          <Route path="/Performance">
-            <Performance></Performance>
-          </Route>
+          <Route path="/Performance" component={Performance} />
+
+          <Route path="/Payroll" component={Payroll} />
         </Switch>
       </main>
     </div>

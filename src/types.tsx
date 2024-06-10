@@ -20,7 +20,7 @@ export type employeeOverviewType = {
   statusColor: string;
   numberOfKPIs: number;
   KPIScore: number;
-  monthlyAvg: string;
+  monthlyAvg: number;
   totalSalary: number;
   grossSalary: number;
   taxes: number;
@@ -53,7 +53,7 @@ export const employeeOverview: { [key: string]: employeeOverviewType } = {
     statusColor: "text-[#047E04]",
     numberOfKPIs: 8,
     KPIScore: 70,
-    monthlyAvg: "72%",
+    monthlyAvg: 72,
     totalSalary: 100000,
     grossSalary: 5000,
     taxes: 370.23,
@@ -70,8 +70,8 @@ export const employeeOverview: { [key: string]: employeeOverviewType } = {
     status: "remote",
     statusColor: "text-[#EF5F04]",
     numberOfKPIs: 8,
-    KPIScore: 60,
-    monthlyAvg: "65%",
+    KPIScore: 52,
+    monthlyAvg: 55,
     totalSalary: 120000,
     grossSalary: 7200,
     taxes: 570.13,
@@ -88,13 +88,13 @@ export const employeeOverview: { [key: string]: employeeOverviewType } = {
     status: "remote",
     statusColor: "text-[#EF5F04]",
     numberOfKPIs: 14,
-    KPIScore: 70,
-    monthlyAvg: "72%",
+    KPIScore: 74,
+    monthlyAvg: 78,
     totalSalary: 90000,
     grossSalary: 4100,
     taxes: 290.93,
     netSalary: 4100 - 290.93,
-    salaryStatus: "not paid",
+    salaryStatus: "pending",
     salaryStatusColor: "text-[#EF5F04]",
   },
   estherHoward: {
@@ -107,7 +107,7 @@ export const employeeOverview: { [key: string]: employeeOverviewType } = {
     statusColor: "text-[#EF5F04]",
     numberOfKPIs: 14,
     KPIScore: 72,
-    monthlyAvg: "75%",
+    monthlyAvg: 75,
     totalSalary: 110000,
     grossSalary: 5500,
     taxes: 400.93,
@@ -125,12 +125,12 @@ export const employeeOverview: { [key: string]: employeeOverviewType } = {
     statusColor: "text-[#047E04]",
     numberOfKPIs: 1,
     KPIScore: 20,
-    monthlyAvg: "21%",
+    monthlyAvg: 21,
     totalSalary: 85000,
     grossSalary: 3000,
     taxes: 200.67,
     netSalary: 3000 - 200.67,
-    salaryStatus: "paid",
+    salaryStatus: "pending",
     salaryStatusColor: "text-[#047E04]",
   },
   floydMiles: {
@@ -143,7 +143,7 @@ export const employeeOverview: { [key: string]: employeeOverviewType } = {
     statusColor: "text-[#047E04]",
     numberOfKPIs: 9,
     KPIScore: 59,
-    monthlyAvg: "66%",
+    monthlyAvg: 66,
     totalSalary: 130000,
     grossSalary: 7150,
     taxes: 573.72,
@@ -161,7 +161,7 @@ export const employeeOverview: { [key: string]: employeeOverviewType } = {
     statusColor: "text-[#047E04]",
     numberOfKPIs: 4,
     KPIScore: 66,
-    monthlyAvg: "69%",
+    monthlyAvg: 69,
     totalSalary: 100000,
     grossSalary: 5200,
     taxes: 347.67,
@@ -179,7 +179,7 @@ export const employeeOverview: { [key: string]: employeeOverviewType } = {
     statusColor: "text-[#EF5F04]",
     numberOfKPIs: 10,
     KPIScore: 40,
-    monthlyAvg: "45%",
+    monthlyAvg: 45,
     totalSalary: 95000,
     grossSalary: 4500,
     taxes: 299.08,
@@ -197,12 +197,12 @@ export const employeeOverview: { [key: string]: employeeOverviewType } = {
     statusColor: "text-[#047E04]",
     numberOfKPIs: 9,
     KPIScore: 57,
-    monthlyAvg: "61%",
+    monthlyAvg: 61,
     totalSalary: 105000,
     grossSalary: 5750,
     taxes: 675.58,
     netSalary: 5750 - 675.58,
-    salaryStatus: "not paid",
+    salaryStatus: "pending",
     salaryStatusColor: "text-[#EF5F04]",
   },
   devonLane: {
@@ -215,7 +215,7 @@ export const employeeOverview: { [key: string]: employeeOverviewType } = {
     statusColor: "text-[#EF5F04]",
     numberOfKPIs: 11,
     KPIScore: 60,
-    monthlyAvg: "65%",
+    monthlyAvg: 65,
     totalSalary: 135000,
     grossSalary: 7900,
     taxes: 611.18,
@@ -251,4 +251,14 @@ export const chartData: chartDataType[] = [
     RetentionRate: 20,
     TurnoverRate: 80,
   },
+];
+
+export const data: pieChartData[] = [
+  { name: "contractStaff", value: 127 },
+  { name: "fulltimeStaff", value: 273 },
+];
+
+export const efficiencyData: pieChartData[] = [
+  { name: "efficient", value: 80 },
+  { name: "notEfficient", value: 20 },
 ];

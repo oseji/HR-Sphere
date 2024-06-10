@@ -23,8 +23,21 @@
   @apply flex flex-row gap-3 text-sm;
 }
 
+.totalEmployeeChart,
+.keyIndicatorsChart,
+.employeePerformanceTable,
+.teamEfficiencyGrp,
+.employeeOfTheMonth,
+.payrollTable {
+  @apply p-3 rounded bg-white;
+}
+
+.boxHeading {
+  @apply font-medium text-base text-black capitalize;
+}
+
 select {
-  @apply cursor-pointer outline-0 p-1 border border-slate-300 rounded capitalize;
+  @apply cursor-pointer outline-0 p-2 border border-slate-300 text-[#6F6F6F] rounded capitalize text-[10px];
 }
 
 header {
@@ -102,10 +115,6 @@ header {
   @apply flex flex-row items-center justify-between mb-3 text-sm;
 }
 
-/* #chartSelection {
-  @apply p-1 border border-slate-300 rounded text-sm outline-0;
-} */
-
 .barChartInfo {
   @apply flex flex-row justify-center items-center gap-5;
 }
@@ -143,10 +152,6 @@ header {
   @apply flex flex-row gap-7 justify-start items-center;
 }
 
-.tableFilter {
-  @apply p-1 border border-slate-300 rounded text-sm outline-0 capitalize;
-}
-
 th {
   @apply py-2 text-start capitalize;
 }
@@ -181,12 +186,32 @@ td {
 }
 
 /* PERFORMANCE SCREEN */
-.totalEmployeeChart,
-.keyIndicatorsChart,
-.employeePerformanceTable {
-  @apply p-3 rounded bg-white;
-}
 
 .totalEmployeeChart {
   @apply overflow-hidden;
+}
+
+.efficiencyTextGrp {
+  @apply flex flex-col gap-2;
+}
+
+.eomPerformanceGrp {
+  @apply flex flex-row justify-between items-center text-center mt-3;
+}
+
+.eomHeading {
+  @apply text-xs capitalize font-medium text-black;
+}
+
+.eomNum {
+  @apply text-[#02AB02] text-xs;
+}
+
+.eomSmallText {
+  @apply text-[10px];
+}
+
+/* PAYROLL */
+.headingGrp {
+  @apply flex flex-row gap-2 text-[#095256] cursor-pointer;
 }

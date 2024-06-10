@@ -1,4 +1,5 @@
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
+
 // import {
 //   Label,
 //   LineChart,
@@ -9,15 +10,15 @@ import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
 //   Tooltip,
 //   ReferenceArea,
 // } from "recharts";
-import { pieChartData, employeeOverview } from "./types";
+
+import { data, efficiencyData, employeeOverview } from "./types";
 import { useState, useRef, SyntheticEvent } from "react";
 
+import eomImg from "./assets/employee of the month.png";
+
 const Performance = () => {
-  const data: pieChartData[] = [
-    { name: "contractStaff", value: 127 },
-    { name: "fulltimeStaff", value: 273 },
-  ];
   const COLORS = ["#06D6A0", "#095256"];
+  const efficiencyCOLORS = ["#06D6A0", "#EBEBEB"];
 
   const [sliceIndexes, setSliceIndexes] = useState({ start: 0, end: 5 });
   const employeeSortBtnRefs = [
@@ -44,7 +45,7 @@ const Performance = () => {
       <div className="flex flex-col gap-3">
         <div className="flex flex-row gap-3">
           <div className="totalEmployeeChart  min-w-[227px]">
-            <div className="flex flex-row justify-between items-center text-black font-semibold">
+            <div className="flex flex-row justify-between items-center boxHeading">
               <h2>Total Employee</h2>
               <h2>400</h2>
             </div>
@@ -84,7 +85,7 @@ const Performance = () => {
 
           <div className="keyIndicatorsChart w-[466px]">
             <div className="flex flex-row items-center justify-between text-black">
-              <h2 className="font-semibold">Key Performance Indicators</h2>
+              <h2 className="boxHeading">Key Performance Indicators</h2>
 
               <select className="capitalize">
                 <option value="all departments">all departments</option>
@@ -96,8 +97,8 @@ const Performance = () => {
         </div>
 
         <div className="employeePerformanceTable">
-          <div className="flex flex-row items-center justify-between">
-            <h2 className="font-semibold text-black">Performance Overview</h2>
+          <div className="flex flex-row items-center justify-between mb-5">
+            <h2 className="boxHeading">Performance Overview</h2>
 
             <div className="flex flex-row items-center gap-3">
               <select>
@@ -139,7 +140,21 @@ const Performance = () => {
                     <td>{value.jobTitle}</td>
                     <td>{value.numberOfKPIs}</td>
                     <td>{value.KPIScore}</td>
-                    <td>{value.monthlyAvg}</td>
+                    <td
+                      className={
+                        value.monthlyAvg < 39
+                          ? "text-[#D00000]"
+                          : value.monthlyAvg >= 39 && value.monthlyAvg < 60
+                          ? "text-[#F48B02]"
+                          : value.monthlyAvg >= 60 && value.monthlyAvg < 70
+                          ? "text-[#02AB02]"
+                          : value.monthlyAvg >= 70
+                          ? "text-[#02AB02]"
+                          : ""
+                      }
+                    >
+                      {value.monthlyAvg}%
+                    </td>
                   </tr>
                 ))}
             </tbody>
@@ -170,6 +185,91 @@ const Performance = () => {
           >
             2
           </button>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <div className="teamEfficiencyGrp ">
+          <h2 className="boxHeading">Team Efficiency</h2>
+
+          <PieChart width={250} height={200}>
+            <Pie
+              data={efficiencyData}
+              cx={125}
+              cy={100}
+              startAngle={180}
+              endAngle={0}
+              innerRadius={60}
+              outerRadius={80}
+              fill="#8884d8"
+              paddingAngle={0}
+              dataKey="value"
+            >
+              {data.map((entry, index) => (
+                <Cell
+                  key={`cell-${index}`}
+                  fill={efficiencyCOLORS[index % efficiencyCOLORS.length]}
+                />
+              ))}
+            </Pie>
+          </PieChart>
+
+          <div className="efficiencyTextGrp">
+            <h2 className="boxHeading">Great Job!</h2>
+
+            <p className="text-xs mb-2">
+              There has been 9.0% increase in your team’s efficiency versus the
+              previous month and the next training is slated for 22nd march
+              2024.
+            </p>
+
+            <button className="rounded text-white bg-[#095256] text-xs px-3 py-1.5 w-fit text-sm">
+              Compare scores
+            </button>
+          </div>
+        </div>
+
+        <div className="employeeOfTheMonth">
+          <h2 className="boxHeading">employee of the month</h2>
+
+          <div className="text-center">
+            <img
+              className="mx-auto mt-6 "
+              src={eomImg}
+              alt="employee of the month"
+            />
+
+            <h4 className="text-sm font-semibold text-black mt-3">
+              Ronald Richards
+            </h4>
+            <p className="text-xs">Product Designer</p>
+          </div>
+
+          <div className="eomPerformanceGrp">
+            <div>
+              <h3 className="eomHeading">performance</h3>
+
+              <p className="eomNum">78%</p>
+
+              <p className="eomSmallText">average of 40%</p>
+            </div>
+
+            <div>
+              <h3 className="eomHeading">attendance</h3>
+
+              <p className="eomNum">99%</p>
+
+              <p className="eomSmallText">average of 75%</p>
+            </div>
+
+            <div>
+              <h3 className="eomHeading">KPIs</h3>
+
+              <p className="eomNum">14</p>
+
+              <p className="eomSmallText">average of 10</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

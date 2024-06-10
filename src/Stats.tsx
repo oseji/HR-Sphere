@@ -146,9 +146,7 @@ const Stats = () => {
       <div className="chartGrp">
         <div className="chartBox">
           <div className="chartHeadingGrp">
-            <h1 className="font-semibold text-black">
-              Retention & Turnover Rate
-            </h1>
+            <h1 className="boxHeading">Retention & Turnover Rate</h1>
 
             <select id="chartSelection" onChange={toggleChartData}>
               <option value="5">Last 5 years</option>
@@ -200,7 +198,7 @@ const Stats = () => {
         </div>
 
         <div className="requestBox">
-          <h1 className="font-semibold pb-3 border-b border-black text-black w-full">
+          <h1 className="boxHeading pb-3 border-b border-black  w-full">
             Requests
           </h1>
 
@@ -229,7 +227,7 @@ const Stats = () => {
 
       <div className="tableGrp">
         <div className="tableGrpHeader">
-          <h1 className="text-black font-semibold">Employees</h1>
+          <h1 className="boxHeading">Employees</h1>
 
           <div className="tableSearchGrp">
             <img src={searchIcon} alt="search icon" className="h-5" />
