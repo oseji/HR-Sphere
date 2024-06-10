@@ -1,3 +1,4 @@
+import { SyntheticEvent, useState } from "react";
 import { employeeOverview } from "./types";
 
 import print from "./assets/print.svg";
@@ -5,6 +6,8 @@ import download from "./assets/download.svg";
 import filterIcon from "./assets/filter.svg";
 
 const Payroll = () => {
+  const [departmentFilter, setDepartmentFilter] = useState<string>();
+
   return (
     <section className="screenSection w-full">
       <div className="payrollTable">
@@ -39,11 +42,16 @@ const Payroll = () => {
             <option value="qtr3 2024">remote</option>
           </select>
 
-          <select>
-            <option value="all departments">all departments</option>
+          <select
+            onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
+              console.log(e.currentTarget.value);
+              setDepartmentFilter(e.currentTarget.value);
+            }}
+          >
+            <option value="">all departments</option>
             <option value="engineering">engineering</option>
             <option value="product">product</option>
-            <option value="hr">HR</option>
+            <option value="human resources">Human resources</option>
           </select>
 
           <img
@@ -66,31 +74,35 @@ const Payroll = () => {
           </thead>
 
           <tbody>
-            {Object.values(employeeOverview).map((value, index) => (
-              <tr key={index}>
-                <td className="employeeName">
-                  <img src={value.img} alt="profile image" />
-                  <p> {value.name}</p>
-                </td>
-                <td>${value.totalSalary.toLocaleString()}</td>
-                <td>${value.grossSalary.toLocaleString()}</td>
-                <td>${value.taxes.toLocaleString()}</td>
-                <td>${value.netSalary.toLocaleString()}</td>
-                <td
-                  className={
-                    value.salaryStatus === "pending"
-                      ? "text-[#F48B02]"
-                      : value.salaryStatus === "paid"
-                      ? "text-[#029202]"
-                      : value.salaryStatus === "not paid"
-                      ? "text-[#D00000]"
-                      : ""
-                  }
-                >
-                  {value.salaryStatus}
-                </td>
-              </tr>
-            ))}
+            {Object.values(employeeOverview)
+              .filter(
+                (e) => !departmentFilter || e.department === departmentFilter
+              )
+              .map((value, index) => (
+                <tr key={index}>
+                  <td className="employeeName">
+                    <img src={value.img} alt="profile image" />
+                    <p> {value.name}</p>
+                  </td>
+                  <td>${value.totalSalary.toLocaleString()}</td>
+                  <td>${value.grossSalary.toLocaleString()}</td>
+                  <td>${value.taxes.toLocaleString()}</td>
+                  <td>${value.netSalary.toLocaleString()}</td>
+                  <td
+                    className={
+                      value.salaryStatus === "pending"
+                        ? "text-[#F48B02]"
+                        : value.salaryStatus === "paid"
+                        ? "text-[#029202]"
+                        : value.salaryStatus === "not paid"
+                        ? "text-[#D00000]"
+                        : ""
+                    }
+                  >
+                    {value.salaryStatus}
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>

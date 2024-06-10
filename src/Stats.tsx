@@ -20,6 +20,7 @@ const Stats = () => {
   const [chartYears, setChartYears] = useState<number>(5);
   const [currentChartData, setCurrentChartData] = useState(chartData);
 
+  const [departmentFilter, setDepartmentFilter] = useState<string>();
   const [sliceIndexes, setSliceIndexes] = useState({ start: 0, end: 5 });
 
   const toggleChartData = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -252,12 +253,21 @@ const Stats = () => {
             <option value="back-end engineer">back-end engineer</option>
             <option value="product manager">product manager</option>
             <option value="product designer">product designer</option>
+            <option value="devOps">devOps</option>
+            <option value="HR">HR</option>
           </select>
 
-          <select className="tableFilter">
-            <option value="All departments">All departments</option>
+          <select
+            className="tableFilter"
+            onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
+              console.log(e.currentTarget.value);
+              setDepartmentFilter(e.currentTarget.value);
+            }}
+          >
+            <option value="">All departments</option>
             <option value="engineering">engineering</option>
             <option value="product">product</option>
+            <option value="human resources">human resources</option>
           </select>
         </div>
 
@@ -274,7 +284,11 @@ const Stats = () => {
 
           <tbody>
             {Object.values(employeeOverview)
+
               .slice(sliceIndexes.start, sliceIndexes.end)
+              .filter(
+                (e) => !departmentFilter || e.department === departmentFilter
+              )
               .map((value, index) => (
                 <tr key={index}>
                   <td className="employeeName">

@@ -135,7 +135,7 @@ const Performance = () => {
                 <option value="all departments">all departments</option>
                 <option value="engineering">engineering</option>
                 <option value="product">product</option>
-                <option value="hr">HR</option>
+                <option value="hr">Human resources</option>
               </select>
             </div>
           </div>
