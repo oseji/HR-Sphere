@@ -7,6 +7,8 @@ import filterIcon from "./assets/filter.svg";
 
 const Payroll = () => {
   const [departmentFilter, setDepartmentFilter] = useState<string>();
+  const [jobTitleFilter, setJobTitleFilter] = useState<string>();
+  const [workTypeFilter, setWorkTypeFilter] = useState<string>();
 
   return (
     <section className="screenSection w-full">
@@ -36,12 +38,19 @@ const Payroll = () => {
         </div>
 
         <div className="flex flex-row items-center gap-3 p-3">
-          <select>
-            <option value="qtr1 2024">all employees</option>
-            <option value="qtr2 2024">on site</option>
-            <option value="qtr3 2024">remote</option>
+          {/* work type */}
+          <select
+            onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
+              console.log(e.currentTarget.value);
+              setWorkTypeFilter(e.currentTarget.value);
+            }}
+          >
+            <option value="">all employees</option>
+            <option value="on site">on site</option>
+            <option value="remote">remote</option>
           </select>
 
+          {/* departments */}
           <select
             onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
               console.log(e.currentTarget.value);
@@ -76,7 +85,9 @@ const Payroll = () => {
           <tbody>
             {Object.values(employeeOverview)
               .filter(
-                (e) => !departmentFilter || e.department === departmentFilter
+                (e) =>
+                  (!departmentFilter || e.department === departmentFilter) &&
+                  (!workTypeFilter || e.status === workTypeFilter)
               )
               .map((value, index) => (
                 <tr key={index}>

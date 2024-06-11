@@ -13,6 +13,7 @@ const Performance = () => {
   const COLORS = ["#06D6A0", "#095256"];
   const efficiencyCOLORS = ["#06D6A0", "#EBEBEB"];
 
+  const [departmentFilter, setDepartmentFilter] = useState<string>();
   const [sliceIndexes, setSliceIndexes] = useState({ start: 0, end: 5 });
   const employeeSortBtnRefs = [
     useRef<HTMLButtonElement>(null),
@@ -131,11 +132,15 @@ const Performance = () => {
                 <option value="qtr4 2024">quater 4 2024</option>
               </select>
 
-              <select>
-                <option value="all departments">all departments</option>
+              <select
+                onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
+                  setDepartmentFilter(e.currentTarget.value);
+                }}
+              >
+                <option value="">all departments</option>
                 <option value="engineering">engineering</option>
                 <option value="product">product</option>
-                <option value="hr">Human resources</option>
+                <option value="human resources">Human resources</option>
               </select>
             </div>
           </div>
@@ -153,6 +158,9 @@ const Performance = () => {
 
             <tbody>
               {Object.values(employeeOverview)
+                .filter(
+                  (e) => !departmentFilter || e.department === departmentFilter
+                )
                 .slice(sliceIndexes.start, sliceIndexes.end)
                 .map((value, index) => (
                   <tr key={index}>

@@ -21,6 +21,9 @@ const Stats = () => {
   const [currentChartData, setCurrentChartData] = useState(chartData);
 
   const [departmentFilter, setDepartmentFilter] = useState<string>();
+  const [jobTitleFilter, setJobTitleFilter] = useState<string>();
+  const [workTypefilter, setWorkTypefilter] = useState<string>();
+
   const [sliceIndexes, setSliceIndexes] = useState({ start: 0, end: 5 });
 
   const toggleChartData = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -241,22 +244,38 @@ const Stats = () => {
         </div>
 
         <div className="tableFilterGrp">
-          <select className="tableFilter">
-            <option value="All employees">All employees</option>
+          {/* work type */}
+          <select
+            className="tableFilter"
+            onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
+              console.log(e.currentTarget.value);
+              setWorkTypefilter(e.currentTarget.value);
+            }}
+          >
+            <option value="">All employees</option>
             <option value="remote">Remote</option>
-            <option value="on site">on site employees</option>
+            <option value="on site">on site</option>
           </select>
 
-          <select className="tableFilter">
-            <option value="All job titles">All job titles</option>
+          {/* job titles */}
+          <select
+            className="tableFilter"
+            onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
+              console.log(e.currentTarget.value);
+              setJobTitleFilter(e.currentTarget.value);
+            }}
+          >
+            <option value="">All job titles</option>
             <option value="front-end engineer">front-end engineer</option>
             <option value="back-end engineer">back-end engineer</option>
+            <option value="fullstack engineer">fullstack engineer</option>
             <option value="product manager">product manager</option>
             <option value="product designer">product designer</option>
-            <option value="devOps">devOps</option>
+            <option value="devOps engineer">devOps</option>
             <option value="HR">HR</option>
           </select>
 
+          {/* departments */}
           <select
             className="tableFilter"
             onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
@@ -284,10 +303,11 @@ const Stats = () => {
 
           <tbody>
             {Object.values(employeeOverview)
-
-              .slice(sliceIndexes.start, sliceIndexes.end)
               .filter(
-                (e) => !departmentFilter || e.department === departmentFilter
+                (e) =>
+                  (!departmentFilter || e.department === departmentFilter) &&
+                  (!workTypefilter || e.status === workTypefilter) &&
+                  (!jobTitleFilter || e.jobTitle === jobTitleFilter)
               )
               .map((value, index) => (
                 <tr key={index}>
