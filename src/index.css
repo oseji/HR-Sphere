@@ -23,6 +23,18 @@
   @apply flex flex-row gap-3 text-sm;
 }
 
+.pageNumGrp {
+  @apply flex flex-row items-center gap-2 text-[10px] font-semibold scale-90;
+}
+
+.pageNum {
+  @apply py-1 px-2.5 rounded-md transition ease-in-out duration-200;
+}
+
+.activePageNum {
+  @apply bg-[#095256] text-white scale-110;
+}
+
 .totalEmployeeChart,
 .keyIndicatorsChart,
 .employeePerformanceTable,
@@ -169,15 +181,11 @@ td {
 }
 
 .employeeSort {
-  @apply flex flex-row justify-center items-center gap-5 text-xs;
+  @apply flex flex-row justify-between items-center gap-5 text-xs;
 }
 
 .employeeSortBtn {
-  @apply bg-white px-3 py-1.5 rounded-md hover:scale-110 transition ease-in-out duration-150;
-}
-
-.activeSortBtn {
-  @apply bg-[#095256] text-white;
+  @apply bg-[#095256] text-white px-3 py-1.5 rounded-md hover:scale-110 transition ease-in-out duration-150;
 }
 
 /* SCHEDULE */

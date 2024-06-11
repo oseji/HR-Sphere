@@ -14,7 +14,7 @@ const Performance = () => {
   const efficiencyCOLORS = ["#06D6A0", "#EBEBEB"];
 
   const [departmentFilter, setDepartmentFilter] = useState<string>();
-  const [sliceIndexes, setSliceIndexes] = useState({ start: 0, end: 5 });
+  // const [sliceIndexes, setSliceIndexes] = useState({ start: 0, end: 5 });
   const employeeSortBtnRefs = [
     useRef<HTMLButtonElement>(null),
     useRef<HTMLButtonElement>(null),
@@ -32,6 +32,29 @@ const Performance = () => {
         btn?.classList.remove("activeSortBtn");
       }
     });
+  };
+
+  // handle pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
+  const handlePrevBtn = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextBtn = () => {
+    if (
+      endIndex <
+      Object.values(employeeOverview).filter(
+        (e) => !departmentFilter || e.department === departmentFilter
+      ).length
+    ) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   return (
@@ -161,7 +184,7 @@ const Performance = () => {
                 .filter(
                   (e) => !departmentFilter || e.department === departmentFilter
                 )
-                .slice(sliceIndexes.start, sliceIndexes.end)
+                .slice(startIndex, endIndex)
                 .map((value, index) => (
                   <tr key={index}>
                     <td className="employeeName">
@@ -193,29 +216,52 @@ const Performance = () => {
         </div>
 
         <div className="employeeSort">
-          <button
-            className={`employeeSortBtn activeSortBtn`}
-            onClick={(e) => {
-              setSliceIndexes({ start: 0, end: 5 });
-              toggleActivePageClass(e);
-            }}
-            ref={employeeSortBtnRefs[0]}
-            value={0}
-          >
-            1
-          </button>
+          <div className="flex flex-row items-center gap-5">
+            <button
+              className={`employeeSortBtn activeSortBtn ${
+                currentPage === 1 ? "hidden" : ""
+              }`}
+              onClick={handlePrevBtn}
+              ref={employeeSortBtnRefs[0]}
+              value={0}
+              disabled={currentPage === 1}
+            >
+              Previous
+            </button>
 
-          <button
-            className={`employeeSortBtn`}
-            onClick={(e) => {
-              setSliceIndexes({ start: 5, end: 10 });
-              toggleActivePageClass(e);
-            }}
-            ref={employeeSortBtnRefs[1]}
-            value={1}
-          >
-            2
-          </button>
+            <button
+              className={`employeeSortBtn ${
+                endIndex >=
+                Object.values(employeeOverview).filter(
+                  (e) => !departmentFilter || e.department === departmentFilter
+                ).length
+                  ? "hidden"
+                  : ""
+              }`}
+              onClick={handleNextBtn}
+              ref={employeeSortBtnRefs[1]}
+              value={1}
+            >
+              Next
+            </button>
+          </div>
+
+          <div className="pageNumGrp">
+            <div
+              className={`pageNum ${
+                currentPage === 1 ? "activePageNum" : "bg-white"
+              }`}
+            >
+              1
+            </div>
+            <div
+              className={`pageNum ${
+                currentPage === 2 ? "activePageNum" : "bg-white"
+              }`}
+            >
+              2
+            </div>
+          </div>
         </div>
       </div>
 
@@ -263,7 +309,7 @@ const Performance = () => {
               2024.
             </p>
 
-            <button className="rounded text-white bg-[#095256] text-xs px-3 py-1.5 w-fit text-sm">
+            <button className="rounded text-white bg-[#095256] px-3 py-1.5 w-fit text-sm">
               Compare scores
             </button>
           </div>

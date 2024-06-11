@@ -17,14 +17,17 @@ import downGrowth from "./assets/down growth.svg";
 import searchIcon from "./assets/circum_search.png";
 
 const Stats = () => {
+  const employeeSortBtnRefs = [
+    useRef<HTMLButtonElement>(null),
+    useRef<HTMLButtonElement>(null),
+  ];
+
   const [chartYears, setChartYears] = useState<number>(5);
   const [currentChartData, setCurrentChartData] = useState(chartData);
 
   const [departmentFilter, setDepartmentFilter] = useState<string>();
   const [jobTitleFilter, setJobTitleFilter] = useState<string>();
-  const [workTypefilter, setWorkTypefilter] = useState<string>();
-
-  const [sliceIndexes, setSliceIndexes] = useState({ start: 0, end: 5 });
+  const [workTypeFilter, setWorkTypeFilter] = useState<string>();
 
   const toggleChartData = (e: ChangeEvent<HTMLSelectElement>) => {
     const yearVal = e.target.value;
@@ -48,23 +51,29 @@ const Stats = () => {
     });
   };
 
-  const employeeSortBtnRefs = [
-    useRef<HTMLButtonElement>(null),
-    useRef<HTMLButtonElement>(null),
-  ];
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 5;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
 
-  const toggleActivePageClass = (e: SyntheticEvent<HTMLButtonElement>) => {
-    const clicked = Number(e.currentTarget.value);
+  const handlePrevBtn = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
 
-    employeeSortBtnRefs.forEach((element, index) => {
-      const btn = element.current;
-
-      if (index === clicked) {
-        btn?.classList.add("activeSortBtn");
-      } else {
-        btn?.classList.remove("activeSortBtn");
-      }
-    });
+  const handleNextBtn = () => {
+    if (
+      endIndex <
+      Object.values(employeeOverview).filter(
+        (e) =>
+          (!departmentFilter || e.department === departmentFilter) &&
+          (!workTypeFilter || e.status === workTypeFilter) &&
+          (!jobTitleFilter || e.jobTitle === jobTitleFilter)
+      ).length
+    ) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   useEffect(() => {
@@ -249,7 +258,7 @@ const Stats = () => {
             className="tableFilter"
             onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
               console.log(e.currentTarget.value);
-              setWorkTypefilter(e.currentTarget.value);
+              setWorkTypeFilter(e.currentTarget.value);
             }}
           >
             <option value="">All employees</option>
@@ -306,9 +315,10 @@ const Stats = () => {
               .filter(
                 (e) =>
                   (!departmentFilter || e.department === departmentFilter) &&
-                  (!workTypefilter || e.status === workTypefilter) &&
+                  (!workTypeFilter || e.status === workTypeFilter) &&
                   (!jobTitleFilter || e.jobTitle === jobTitleFilter)
               )
+              .slice(startIndex, endIndex)
               .map((value, index) => (
                 <tr key={index}>
                   <td className="employeeName">
@@ -326,29 +336,55 @@ const Stats = () => {
       </div>
 
       <div className="employeeSort">
-        <button
-          className={`employeeSortBtn activeSortBtn`}
-          onClick={(e) => {
-            setSliceIndexes({ start: 0, end: 5 });
-            toggleActivePageClass(e);
-          }}
-          ref={employeeSortBtnRefs[0]}
-          value={0}
-        >
-          1
-        </button>
+        <div className="flex flex-row items-center gap-5">
+          <button
+            className={`employeeSortBtn activeSortBtn ${
+              currentPage === 1 ? "hidden" : ""
+            }`}
+            onClick={handlePrevBtn}
+            ref={employeeSortBtnRefs[0]}
+            value={0}
+            disabled={currentPage === 1}
+          >
+            Previous
+          </button>
 
-        <button
-          className={`employeeSortBtn`}
-          onClick={(e) => {
-            setSliceIndexes({ start: 5, end: 10 });
-            toggleActivePageClass(e);
-          }}
-          ref={employeeSortBtnRefs[1]}
-          value={1}
-        >
-          2
-        </button>
+          <button
+            className={`employeeSortBtn ${
+              endIndex >=
+              Object.values(employeeOverview).filter(
+                (e) =>
+                  (!departmentFilter || e.department === departmentFilter) &&
+                  (!workTypeFilter || e.status === workTypeFilter) &&
+                  (!jobTitleFilter || e.jobTitle === jobTitleFilter)
+              ).length
+                ? "hidden"
+                : ""
+            }`}
+            onClick={handleNextBtn}
+            ref={employeeSortBtnRefs[1]}
+            value={1}
+          >
+            Next
+          </button>
+        </div>
+
+        <div className="pageNumGrp">
+          <div
+            className={`pageNum ${
+              currentPage === 1 ? "activePageNum" : "bg-white"
+            }`}
+          >
+            1
+          </div>
+          <div
+            className={`pageNum ${
+              currentPage === 2 ? "activePageNum" : "bg-white"
+            }`}
+          >
+            2
+          </div>
+        </div>
       </div>
     </section>
   );

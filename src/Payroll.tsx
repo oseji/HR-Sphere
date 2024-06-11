@@ -7,7 +7,6 @@ import filterIcon from "./assets/filter.svg";
 
 const Payroll = () => {
   const [departmentFilter, setDepartmentFilter] = useState<string>();
-  const [jobTitleFilter, setJobTitleFilter] = useState<string>();
   const [workTypeFilter, setWorkTypeFilter] = useState<string>();
 
   return (
