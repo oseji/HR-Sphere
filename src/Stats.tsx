@@ -100,10 +100,6 @@ const Stats = () => {
     });
   }, [chartYears]);
 
-  useEffect(() => {
-    console.log(searchFilter);
-  }, [searchFilter]);
-
   return (
     <section className="flex flex-col gap-3 p-3 max-w-[730px]">
       <div className="statsCardGrp">
@@ -266,10 +262,9 @@ const Stats = () => {
           {/* work type */}
           <select
             className="tableFilter"
-            onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
-              console.log(e.currentTarget.value);
-              setWorkTypeFilter(e.currentTarget.value);
-            }}
+            onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
+              setWorkTypeFilter(e.currentTarget.value)
+            }
           >
             <option value="">All employees</option>
             <option value="remote">Remote</option>
@@ -279,10 +274,9 @@ const Stats = () => {
           {/* job titles */}
           <select
             className="tableFilter"
-            onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
-              console.log(e.currentTarget.value);
-              setJobTitleFilter(e.currentTarget.value);
-            }}
+            onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
+              setJobTitleFilter(e.currentTarget.value)
+            }
           >
             <option value="">All job titles</option>
             <option value="front-end engineer">front-end engineer</option>
@@ -297,10 +291,9 @@ const Stats = () => {
           {/* departments */}
           <select
             className="tableFilter"
-            onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
-              console.log(e.currentTarget.value);
-              setDepartmentFilter(e.currentTarget.value);
-            }}
+            onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
+              setDepartmentFilter(e.currentTarget.value)
+            }
           >
             <option value="">All departments</option>
             <option value="engineering">engineering</option>

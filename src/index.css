@@ -165,7 +165,7 @@ header {
 
 /* table group */
 .tableGrp {
-  @apply text-sm bg-white p-3 rounded flex flex-col gap-5;
+  @apply text-sm bg-white p-3 rounded flex flex-col gap-5 min-h-[412px];
 }
 
 .tableGrpHeader {

@@ -39,10 +39,9 @@ const Payroll = () => {
         <div className="flex flex-row items-center gap-3 p-3">
           {/* work type */}
           <select
-            onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
-              console.log(e.currentTarget.value);
-              setWorkTypeFilter(e.currentTarget.value);
-            }}
+            onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
+              setWorkTypeFilter(e.currentTarget.value)
+            }
           >
             <option value="">all employees</option>
             <option value="on site">on site</option>
@@ -51,10 +50,9 @@ const Payroll = () => {
 
           {/* departments */}
           <select
-            onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
-              console.log(e.currentTarget.value);
-              setDepartmentFilter(e.currentTarget.value);
-            }}
+            onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
+              setDepartmentFilter(e.currentTarget.value)
+            }
           >
             <option value="">all departments</option>
             <option value="engineering">engineering</option>

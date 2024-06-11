@@ -129,7 +129,7 @@ const Performance = () => {
           </div>
         </div>
 
-        <div className="employeePerformanceTable">
+        <div className="employeePerformanceTable min-h-[371px]">
           <div className="flex flex-row items-center justify-between mb-5">
             <h2 className="boxHeading">Performance Overview</h2>
 
