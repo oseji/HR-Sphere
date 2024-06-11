@@ -14,25 +14,11 @@ const Performance = () => {
   const efficiencyCOLORS = ["#06D6A0", "#EBEBEB"];
 
   const [departmentFilter, setDepartmentFilter] = useState<string>();
-  // const [sliceIndexes, setSliceIndexes] = useState({ start: 0, end: 5 });
+
   const employeeSortBtnRefs = [
     useRef<HTMLButtonElement>(null),
     useRef<HTMLButtonElement>(null),
   ];
-
-  const toggleActivePageClass = (e: SyntheticEvent<HTMLButtonElement>) => {
-    const clicked = Number(e.currentTarget.value);
-
-    employeeSortBtnRefs.forEach((element, index) => {
-      const btn = element.current;
-
-      if (index === clicked) {
-        btn?.classList.add("activeSortBtn");
-      } else {
-        btn?.classList.remove("activeSortBtn");
-      }
-    });
-  };
 
   // handle pagination
   const [currentPage, setCurrentPage] = useState(1);
@@ -215,7 +201,7 @@ const Performance = () => {
           </table>
         </div>
 
-        <div className="employeeSort">
+        <div className="employeeSort pb-3">
           <div className="flex flex-row items-center gap-5">
             <button
               className={`employeeSortBtn activeSortBtn ${

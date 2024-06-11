@@ -25,6 +25,7 @@ const Stats = () => {
   const [chartYears, setChartYears] = useState<number>(5);
   const [currentChartData, setCurrentChartData] = useState(chartData);
 
+  const [searchFilter, setSearchFilter] = useState<string>();
   const [departmentFilter, setDepartmentFilter] = useState<string>();
   const [jobTitleFilter, setJobTitleFilter] = useState<string>();
   const [workTypeFilter, setWorkTypeFilter] = useState<string>();
@@ -76,6 +77,7 @@ const Stats = () => {
     }
   };
 
+  //update barchart
   useEffect(() => {
     setCurrentChartData((prev) => {
       let chart = prev;
@@ -97,6 +99,10 @@ const Stats = () => {
       return chart;
     });
   }, [chartYears]);
+
+  useEffect(() => {
+    console.log(searchFilter);
+  }, [searchFilter]);
 
   return (
     <section className="flex flex-col gap-3 p-3 max-w-[730px]">
@@ -246,8 +252,12 @@ const Stats = () => {
             <img src={searchIcon} alt="search icon" className="h-5" />
             <input
               type="text"
-              placeholder="Search"
-              className="bg-transparent outline-0 text-sm placeholder:text-sm"
+              placeholder="Search for employee"
+              className="bg-transparent outline-0 text-xs placeholder:text-xs"
+              value={searchFilter}
+              onChange={(e: SyntheticEvent<HTMLInputElement>) => {
+                setSearchFilter(e.currentTarget.value);
+              }}
             />
           </div>
         </div>
@@ -316,7 +326,9 @@ const Stats = () => {
                 (e) =>
                   (!departmentFilter || e.department === departmentFilter) &&
                   (!workTypeFilter || e.status === workTypeFilter) &&
-                  (!jobTitleFilter || e.jobTitle === jobTitleFilter)
+                  (!jobTitleFilter || e.jobTitle === jobTitleFilter) &&
+                  (!searchFilter ||
+                    e.name.toLowerCase().includes(searchFilter.toLowerCase()))
               )
               .slice(startIndex, endIndex)
               .map((value, index) => (

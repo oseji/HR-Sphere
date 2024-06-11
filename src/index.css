@@ -7,16 +7,32 @@
   src: url("/fonts/Poppins-Regular.ttf");
 }
 
+html {
+  @apply scroll-smooth;
+}
+
 .App {
   @apply font-Poppins text-[#6F6F6F] bg-[#ECECEC] max-w-[100vw];
 }
 
 .screenSection {
-  @apply min-h-screen p-3;
+  @apply min-h-screen p-3 overflow-y-scroll;
+}
+
+.screenSection::-webkit-scrollbar {
+  @apply hidden;
 }
 
 .overviewSection {
   @apply flex flex-row;
+}
+
+.overviewScreen {
+  @apply overflow-y-scroll;
+}
+
+.overviewScreen::-webkit-scrollbar {
+  @apply hidden;
 }
 
 .performanceSection {

@@ -44,7 +44,7 @@ function App() {
         </div>
       </header>
 
-      <main className="flex flex-row">
+      <main className="flex flex-row max-h-screen">
         <Menu></Menu>
 
         <Switch>
