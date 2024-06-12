@@ -56,6 +56,14 @@ const Stats = () => {
   const itemsPerPage = 5;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
+  let numberOfPages = Math.ceil(
+    Object.values(employeeOverview).filter(
+      (e) =>
+        (!departmentFilter || e.department === departmentFilter) &&
+        (!workTypeFilter || e.status === workTypeFilter) &&
+        (!jobTitleFilter || e.jobTitle === jobTitleFilter)
+    ).length / itemsPerPage
+  );
 
   const handlePrevBtn = () => {
     if (currentPage > 1) {
@@ -375,20 +383,16 @@ const Stats = () => {
         </div>
 
         <div className="pageNumGrp">
-          <div
-            className={`pageNum ${
-              currentPage === 1 ? "activePageNum" : "bg-white"
-            }`}
-          >
-            1
-          </div>
-          <div
-            className={`pageNum ${
-              currentPage === 2 ? "activePageNum" : "bg-white"
-            }`}
-          >
-            2
-          </div>
+          {Array.from({ length: numberOfPages }, (_, index) => (
+            <button
+              key={index + 1}
+              className={`pageNum ${
+                currentPage === index + 1 ? "activePageNum" : "bg-white"
+              }`}
+            >
+              {index + 1}
+            </button>
+          ))}
         </div>
       </div>
     </section>

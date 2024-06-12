@@ -11,7 +11,7 @@ const Payroll = () => {
 
   return (
     <section className="screenSection w-full">
-      <div className="payrollTable">
+      <div className="payrollTable min-h-screen">
         <div className="pb-2 border-b border-slate-300 flex flex-row justify-between items-center">
           <select className="cursor-pointer outline-0 p-2  rounded capitalize text-base text-black border-none">
             <option value="">Payroll for february 2024</option>

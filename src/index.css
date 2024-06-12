@@ -246,3 +246,5 @@ td {
 .headingGrp {
   @apply flex flex-row gap-2 text-[#095256] cursor-pointer;
 }
+
+/* FILE MANAGER */

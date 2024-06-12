@@ -4,6 +4,7 @@ import Menu from "./Menu";
 import Overview from "./Overview";
 import Performance from "./Performance";
 import Payroll from "./Payroll";
+import FileManager from "./FileManager";
 
 import logo from "./assets/logo.png";
 import searchIcon from "./assets/circum_search.png";
@@ -53,6 +54,8 @@ function App() {
           <Route path="/Performance" component={Performance} />
 
           <Route path="/Payroll" component={Payroll} />
+
+          <Route path="/FileManager" component={FileManager} />
         </Switch>
       </main>
     </div>

@@ -1,6 +1,6 @@
 import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
 
-import { LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
+import { LineChart, Line, XAxis, YAxis } from "recharts";
 
 import { data, efficiencyData, employeeOverview, keyIndicator } from "./types";
 
@@ -25,6 +25,13 @@ const Performance = () => {
   const itemsPerPage = 5;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
+  let numberOfPages = Math.ceil(
+    Object.values(employeeOverview).filter(
+      (e) => !departmentFilter || e.department === departmentFilter
+    ).length / itemsPerPage
+  );
+
+  console.log(numberOfPages);
 
   const handlePrevBtn = () => {
     if (currentPage > 1) {
@@ -233,20 +240,16 @@ const Performance = () => {
           </div>
 
           <div className="pageNumGrp">
-            <div
-              className={`pageNum ${
-                currentPage === 1 ? "activePageNum" : "bg-white"
-              }`}
-            >
-              1
-            </div>
-            <div
-              className={`pageNum ${
-                currentPage === 2 ? "activePageNum" : "bg-white"
-              }`}
-            >
-              2
-            </div>
+            {Array.from({ length: numberOfPages }, (_, index) => (
+              <button
+                key={index + 1}
+                className={`pageNum ${
+                  currentPage === index + 1 ? "activePageNum" : "bg-white"
+                }`}
+              >
+                {index + 1}
+              </button>
+            ))}
           </div>
         </div>
       </div>
