@@ -58,6 +58,7 @@ export type documentType = {
   name: string;
   size: string;
   date: string;
+  filterType: string;
 };
 
 // CONST
@@ -491,6 +492,7 @@ export const folders: documentType[] = [
     name: "Public documents",
     size: "2 GB",
     date: "12-01-24",
+    filterType: "updated",
   },
   {
     thumbnail: folderIcon,
@@ -498,6 +500,7 @@ export const folders: documentType[] = [
     name: "Appraisal forms",
     size: "10.2 MB",
     date: "07-01-24",
+    filterType: "updated",
   },
   {
     thumbnail: folderIcon,
@@ -505,6 +508,7 @@ export const folders: documentType[] = [
     name: "Satisfaction surveys",
     size: "4 GB",
     date: "01-02-24",
+    filterType: "shared",
   },
   {
     thumbnail: folderIcon,
@@ -512,6 +516,7 @@ export const folders: documentType[] = [
     name: "admin reports",
     size: "1 GB",
     date: "21-02-24",
+    filterType: "added",
   },
   {
     thumbnail: folderIcon,
@@ -519,6 +524,7 @@ export const folders: documentType[] = [
     name: "EPR",
     size: "3.1 GB",
     date: "11-02-24",
+    filterType: "updated",
   },
   {
     thumbnail: folderIcon,
@@ -526,6 +532,7 @@ export const folders: documentType[] = [
     name: "Project Plans",
     size: "500 MB",
     date: "14-03-24",
+    filterType: "shared",
   },
   {
     thumbnail: folderIcon,
@@ -533,6 +540,7 @@ export const folders: documentType[] = [
     name: "Financial Reports",
     size: "2.5 GB",
     date: "28-01-24",
+    filterType: "added",
   },
   {
     thumbnail: folderIcon,
@@ -540,6 +548,7 @@ export const folders: documentType[] = [
     name: "HR Policies",
     size: "1.2 GB",
     date: "19-02-24",
+    filterType: "added",
   },
   {
     thumbnail: folderIcon,
@@ -547,6 +556,7 @@ export const folders: documentType[] = [
     name: "Training Materials",
     size: "750 MB",
     date: "05-03-24",
+    filterType: "shared",
   },
   {
     thumbnail: folderIcon,
@@ -554,6 +564,7 @@ export const folders: documentType[] = [
     name: "Marketing Assets",
     size: "3 GB",
     date: "22-02-24",
+    filterType: "shared",
   },
   {
     thumbnail: folderIcon,
@@ -561,6 +572,7 @@ export const folders: documentType[] = [
     name: "Sales Data",
     size: "1.5 GB",
     date: "18-01-24",
+    filterType: "added",
   },
   {
     thumbnail: folderIcon,
@@ -568,6 +580,7 @@ export const folders: documentType[] = [
     name: "Meeting Notes",
     size: "200 MB",
     date: "12-03-24",
+    filterType: "added",
   },
   {
     thumbnail: folderIcon,
@@ -575,6 +588,7 @@ export const folders: documentType[] = [
     name: "Technical Specifications",
     size: "850 MB",
     date: "25-01-24",
+    filterType: "updated",
   },
   {
     thumbnail: folderIcon,
@@ -582,6 +596,7 @@ export const folders: documentType[] = [
     name: "Annual Reviews",
     size: "2 GB",
     date: "30-01-24",
+    filterType: "shared",
   },
   {
     thumbnail: folderIcon,
@@ -589,6 +604,7 @@ export const folders: documentType[] = [
     name: "Legal Documents",
     size: "4.5 GB",
     date: "10-03-24",
+    filterType: "added",
   },
 ];
 
@@ -599,6 +615,7 @@ export const files: documentType[] = [
     name: "game Plans",
     size: "2.2 MB",
     date: "17-03-24",
+    filterType: "updated",
   },
   {
     thumbnail: pdfIcon,
@@ -606,6 +623,7 @@ export const files: documentType[] = [
     name: "Project Plans",
     size: "25 MB",
     date: "11-03-24",
+    filterType: "updated",
   },
   {
     thumbnail: pngIcon,
@@ -613,6 +631,7 @@ export const files: documentType[] = [
     name: "Project Plans",
     size: "27 kb",
     date: "04-04-24",
+    filterType: "shared",
   },
   {
     thumbnail: docIcon,
@@ -620,6 +639,7 @@ export const files: documentType[] = [
     name: "Team Meeting Notes",
     size: "1.5 MB",
     date: "05-03-24",
+    filterType: "added",
   },
   {
     thumbnail: pdfIcon,
@@ -627,6 +647,7 @@ export const files: documentType[] = [
     name: "Annual Report",
     size: "12 MB",
     date: "10-02-24",
+    filterType: "shared",
   },
   {
     thumbnail: pngIcon,
@@ -634,6 +655,7 @@ export const files: documentType[] = [
     name: "Company Logo",
     size: "50 KB",
     date: "21-01-24",
+    filterType: "added",
   },
   {
     thumbnail: pdfIcon,
@@ -641,6 +663,7 @@ export const files: documentType[] = [
     name: "Financial Summary",
     size: "30 MB",
     date: "08-03-24",
+    filterType: "added",
   },
   {
     thumbnail: docIcon,
@@ -648,6 +671,7 @@ export const files: documentType[] = [
     name: "Employee Handbook",
     size: "4.5 MB",
     date: "15-02-24",
+    filterType: "added",
   },
   {
     thumbnail: pngIcon,
@@ -655,6 +679,7 @@ export const files: documentType[] = [
     name: "Product Images",
     size: "300 KB",
     date: "01-02-24",
+    filterType: "added",
   },
   {
     thumbnail: pdfIcon,
@@ -662,6 +687,7 @@ export const files: documentType[] = [
     name: "Marketing Strategy",
     size: "22 MB",
     date: "19-02-24",
+    filterType: "updated",
   },
   {
     thumbnail: docIcon,
@@ -669,6 +695,7 @@ export const files: documentType[] = [
     name: "Client Contracts",
     size: "7.8 MB",
     date: "07-03-24",
+    filterType: "shared",
   },
   {
     thumbnail: pdfIcon,
@@ -676,6 +703,7 @@ export const files: documentType[] = [
     name: "Sales Report Q1",
     size: "14 MB",
     date: "23-01-24",
+    filterType: "shared",
   },
   {
     thumbnail: pngIcon,
@@ -683,6 +711,7 @@ export const files: documentType[] = [
     name: "Infographic",
     size: "120 KB",
     date: "14-02-24",
+    filterType: "shared",
   },
   {
     thumbnail: docIcon,
@@ -690,6 +719,7 @@ export const files: documentType[] = [
     name: "Project Proposal",
     size: "3.2 MB",
     date: "09-03-24",
+    filterType: "added",
   },
   {
     thumbnail: pdfIcon,
@@ -697,6 +727,7 @@ export const files: documentType[] = [
     name: "Research Paper",
     size: "9 MB",
     date: "20-01-24",
+    filterType: "added",
   },
   {
     thumbnail: pngIcon,
@@ -704,6 +735,7 @@ export const files: documentType[] = [
     name: "Event Poster",
     size: "85 KB",
     date: "12-02-24",
+    filterType: "shared",
   },
   {
     thumbnail: pdfIcon,
@@ -711,6 +743,7 @@ export const files: documentType[] = [
     name: "Budget Report",
     size: "15 MB",
     date: "03-03-24",
+    filterType: "updated",
   },
   {
     thumbnail: docIcon,
@@ -718,6 +751,7 @@ export const files: documentType[] = [
     name: "Training Manual",
     size: "5.6 MB",
     date: "28-01-24",
+    filterType: "updated",
   },
   {
     thumbnail: pngIcon,
@@ -725,6 +759,7 @@ export const files: documentType[] = [
     name: "Product Screenshot",
     size: "110 KB",
     date: "17-02-24",
+    filterType: "added",
   },
   {
     thumbnail: pdfIcon,
@@ -732,6 +767,7 @@ export const files: documentType[] = [
     name: "Workshop Materials",
     size: "20 MB",
     date: "13-03-24",
+    filterType: "added",
   },
   {
     thumbnail: docIcon,
@@ -739,6 +775,7 @@ export const files: documentType[] = [
     name: "Technical Documentation",
     size: "6.4 MB",
     date: "24-01-24",
+    filterType: "shared",
   },
   {
     thumbnail: pdfIcon,
@@ -746,6 +783,7 @@ export const files: documentType[] = [
     name: "Policy Document",
     size: "10 MB",
     date: "02-03-24",
+    filterType: "shared",
   },
   {
     thumbnail: pngIcon,
@@ -753,6 +791,7 @@ export const files: documentType[] = [
     name: "Diagram",
     size: "70 KB",
     date: "11-02-24",
+    filterType: "added",
   },
   {
     thumbnail: docIcon,
@@ -760,6 +799,7 @@ export const files: documentType[] = [
     name: "Meeting Agenda",
     size: "2 MB",
     date: "05-02-24",
+    filterType: "updated",
   },
   {
     thumbnail: pdfIcon,
@@ -767,6 +807,7 @@ export const files: documentType[] = [
     name: "Audit Report",
     size: "18 MB",
     date: "22-01-24",
+    filterType: "updated",
   },
   {
     thumbnail: pngIcon,
@@ -774,6 +815,7 @@ export const files: documentType[] = [
     name: "Chart",
     size: "90 KB",
     date: "27-02-24",
+    filterType: "added",
   },
   {
     thumbnail: docIcon,
@@ -781,6 +823,7 @@ export const files: documentType[] = [
     name: "Work Plan",
     size: "3 MB",
     date: "14-03-24",
+    filterType: "added",
   },
   {
     thumbnail: pdfIcon,
@@ -788,6 +831,7 @@ export const files: documentType[] = [
     name: "Quarterly Review",
     size: "17 MB",
     date: "26-02-24",
+    filterType: "updated",
   },
   {
     thumbnail: pngIcon,
@@ -795,6 +839,7 @@ export const files: documentType[] = [
     name: "Wireframe",
     size: "60 KB",
     date: "03-02-24",
+    filterType: "shared",
   },
   {
     thumbnail: docIcon,
@@ -802,6 +847,7 @@ export const files: documentType[] = [
     name: "Business Plan",
     size: "4 MB",
     date: "18-03-24",
+    filterType: "added",
   },
   {
     thumbnail: pdfIcon,
@@ -809,6 +855,7 @@ export const files: documentType[] = [
     name: "Compliance Report",
     size: "12 MB",
     date: "07-03-24",
+    filterType: "updated",
   },
   {
     thumbnail: pngIcon,
@@ -816,6 +863,7 @@ export const files: documentType[] = [
     name: "Flowchart",
     size: "95 KB",
     date: "09-02-24",
+    filterType: "shared",
   },
   {
     thumbnail: docIcon,
@@ -823,5 +871,6 @@ export const files: documentType[] = [
     name: "Requirements Document",
     size: "5 MB",
     date: "20-03-24",
+    filterType: "added",
   },
 ];

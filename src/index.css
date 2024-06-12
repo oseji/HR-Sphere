@@ -248,3 +248,14 @@ td {
 }
 
 /* FILE MANAGER */
+.docCard {
+  @apply bg-white rounded p-2 flex flex-col justify-between h-[140px];
+}
+
+.docGrp {
+  @apply flex flex-row justify-between items-center text-[8px];
+}
+
+.docName {
+  @apply text-xs text-center my-2;
+}
