@@ -24,7 +24,7 @@ html {
 }
 
 .overviewSection {
-  @apply flex flex-row;
+  @apply flex flex-col-reverse lg:flex-row;
 }
 
 .overviewScreen {
@@ -36,7 +36,7 @@ html {
 }
 
 .performanceSection {
-  @apply flex flex-row gap-3 text-sm;
+  @apply flex flex-col-reverse lg:flex-row gap-3 text-sm;
 }
 
 .pageNumGrp {
@@ -69,33 +69,45 @@ select {
 }
 
 header {
-  @apply w-full flex flex-row items-center py-3 px-10 border-b border-slate-300 bg-white;
+  @apply w-full flex flex-row items-center py-3 md:px-10 px-3 border-b border-slate-300 bg-white;
 }
 
 .logoGrp {
-  @apply w-[150px] flex flex-row items-center gap-2 mr-20;
+  @apply hidden  w-[150px] md:flex flex-row items-center gap-2 mr-20;
 }
 
 .inputGrp {
-  @apply w-[380px] flex flex-row items-center gap-2 border border-slate-300 rounded p-1;
+  @apply w-[150px] md:w-[380px] hidden lg:flex flex-row items-center gap-2 border border-slate-300 rounded p-1;
 }
 
 .profileGrp {
-  @apply flex flex-row items-center gap-2 cursor-pointer;
+  @apply flex flex-row items-center md:gap-2 cursor-pointer;
 }
 
 .profileName {
-  @apply capitalize text-sm text-black;
+  @apply capitalize text-sm text-black text-center;
 }
 
 /* MENU */
+.menuScreen {
+  @apply flex flex-col justify-between py-5 px-3 bg-white absolute z-10 min-h-screen lg:relative shadow-xl lg:shadow-none transition ease-in-out duration-200;
+}
+
+.menuClosed {
+  @apply -translate-x-96 max-w-[220px] lg:-translate-x-0;
+}
+
 .menuCollection {
   @apply flex flex-col gap-1 items-start;
 }
 
 .menuGrp {
-  @apply w-[200px] flex flex-row gap-4 p-2 rounded cursor-pointer text-sm;
+  @apply w-[150px] lg:w-[200px] flex flex-row gap-4 p-2 rounded cursor-pointer text-sm;
 }
+
+/* .menutext {
+  @apply hidden lg:block;
+} */
 
 .activeMenuGrp {
   @apply bg-green-100 font-semibold text-black;
@@ -103,11 +115,11 @@ header {
 
 /* STATS SECTION */
 .statsCardGrp {
-  @apply flex flex-row gap-3 items-center;
+  @apply flex flex-row gap-3 items-center overflow-x-scroll lg:overflow-x-hidden;
 }
 
 .statsCard {
-  @apply w-full flex flex-col gap-2 p-5 rounded bg-white;
+  @apply min-w-72 lg:min-w-0 lg:w-full flex flex-col gap-2 p-5 rounded bg-white;
 }
 
 .statsHeading {
@@ -132,11 +144,11 @@ header {
 
 /* chart group */
 .chartGrp {
-  @apply flex flex-row gap-3;
+  @apply flex flex-col lg:flex-row gap-3;
 }
 
 .chartBox {
-  @apply w-[450px] bg-white p-3 rounded;
+  @apply w-[450px] bg-white p-3;
 }
 
 .chartHeadingGrp {
@@ -148,7 +160,7 @@ header {
 }
 
 .requestBox {
-  @apply w-[280px] p-3 bg-white rounded text-sm;
+  @apply lg:w-[280px] p-3 bg-white rounded text-sm;
 }
 
 .requestTextGrp {
@@ -165,7 +177,7 @@ header {
 
 /* table group */
 .tableGrp {
-  @apply text-sm bg-white p-3 rounded flex flex-col gap-5 min-h-[412px];
+  @apply text-sm bg-white p-3 rounded flex flex-col gap-5 min-h-[412px] min-w-[700px] lg:min-w-0;
 }
 
 .tableGrpHeader {
@@ -210,6 +222,10 @@ td {
 }
 
 /* PERFORMANCE SCREEN */
+
+.employeePerformanceTable {
+  @apply min-h-[371px] min-w-[700px] lg:min-w-0;
+}
 
 .totalEmployeeChart {
   @apply overflow-hidden;

@@ -38,146 +38,155 @@ const FileManager = () => {
   }, [filesToggled]);
 
   return (
-    <section className="screenSection w-full">
-      {/* header */}
-      <div className="flex flex-row justify-between items-center">
-        <div className="flex flex-row items-center gap-5">
-          <h1 className="text-xl text-black">
-            Folders <span className="text-[#6F6F6F]">({numberOfFolders})</span>
-          </h1>
+    <section className="flex flex-col-reverse lg:flex-row gap-3 lg:gap-0">
+      {/* file cards */}
+      <div className="screenSection w-full">
+        {/* header */}
+        <div className="flex flex-row justify-between items-center">
+          <div className="flex flex-row items-center gap-5">
+            <h1 className="text-xl text-black">
+              Folders
+              <span className="text-[#6F6F6F]"> ({numberOfFolders})</span>
+            </h1>
 
-          <h1 className="text-xl text-black">
-            Files <span className="text-[#6F6F6F]">({numberOfFiles})</span>
-          </h1>
+            <h1 className="text-xl text-black">
+              Files <span className="text-[#6F6F6F]">({numberOfFiles})</span>
+            </h1>
+          </div>
+
+          <button className="bg-[#095256] text-xs text-white px-3 py-1.5 rounded-md hover:scale-110 transition ease-in-out duration-150">
+            + New File
+          </button>
         </div>
 
-        <button className="bg-[#095256] text-xs text-white px-3 py-1.5 rounded-md hover:scale-110 transition ease-in-out duration-150">
-          + New File
-        </button>
-      </div>
+        {/* filter group */}
+        <div className="flex flex-row justify-between items-center mt-5">
+          <div className="flex flex-row items-center justify-between w-full">
+            <select
+              onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
+                setFolderFilter(e.currentTarget.value);
+                setFileFilter(e.currentTarget.value);
+              }}
+            >
+              <option value="">All files & folders</option>
+              <option value="shared">shared files & folders</option>
+              <option value="updated">updated files & folders</option>
+              <option value="added">added files & folders</option>
+            </select>
 
-      {/* filter group */}
-      <div className="flex flex-row justify-between items-center mt-5">
-        <div className="flex flex-row items-center justify-between w-full">
-          <select
-            onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
-              setFolderFilter(e.currentTarget.value);
-              setFileFilter(e.currentTarget.value);
-            }}
-          >
-            <option value="">All files & folders</option>
-            <option value="shared">shared files & folders</option>
-            <option value="updated">updated files & folders</option>
-            <option value="added">added files & folders</option>
-          </select>
+            <div className="tableSearchGrp bg-white w-[150px] lg:w-[224px]">
+              <img src={searchIcon} alt="search icon" className="h-5" />
+              <input
+                type="text"
+                placeholder="Search for a file"
+                className="w-full outline-0 text-xs placeholder:text-xs"
+                value={searchFilter}
+                onChange={(e: SyntheticEvent<HTMLInputElement>) =>
+                  setSearchFilter(e.currentTarget.value)
+                }
+              />
+            </div>
+          </div>
+        </div>
 
-          <div className="tableSearchGrp bg-white w-[224px]">
-            <img src={searchIcon} alt="search icon" className="h-5" />
-            <input
-              type="text"
-              placeholder="Search for a file"
-              className="outline-0 text-xs placeholder:text-xs"
-              value={searchFilter}
-              onChange={(e: SyntheticEvent<HTMLInputElement>) =>
-                setSearchFilter(e.currentTarget.value)
-              }
-            />
+        {/* folder group */}
+        <div className="mt-5">
+          <div className="flex flex-row items-center justify-between mb-4">
+            <h1 className="text-base text-black">Folders</h1>
+
+            <button
+              className="text-[#095256] underline text-xs"
+              onClick={() => setFoldersToggled(!foldersToggled)}
+            >
+              {foldersToggled ? "See Less" : "See All"}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-3 lg:grid-cols-6 gap-3">
+            {folders
+              .filter(
+                (e) =>
+                  (!folderFilter || e.filterType === folderFilter) &&
+                  (!searchFilter ||
+                    e.name.toLowerCase().includes(searchFilter.toLowerCase()))
+              )
+              .slice(0, endOfFolders)
+              .map((element, index) => (
+                <div className="docCard" key={index}>
+                  <div className="docGrp">
+                    <input type="checkbox" />
+                    <img src={dots} alt="dots" className="cursor-pointer" />
+                  </div>
+
+                  <div>
+                    <img
+                      src={element.thumbnail}
+                      alt="icon thumbnail"
+                      className="mx-auto"
+                    />
+                    <p className="docName">{element.name}</p>
+                  </div>
+
+                  <div className="docGrp">
+                    <p>{element.size}</p>
+                    <p>{element.date}</p>
+                  </div>
+                </div>
+              ))}
+          </div>
+        </div>
+
+        {/* file group */}
+        <div className="mt-14">
+          <div className="flex flex-row items-center justify-between mb-4">
+            <h1 className="text-base">Recent Files</h1>
+
+            <button
+              className="text-[#095256] underline text-xs"
+              onClick={() => setFilesToggled(!filesToggled)}
+            >
+              {filesToggled ? "See Less" : "See All"}
+            </button>
+          </div>
+
+          <div className="grid grid-cols-3 lg:grid-cols-6 gap-3">
+            {files
+              .filter(
+                (e) =>
+                  (!fileFilter || e.filterType === fileFilter) &&
+                  (!searchFilter ||
+                    e.name.toLowerCase().includes(searchFilter.toLowerCase()))
+              )
+              .slice(0, endOfFiles)
+              .map((element, index) => (
+                <div className="docCard" key={index}>
+                  <div className="docGrp">
+                    <input type="checkbox" />
+                    <img src={dots} alt="dots" className="cursor-pointer" />
+                  </div>
+
+                  <div>
+                    <img
+                      src={element.thumbnail}
+                      alt="icon thumbnail"
+                      className="mx-auto"
+                    />
+                    <p className="docName">{element.name}</p>
+                  </div>
+
+                  <div className="docGrp">
+                    <p>{element.size}</p>
+                    <p>{element.date}</p>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
       </div>
 
-      {/* folder group */}
-      <div className="mt-5">
-        <div className="flex flex-row items-center justify-between mb-4">
-          <h1 className="text-base text-black">Folders</h1>
-
-          <button
-            className="text-[#095256] underline text-xs"
-            onClick={() => setFoldersToggled(!foldersToggled)}
-          >
-            {foldersToggled ? "See Less" : "See All"}
-          </button>
-        </div>
-
-        <div className="grid grid-cols-6 gap-3">
-          {folders
-            .filter(
-              (e) =>
-                (!folderFilter || e.filterType === folderFilter) &&
-                (!searchFilter ||
-                  e.name.toLowerCase().includes(searchFilter.toLowerCase()))
-            )
-            .slice(0, endOfFolders)
-            .map((element, index) => (
-              <div className="docCard" key={index}>
-                <div className="docGrp">
-                  <input type="checkbox" />
-                  <img src={dots} alt="dots" className="cursor-pointer" />
-                </div>
-
-                <div>
-                  <img
-                    src={element.thumbnail}
-                    alt="icon thumbnail"
-                    className="mx-auto"
-                  />
-                  <p className="docName">{element.name}</p>
-                </div>
-
-                <div className="docGrp">
-                  <p>{element.size}</p>
-                  <p>{element.date}</p>
-                </div>
-              </div>
-            ))}
-        </div>
-      </div>
-
-      {/* file group */}
-      <div className="mt-14">
-        <div className="flex flex-row items-center justify-between mb-4">
-          <h1 className="text-base">Recent Files</h1>
-
-          <button
-            className="text-[#095256] underline text-xs"
-            onClick={() => setFilesToggled(!filesToggled)}
-          >
-            {filesToggled ? "See Less" : "See All"}
-          </button>
-        </div>
-
-        <div className="grid grid-cols-6 gap-3">
-          {files
-            .filter(
-              (e) =>
-                (!fileFilter || e.filterType === fileFilter) &&
-                (!searchFilter ||
-                  e.name.toLowerCase().includes(searchFilter.toLowerCase()))
-            )
-            .slice(0, endOfFiles)
-            .map((element, index) => (
-              <div className="docCard" key={index}>
-                <div className="docGrp">
-                  <input type="checkbox" />
-                  <img src={dots} alt="dots" className="cursor-pointer" />
-                </div>
-
-                <div>
-                  <img
-                    src={element.thumbnail}
-                    alt="icon thumbnail"
-                    className="mx-auto"
-                  />
-                  <p className="docName">{element.name}</p>
-                </div>
-
-                <div className="docGrp">
-                  <p>{element.size}</p>
-                  <p>{element.date}</p>
-                </div>
-              </div>
-            ))}
-        </div>
+      {/* file activity */}
+      <div className=" w-full lg:w-[220px] bg-white p-2">
+        <h2 className="boxHeading">recent activity</h2>
       </div>
     </section>
   );

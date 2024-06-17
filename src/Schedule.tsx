@@ -7,7 +7,7 @@ const Schedule = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
 
   return (
-    <section className="bg-white rounded max-w-fit my-3 p-3 text-sm">
+    <section className="bg-white rounded max-w-full mx-3 lg:mx-0 my-3 p-3 text-sm">
       <div className="calendarHeading">
         <div className="flex flex-row items-center gap-2">
           <img src={calndarIcon} alt="calendar" />

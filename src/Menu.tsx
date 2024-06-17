@@ -10,7 +10,11 @@ import iconHelp from "./assets/formkit_help.svg";
 import iconSettings from "./assets/fluent_settings-20-regular.svg";
 import iconLogout from "./assets/iconoir_log-out.svg";
 
-const Menu = () => {
+type menuProp = {
+  menu: any;
+};
+
+const Menu = (props: menuProp) => {
   const menuRefs = [
     useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null),
@@ -37,7 +41,7 @@ const Menu = () => {
   };
 
   return (
-    <section className=" flex flex-col justify-between py-5 px-3 bg-white">
+    <section className="menuScreen menuClosed" ref={props.menu}>
       <div className="menuCollection">
         <Link to={"/"}>
           <div
@@ -47,7 +51,7 @@ const Menu = () => {
             onClick={toggleMenuClass}
           >
             <img src={iconHome} alt="home icon" />
-            <p>Dashboard</p>
+            <p className="menutext">Home</p>
           </div>
         </Link>
 
@@ -59,7 +63,7 @@ const Menu = () => {
             onClick={toggleMenuClass}
           >
             <img src={iconUsers} alt="profile icon" />
-            <p>Profiles</p>
+            <p className="menutext">Profiles</p>
           </div>
         </Link>
 
@@ -71,7 +75,7 @@ const Menu = () => {
             onClick={toggleMenuClass}
           >
             <img src={iconPerformance} alt="performance icon" />
-            <p>Performance</p>
+            <p className="menutext">Performance</p>
           </div>
         </Link>
 
@@ -83,7 +87,7 @@ const Menu = () => {
             onClick={toggleMenuClass}
           >
             <img src={iconPayroll} alt="payroll icon" />
-            <p>Payroll</p>
+            <p className="menutext">Payroll</p>
           </div>
         </Link>
 
@@ -95,7 +99,7 @@ const Menu = () => {
             onClick={toggleMenuClass}
           >
             <img src={iconFolder} alt="folder icon" />
-            <p>File Manager</p>
+            <p className="menutext">File Manager</p>
           </div>
         </Link>
       </div>
@@ -109,7 +113,7 @@ const Menu = () => {
             onClick={toggleMenuClass}
           >
             <img src={iconHelp} alt="help icon" />
-            <p>Help/support</p>
+            <p className="menutext">Help/support</p>
           </div>
         </Link>
 
@@ -121,7 +125,7 @@ const Menu = () => {
             onClick={toggleMenuClass}
           >
             <img src={iconSettings} alt="settings icon" />
-            <p>Setting</p>
+            <p className="menutext">Setting</p>
           </div>
         </Link>
 
@@ -133,7 +137,7 @@ const Menu = () => {
             onClick={toggleMenuClass}
           >
             <img src={iconLogout} alt="log out icon" />
-            <p>Log out</p>
+            <p className="menutext">Log out</p>
           </div>
         </Link>
       </div>

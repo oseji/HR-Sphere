@@ -109,7 +109,7 @@ const Stats = () => {
   }, [chartYears]);
 
   return (
-    <section className="flex flex-col gap-3 p-3 max-w-[730px]">
+    <section className="flex flex-col gap-3 p-3 w-full lg:max-w-[730px]">
       <div className="statsCardGrp">
         <div className="statsCard">
           <p className="statsHeading">Employees</p>
@@ -167,55 +167,57 @@ const Stats = () => {
       </div>
 
       <div className="chartGrp">
-        <div className="chartBox">
-          <div className="chartHeadingGrp">
-            <h1 className="boxHeading">Retention & Turnover Rate</h1>
+        <div className="overflow-x-scroll lg:overflow-x-hidden lg:min-w-fit bg-white rounded-md">
+          <div className="chartBox">
+            <div className="chartHeadingGrp">
+              <h1 className="boxHeading">Retention & Turnover Rate</h1>
 
-            <select id="chartSelection" onChange={toggleChartData}>
-              <option value="5">Last 5 years</option>
-              <option value="4">Last 4 years</option>
-              <option value="3">Last 3 years</option>
-              <option value="2">Last 2 years</option>
-              <option value="1">Last 1 year</option>
-            </select>
-          </div>
-
-          <BarChart
-            width={432}
-            height={190}
-            data={currentChartData}
-            margin={{
-              top: 40,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <XAxis dataKey="name" className="font-bold text-black" />
-
-            <Tooltip />
-
-            <Bar
-              dataKey="RetentionRate"
-              fill="#095256"
-              activeBar={<Rectangle fill="#074144" stroke="white" />}
-            />
-            <Bar
-              dataKey="TurnoverRate"
-              fill="#06D6A0"
-              activeBar={<Rectangle fill="#05B587" stroke="white" />}
-            />
-          </BarChart>
-
-          <div className="barChartInfo">
-            <div className="flex flex-row items-center gap-2">
-              <span className="h-3 w-3 rounded bg-[#095256]"></span>
-              <div className="text-[10px]">Retention Rate</div>
+              <select id="chartSelection" onChange={toggleChartData}>
+                <option value="5">Last 5 years</option>
+                <option value="4">Last 4 years</option>
+                <option value="3">Last 3 years</option>
+                <option value="2">Last 2 years</option>
+                <option value="1">Last 1 year</option>
+              </select>
             </div>
 
-            <div className="flex flex-row items-center gap-2">
-              <span className="h-3 w-3 rounded bg-[#06D6A0]"></span>
-              <div className="text-[10px]">Turnover Rate</div>
+            <BarChart
+              width={432}
+              height={190}
+              data={currentChartData}
+              margin={{
+                top: 40,
+                right: 30,
+                left: 20,
+                bottom: 5,
+              }}
+            >
+              <XAxis dataKey="name" className="font-bold text-black" />
+
+              <Tooltip />
+
+              <Bar
+                dataKey="RetentionRate"
+                fill="#095256"
+                activeBar={<Rectangle fill="#074144" stroke="white" />}
+              />
+              <Bar
+                dataKey="TurnoverRate"
+                fill="#06D6A0"
+                activeBar={<Rectangle fill="#05B587" stroke="white" />}
+              />
+            </BarChart>
+
+            <div className="barChartInfo">
+              <div className="flex flex-row items-center gap-2">
+                <span className="h-3 w-3 rounded bg-[#095256]"></span>
+                <div className="text-[10px]">Retention Rate</div>
+              </div>
+
+              <div className="flex flex-row items-center gap-2">
+                <span className="h-3 w-3 rounded bg-[#06D6A0]"></span>
+                <div className="text-[10px]">Turnover Rate</div>
+              </div>
             </div>
           </div>
         </div>
@@ -248,104 +250,106 @@ const Stats = () => {
         </div>
       </div>
 
-      <div className="tableGrp">
-        <div className="tableGrpHeader">
-          <h1 className="boxHeading">Employees</h1>
+      <div className="overflow-x-scroll lg:overflow-x-hidden">
+        <div className="tableGrp">
+          <div className="tableGrpHeader">
+            <h1 className="boxHeading">Employees</h1>
 
-          <div className="tableSearchGrp">
-            <img src={searchIcon} alt="search icon" className="h-5" />
-            <input
-              type="text"
-              placeholder="Search for employee"
-              className="bg-transparent outline-0 text-xs placeholder:text-xs"
-              value={searchFilter}
-              onChange={(e: SyntheticEvent<HTMLInputElement>) => {
-                setSearchFilter(e.currentTarget.value);
-              }}
-            />
+            <div className="tableSearchGrp">
+              <img src={searchIcon} alt="search icon" className="h-5" />
+              <input
+                type="text"
+                placeholder="Search for employee"
+                className="bg-transparent outline-0 text-xs placeholder:text-xs"
+                value={searchFilter}
+                onChange={(e: SyntheticEvent<HTMLInputElement>) => {
+                  setSearchFilter(e.currentTarget.value);
+                }}
+              />
+            </div>
           </div>
+
+          <div className="tableFilterGrp">
+            {/* work type */}
+            <select
+              className="tableFilter"
+              onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
+                setWorkTypeFilter(e.currentTarget.value)
+              }
+            >
+              <option value="">All employees</option>
+              <option value="remote">Remote</option>
+              <option value="on site">on site</option>
+            </select>
+
+            {/* job titles */}
+            <select
+              className="tableFilter"
+              onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
+                setJobTitleFilter(e.currentTarget.value)
+              }
+            >
+              <option value="">All job titles</option>
+              <option value="front-end engineer">front-end engineer</option>
+              <option value="back-end engineer">back-end engineer</option>
+              <option value="fullstack engineer">fullstack engineer</option>
+              <option value="product manager">product manager</option>
+              <option value="product designer">product designer</option>
+              <option value="devOps engineer">devOps</option>
+              <option value="HR">HR</option>
+            </select>
+
+            {/* departments */}
+            <select
+              className="tableFilter"
+              onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
+                setDepartmentFilter(e.currentTarget.value)
+              }
+            >
+              <option value="">All departments</option>
+              <option value="engineering">engineering</option>
+              <option value="product">product</option>
+              <option value="human resources">human resources</option>
+            </select>
+          </div>
+
+          <table className="text-xs">
+            <thead>
+              <tr>
+                <th>employee</th>
+                <th>job title</th>
+                <th>department</th>
+                <th>email</th>
+                <th>status</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {Object.values(employeeOverview)
+                .filter(
+                  (e) =>
+                    (!departmentFilter || e.department === departmentFilter) &&
+                    (!workTypeFilter || e.status === workTypeFilter) &&
+                    (!jobTitleFilter || e.jobTitle === jobTitleFilter) &&
+                    (!searchFilter ||
+                      e.name.toLowerCase().includes(searchFilter.toLowerCase()))
+                )
+                .slice(startIndex, endIndex)
+                .map((value, index) => (
+                  <tr key={index}>
+                    <td className="employeeName">
+                      <img src={value.img} alt="profile image" />
+                      <p> {value.name}</p>
+                    </td>
+                    <td>{value.jobTitle}</td>
+                    <td>{value.department}</td>
+                    <td>{value.email}</td>
+                    <td className={value.statusColor}>{value.status}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
         </div>
-
-        <div className="tableFilterGrp">
-          {/* work type */}
-          <select
-            className="tableFilter"
-            onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
-              setWorkTypeFilter(e.currentTarget.value)
-            }
-          >
-            <option value="">All employees</option>
-            <option value="remote">Remote</option>
-            <option value="on site">on site</option>
-          </select>
-
-          {/* job titles */}
-          <select
-            className="tableFilter"
-            onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
-              setJobTitleFilter(e.currentTarget.value)
-            }
-          >
-            <option value="">All job titles</option>
-            <option value="front-end engineer">front-end engineer</option>
-            <option value="back-end engineer">back-end engineer</option>
-            <option value="fullstack engineer">fullstack engineer</option>
-            <option value="product manager">product manager</option>
-            <option value="product designer">product designer</option>
-            <option value="devOps engineer">devOps</option>
-            <option value="HR">HR</option>
-          </select>
-
-          {/* departments */}
-          <select
-            className="tableFilter"
-            onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
-              setDepartmentFilter(e.currentTarget.value)
-            }
-          >
-            <option value="">All departments</option>
-            <option value="engineering">engineering</option>
-            <option value="product">product</option>
-            <option value="human resources">human resources</option>
-          </select>
-        </div>
-
-        <table className="text-xs">
-          <thead>
-            <tr>
-              <th>employee</th>
-              <th>job title</th>
-              <th>department</th>
-              <th>email</th>
-              <th>status</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            {Object.values(employeeOverview)
-              .filter(
-                (e) =>
-                  (!departmentFilter || e.department === departmentFilter) &&
-                  (!workTypeFilter || e.status === workTypeFilter) &&
-                  (!jobTitleFilter || e.jobTitle === jobTitleFilter) &&
-                  (!searchFilter ||
-                    e.name.toLowerCase().includes(searchFilter.toLowerCase()))
-              )
-              .slice(startIndex, endIndex)
-              .map((value, index) => (
-                <tr key={index}>
-                  <td className="employeeName">
-                    <img src={value.img} alt="profile image" />
-                    <p> {value.name}</p>
-                  </td>
-                  <td>{value.jobTitle}</td>
-                  <td>{value.department}</td>
-                  <td>{value.email}</td>
-                  <td className={value.statusColor}>{value.status}</td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
       </div>
 
       <div className="employeeSort">
