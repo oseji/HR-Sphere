@@ -13,6 +13,7 @@ import bellIcon from "./assets/bellIcon.svg";
 import avatar from "./assets/stephanie.jpg";
 
 function App() {
+  const appRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const openCloseMenu = () => {
@@ -21,11 +22,11 @@ function App() {
   };
 
   return (
-    <div className="App">
+    <div className="App" ref={appRef}>
       <header>
         <div className="logoGrp">
           <img src={logo} alt="logo" className="block" />
-          <h1 className="font-bold text-black">HR Sphere</h1>
+          <h1 className="font-bold text-black dark:text-white">HR Sphere</h1>
         </div>
 
         <div className="w-full flex flex-row items-center justify-between">
@@ -38,7 +39,7 @@ function App() {
             <input
               type="text"
               placeholder="Search"
-              className="bg-transparent outline-0 w-full text-sm placeholder:text-sm"
+              className="w-full text-sm placeholder:text-sm "
             />
           </div>
 
@@ -58,7 +59,7 @@ function App() {
       </header>
 
       <main className="lg:flex flex-row lg:max-h-screen relative">
-        <Menu menu={menuRef}></Menu>
+        <Menu menu={menuRef} app={appRef}></Menu>
 
         <Switch>
           <Route exact path="/" component={Overview} />

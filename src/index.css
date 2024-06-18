@@ -12,7 +12,7 @@ html {
 }
 
 .App {
-  @apply font-Poppins text-[#6F6F6F] bg-[#ECECEC] max-w-[100vw];
+  @apply font-Poppins text-[#6F6F6F] dark:text-[#908F8F] bg-[#ECECEC] dark:bg-black max-w-[100vw];
 }
 
 .screenSection {
@@ -44,7 +44,7 @@ html {
 }
 
 .pageNum {
-  @apply py-1 px-2.5 rounded-md transition ease-in-out duration-200;
+  @apply py-1 px-2.5 rounded-md dark:text-black transition ease-in-out duration-200;
 }
 
 .activePageNum {
@@ -57,23 +57,27 @@ html {
 .teamEfficiencyGrp,
 .employeeOfTheMonth,
 .payrollTable {
-  @apply p-3 rounded bg-white;
+  @apply p-3 rounded bg-white dark:bg-[#0F0F0F];
 }
 
 .boxHeading {
-  @apply font-medium text-base text-black capitalize;
+  @apply font-medium text-base text-black dark:text-white capitalize;
 }
 
 select {
-  @apply cursor-pointer outline-0 p-2 border border-slate-300 text-[#6F6F6F] rounded capitalize text-[10px];
+  @apply cursor-pointer outline-0 p-2 border border-slate-300 bg-transparent text-[#6F6F6F] rounded capitalize text-[10px];
+}
+
+input {
+  @apply bg-transparent outline-0  dark:text-white;
 }
 
 header {
-  @apply w-full flex flex-row items-center py-3 md:px-10 px-3 border-b border-slate-300 bg-white;
+  @apply w-full flex flex-row items-center py-3 md:px-10 px-3 border-b border-slate-300 bg-white dark:bg-[#0F0F0F];
 }
 
 .logoGrp {
-  @apply hidden  w-[150px] md:flex flex-row items-center gap-2 mr-20;
+  @apply hidden w-[150px] md:flex flex-row items-center gap-2 mr-20;
 }
 
 .inputGrp {
@@ -85,12 +89,12 @@ header {
 }
 
 .profileName {
-  @apply capitalize text-sm text-black text-center;
+  @apply capitalize text-sm text-black dark:text-white text-center;
 }
 
 /* MENU */
 .menuScreen {
-  @apply flex flex-col justify-between py-5 px-3 bg-white absolute z-10 min-h-screen lg:relative shadow-xl lg:shadow-none transition ease-in-out duration-200;
+  @apply flex flex-col justify-between py-5 px-3 bg-white dark:bg-[#0F0F0F] absolute z-10 min-h-screen lg:relative shadow-xl lg:shadow-none transition ease-in-out duration-200;
 }
 
 .menuClosed {
@@ -119,7 +123,7 @@ header {
 }
 
 .statsCard {
-  @apply min-w-72 lg:min-w-0 lg:w-full flex flex-col gap-2 p-5 rounded bg-white;
+  @apply min-w-72 lg:min-w-0 lg:w-full flex flex-col gap-2 p-5 rounded bg-white dark:bg-[#0F0F0F];
 }
 
 .statsHeading {
@@ -131,7 +135,7 @@ header {
 }
 
 .statsNum {
-  @apply text-lg font-semibold text-black;
+  @apply text-lg font-semibold text-black dark:text-white;
 }
 
 .bottomStatsCard {
@@ -148,7 +152,7 @@ header {
 }
 
 .chartBox {
-  @apply w-[450px] bg-white p-3;
+  @apply w-[450px] bg-white dark:bg-[#0F0F0F] p-3;
 }
 
 .chartHeadingGrp {
@@ -160,7 +164,7 @@ header {
 }
 
 .requestBox {
-  @apply lg:w-[280px] p-3 bg-white rounded text-sm;
+  @apply lg:w-[280px] p-3 bg-white dark:bg-[#0F0F0F] rounded text-sm;
 }
 
 .requestTextGrp {
@@ -177,7 +181,7 @@ header {
 
 /* table group */
 .tableGrp {
-  @apply text-sm bg-white p-3 rounded flex flex-col gap-5 min-h-[412px] min-w-[700px] lg:min-w-0;
+  @apply text-sm bg-white dark:bg-[#0F0F0F] p-3 rounded flex flex-col gap-5 min-h-[412px] min-w-[700px] lg:min-w-0;
 }
 
 .tableGrpHeader {
@@ -205,7 +209,7 @@ td {
 }
 
 .employeeName {
-  @apply flex flex-row items-center gap-2 font-semibold text-black;
+  @apply flex flex-row items-center gap-2 font-semibold text-black dark:text-white;
 }
 
 .employeeSort {
@@ -260,12 +264,12 @@ td {
 
 /* PAYROLL */
 .headingGrp {
-  @apply flex flex-row gap-2 text-[#095256] cursor-pointer;
+  @apply flex flex-row gap-2 text-[#095256] dark:text-[#A9F2F6] cursor-pointer;
 }
 
 /* FILE MANAGER */
 .docCard {
-  @apply bg-white rounded p-2 flex flex-col justify-between h-[140px];
+  @apply bg-white dark:bg-[#0F0F0F] rounded p-2 flex flex-col justify-between h-[140px];
 }
 
 .docGrp {

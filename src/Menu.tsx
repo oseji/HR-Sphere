@@ -1,4 +1,4 @@
-import { SyntheticEvent, useRef } from "react";
+import { SyntheticEvent, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import iconHome from "./assets/octicon_home-24.svg";
@@ -9,9 +9,12 @@ import iconFolder from "./assets/fluent_document-folder-20-regular.svg";
 import iconHelp from "./assets/formkit_help.svg";
 import iconSettings from "./assets/fluent_settings-20-regular.svg";
 import iconLogout from "./assets/iconoir_log-out.svg";
+import sun from "./assets/sun.svg";
+import moon from "./assets/moon.svg";
 
 type menuProp = {
   menu: any;
+  app: any;
 };
 
 const Menu = (props: menuProp) => {
@@ -25,6 +28,15 @@ const Menu = (props: menuProp) => {
     useRef<HTMLDivElement>(null),
     useRef<HTMLDivElement>(null),
   ];
+
+  const appRef = props.app;
+
+  const [isToggled, setIsToggled] = useState(false);
+
+  const toggleTheme = () => {
+    appRef.current?.classList.toggle("dark");
+    setIsToggled(!isToggled);
+  };
 
   const toggleMenuClass = (e: SyntheticEvent) => {
     const clicked = Number(e.currentTarget.getAttribute("data-value"));
@@ -102,6 +114,11 @@ const Menu = (props: menuProp) => {
             <p className="menutext">File Manager</p>
           </div>
         </Link>
+
+        <p className="menuGrp" onClick={toggleTheme}>
+          <img src={!isToggled ? moon : sun} alt="theme icon" className="h-5" />
+          <p> Toggle theme</p>
+        </p>
       </div>
 
       <div className="menuCollection">

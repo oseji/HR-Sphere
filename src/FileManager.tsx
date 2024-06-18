@@ -44,12 +44,12 @@ const FileManager = () => {
         {/* header */}
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-row items-center gap-5">
-            <h1 className="text-xl text-black">
+            <h1 className="text-xl text-black dark:text-white">
               Folders
               <span className="text-[#6F6F6F]"> ({numberOfFolders})</span>
             </h1>
 
-            <h1 className="text-xl text-black">
+            <h1 className="text-xl text-black dark:text-white">
               Files <span className="text-[#6F6F6F]">({numberOfFiles})</span>
             </h1>
           </div>
@@ -74,7 +74,7 @@ const FileManager = () => {
               <option value="added">added files & folders</option>
             </select>
 
-            <div className="tableSearchGrp bg-white w-[150px] lg:w-[224px]">
+            <div className="tableSearchGrp bg-white dark:bg-transparent w-[150px] lg:w-[224px]">
               <img src={searchIcon} alt="search icon" className="h-5" />
               <input
                 type="text"
@@ -92,10 +92,10 @@ const FileManager = () => {
         {/* folder group */}
         <div className="mt-5">
           <div className="flex flex-row items-center justify-between mb-4">
-            <h1 className="text-base text-black">Folders</h1>
+            <h1 className="text-base text-black dark:text-white">Folders</h1>
 
             <button
-              className="text-[#095256] underline text-xs"
+              className="text-[#095256] dark:text-[#A9F2F6] underline text-xs"
               onClick={() => setFoldersToggled(!foldersToggled)}
             >
               {foldersToggled ? "See Less" : "See All"}
@@ -139,10 +139,12 @@ const FileManager = () => {
         {/* file group */}
         <div className="mt-14">
           <div className="flex flex-row items-center justify-between mb-4">
-            <h1 className="text-base">Recent Files</h1>
+            <h1 className="text-base text-black dark:text-white">
+              Recent Files
+            </h1>
 
             <button
-              className="text-[#095256] underline text-xs"
+              className="text-[#095256] dark:text-[#A9F2F6] underline text-xs"
               onClick={() => setFilesToggled(!filesToggled)}
             >
               {filesToggled ? "See Less" : "See All"}

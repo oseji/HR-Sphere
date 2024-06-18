@@ -119,7 +119,7 @@ const Stats = () => {
             <img
               src={userIcon}
               alt="user icon"
-              className="p-2 bg-green-100 rounded-lg"
+              className="p-2 bg-green-100 dark:bg-[#011B1D] rounded-lg"
             />
           </div>
 
@@ -137,7 +137,7 @@ const Stats = () => {
             <img
               src={jobIcon}
               alt="user icon"
-              className="p-2 bg-green-100 rounded-lg"
+              className="p-2 bg-green-100 dark:bg-[#011B1D] rounded-lg"
             />
           </div>
 
@@ -155,7 +155,7 @@ const Stats = () => {
             <img
               src={folderIcon}
               alt="user icon"
-              className="p-2 bg-green-100 rounded-lg"
+              className="p-2 bg-green-100 dark:bg-[#011B1D] rounded-lg"
             />
           </div>
 
@@ -167,7 +167,7 @@ const Stats = () => {
       </div>
 
       <div className="chartGrp">
-        <div className="overflow-x-scroll lg:overflow-x-hidden lg:min-w-fit bg-white rounded-md">
+        <div className="overflow-x-scroll lg:overflow-x-hidden lg:min-w-fit bg-white dark:bg-[#0F0F0F] rounded-md">
           <div className="chartBox">
             <div className="chartHeadingGrp">
               <h1 className="boxHeading">Retention & Turnover Rate</h1>
@@ -260,7 +260,7 @@ const Stats = () => {
               <input
                 type="text"
                 placeholder="Search for employee"
-                className="bg-transparent outline-0 text-xs placeholder:text-xs"
+                className="text-xs placeholder:text-xs"
                 value={searchFilter}
                 onChange={(e: SyntheticEvent<HTMLInputElement>) => {
                   setSearchFilter(e.currentTarget.value);

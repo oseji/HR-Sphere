@@ -1,4 +1,4 @@
-import { PieChart, Pie, Sector, Cell, ResponsiveContainer } from "recharts";
+import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 import { LineChart, Line, XAxis, YAxis } from "recharts";
 
@@ -69,7 +69,7 @@ const Performance = () => {
                 paddingAngle={7}
                 dataKey="value"
               >
-                {data.map((entry, index) => (
+                {data.map((_, index) => (
                   <Cell
                     key={`cell-${index}`}
                     fill={COLORS[index % COLORS.length]}
@@ -274,7 +274,7 @@ const Performance = () => {
               paddingAngle={0}
               dataKey="value"
             >
-              {data.map((entry, index) => (
+              {data.map((_, index) => (
                 <Cell
                   key={`cell-${index}`}
                   fill={efficiencyCOLORS[index % efficiencyCOLORS.length]}

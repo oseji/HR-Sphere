@@ -14,7 +14,7 @@ const Payroll = () => {
       <div className=" overflow-x-scroll lg:overflow-x-hidden">
         <div className="payrollTable min-h-screen min-w-[700px] lg:min-w-0">
           <div className="pb-2 border-b border-slate-300 flex flex-row justify-between items-center">
-            <select className="cursor-pointer outline-0 p-2  rounded capitalize text-base text-black border-none">
+            <select className="cursor-pointer outline-0 p-2  rounded capitalize text-base text-black dark:text-white border-none">
               <option value="">Payroll for february 2024</option>
               <option value="">Payroll for january 2024</option>
               <option value="">Payroll for december 2023</option>
