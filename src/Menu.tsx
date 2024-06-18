@@ -117,7 +117,7 @@ const Menu = (props: menuProp) => {
 
         <p className="menuGrp" onClick={toggleTheme}>
           <img src={!isToggled ? moon : sun} alt="theme icon" className="h-5" />
-          <p> Toggle theme</p>
+          <p>{!isToggled ? "Dark mode" : "Light mode"}</p>
         </p>
       </div>
 

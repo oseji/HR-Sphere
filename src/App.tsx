@@ -1,5 +1,5 @@
 import { Route, Switch } from "react-router-dom";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 
 import Menu from "./Menu";
 import Overview from "./Overview";
@@ -7,16 +7,21 @@ import Performance from "./Performance";
 import Payroll from "./Payroll";
 import FileManager from "./FileManager";
 
+import menuIcon from "./assets/menu.svg";
+import closeMenu from "./assets/closeMenu.svg";
 import logo from "./assets/logo.png";
 import searchIcon from "./assets/circum_search.png";
 import bellIcon from "./assets/bellIcon.svg";
-import avatar from "./assets/stephanie.jpg";
+import avatar from "./assets/esther.png";
 
 function App() {
   const appRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  const [menuToggled, setMenuToggled] = useState<boolean>(false);
+
   const openCloseMenu = () => {
+    setMenuToggled(!menuToggled);
     const menuBtn = menuRef.current;
     menuBtn?.classList.toggle("menuClosed");
   };
@@ -30,9 +35,12 @@ function App() {
         </div>
 
         <div className="w-full flex flex-row items-center justify-between">
-          <p className="lg:hidden" onClick={openCloseMenu}>
-            menu
-          </p>
+          <img
+            src={menuToggled ? closeMenu : menuIcon}
+            alt="menu icon"
+            className="lg:hidden h-8"
+            onClick={openCloseMenu}
+          />
 
           <div className="inputGrp">
             <img src={searchIcon} alt="search icon" className="h-5" />
@@ -58,7 +66,7 @@ function App() {
         </div>
       </header>
 
-      <main className="lg:flex flex-row lg:max-h-screen relative">
+      <main className="lg:flex flex-row lg:max-h-screen max-w-[100dvw] relative">
         <Menu menu={menuRef} app={appRef}></Menu>
 
         <Switch>

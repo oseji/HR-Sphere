@@ -14,7 +14,7 @@ const Schedule = () => {
           <p className="boxHeading">Schedule</p>
         </div>
 
-        <button className="text-white px-3 py-1.5 bg-[#095256] rounded-lg">
+        <button className="text-white px-3 py-1.5 bg-[#095256] rounded-lg dark:bg-[#A9F2F6] dark:text-black">
           + New
         </button>
       </div>

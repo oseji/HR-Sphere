@@ -48,7 +48,7 @@ html {
 }
 
 .activePageNum {
-  @apply bg-[#095256] text-white scale-110;
+  @apply bg-[#095256] text-white dark:bg-[#A9F2F6] dark:text-black scale-110;
 }
 
 .totalEmployeeChart,
@@ -73,7 +73,7 @@ input {
 }
 
 header {
-  @apply w-full flex flex-row items-center py-3 md:px-10 px-3 border-b border-slate-300 bg-white dark:bg-[#0F0F0F];
+  @apply w-full  flex flex-row items-center py-3 md:px-10 px-3 border-b border-slate-300 bg-white dark:bg-[#0F0F0F];
 }
 
 .logoGrp {
@@ -85,7 +85,7 @@ header {
 }
 
 .profileGrp {
-  @apply flex flex-row items-center md:gap-2 cursor-pointer;
+  @apply flex flex-row items-center gap-2 cursor-pointer;
 }
 
 .profileName {
@@ -106,15 +106,11 @@ header {
 }
 
 .menuGrp {
-  @apply w-[150px] lg:w-[200px] flex flex-row gap-4 p-2 rounded cursor-pointer text-sm;
+  @apply w-[180px] lg:w-[200px] flex flex-row gap-4 p-2 rounded cursor-pointer text-sm;
 }
 
-/* .menutext {
-  @apply hidden lg:block;
-} */
-
 .activeMenuGrp {
-  @apply bg-green-100 font-semibold text-black;
+  @apply bg-[#E9FBFB] dark:bg-[#0B1E26] font-semibold text-black dark:text-white;
 }
 
 /* STATS SECTION */
@@ -217,7 +213,7 @@ td {
 }
 
 .employeeSortBtn {
-  @apply bg-[#095256] text-white px-3 py-1.5 rounded-md hover:scale-110 transition ease-in-out duration-150;
+  @apply bg-[#095256] text-white dark:bg-[#A9F2F6] dark:text-black  px-3 py-1.5 rounded-md hover:scale-110 transition ease-in-out duration-150;
 }
 
 /* SCHEDULE */
@@ -251,7 +247,7 @@ td {
 }
 
 .eomHeading {
-  @apply text-xs capitalize font-medium text-black;
+  @apply text-xs capitalize font-medium text-black dark:text-white;
 }
 
 .eomNum {

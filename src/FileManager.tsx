@@ -44,17 +44,17 @@ const FileManager = () => {
         {/* header */}
         <div className="flex flex-row justify-between items-center">
           <div className="flex flex-row items-center gap-5">
-            <h1 className="text-xl text-black dark:text-white">
+            <h1 className="lg:text-xl text-black dark:text-white">
               Folders
               <span className="text-[#6F6F6F]"> ({numberOfFolders})</span>
             </h1>
 
-            <h1 className="text-xl text-black dark:text-white">
+            <h1 className="lg:text-xl text-black dark:text-white">
               Files <span className="text-[#6F6F6F]">({numberOfFiles})</span>
             </h1>
           </div>
 
-          <button className="bg-[#095256] text-xs text-white px-3 py-1.5 rounded-md hover:scale-110 transition ease-in-out duration-150">
+          <button className="bg-[#095256] text-xs text-white dark:bg-[#A9F2F6] dark:text-black px-3 py-1.5 rounded-md hover:scale-110 transition ease-in-out duration-150">
             + New File
           </button>
         </div>
@@ -187,7 +187,7 @@ const FileManager = () => {
       </div>
 
       {/* file activity */}
-      <div className=" w-full lg:w-[220px] bg-white p-2">
+      <div className=" w-full lg:w-[220px] bg-white dark:bg-black dark:text-white p-2">
         <h2 className="boxHeading">recent activity</h2>
       </div>
     </section>

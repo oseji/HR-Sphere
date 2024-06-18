@@ -284,7 +284,9 @@ const Performance = () => {
           </PieChart>
 
           <div className="text-center relative bottom-16">
-            <p className="text-black font-semibold text-xl">80%</p>
+            <p className="text-black dark:text-white font-semibold text-xl">
+              80%
+            </p>
 
             <div className="flex flex-row justify-center gap-1 text-xs">
               <img src={upArrow} alt="growth icon" />
@@ -301,7 +303,7 @@ const Performance = () => {
               2024.
             </p>
 
-            <button className="rounded text-white bg-[#095256] px-3 py-1.5 w-fit text-sm">
+            <button className="rounded text-white bg-[#095256] dark:bg-[#A9F2F6] dark:text-black px-3 py-1.5 w-fit text-sm">
               Compare scores
             </button>
           </div>
@@ -317,7 +319,7 @@ const Performance = () => {
               alt="employee of the month"
             />
 
-            <h4 className="text-sm font-semibold text-black mt-3">
+            <h4 className="text-sm font-semibold text-black dark:text-white mt-3">
               Ronald Richards
             </h4>
             <p className="text-xs">Product Designer</p>
