@@ -94,28 +94,27 @@ header {
 
 /* LOGIN PAGE */
 .loginPage {
-  @apply flex flex-row items-center min-h-screen p-3 text-black dark:text-white;
+  @apply flex flex-col xl:flex-row items-center justify-center xl:justify-between gap-10 xl:gap-0 min-h-screen  text-black dark:text-white bg-white dark:bg-black;
 }
 
-.loginTextContainer,
-.loginForm {
-  @apply w-full md:w-1/2;
+.loginTextContainer {
+  @apply w-full;
 }
 
 .loginForm {
-  @apply flex flex-col items-start gap-5 p-3 rounded-md;
+  @apply w-full md:w-2/3 xl:w-1/2 xl:min-h-screen flex flex-col items-start xl:justify-center gap-5 p-3 xl:bg-slate-300;
 }
 
 .loginFieldGrp {
-  @apply flex flex-col gap-1 w-full;
+  @apply flex flex-col gap-1 w-full xl:pl-5;
 }
 
 .loginInput {
-  @apply bg-slate-300 dark:bg-slate-600 rounded-md p-2 text-black w-full lg:w-3/4;
+  @apply bg-slate-200 xl:bg-white dark:bg-slate-600 rounded-md p-2 text-black w-full xl:w-3/4;
 }
 
 .loginBtn {
-  @apply px-4 py-2 rounded-md bg-slate-300 dark:bg-slate-600 mt-3 capitalize hover:scale-110 transition ease-in-out duration-150;
+  @apply px-4 py-2 rounded-md bg-slate-200 xl:bg-white dark:bg-slate-600 mt-3 capitalize hover:scale-110 transition ease-in-out duration-150 xl:ml-5;
 }
 
 /* MENU */

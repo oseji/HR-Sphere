@@ -6,7 +6,7 @@ const LoginPage = () => {
   return (
     <div className="loginPage">
       <div className="loginTextContainer">
-        <h1 className=" text-3xl md:text-4xl lg:text-6xl font-bold text-center">
+        <h1 className=" text-3xl md:text-5xl lg:text-6xl font-bold text-center">
           Welcome to HR-Sphere
         </h1>
       </div>
@@ -16,22 +16,22 @@ const LoginPage = () => {
         <form className="loginForm">
           <div className="loginFieldGrp">
             <label htmlFor="email">First Name</label>
-            <input type="text" className="loginInput" />
+            <input type="text" className="loginInput" required />
           </div>
 
           <div className="loginFieldGrp">
             <label htmlFor="email">Last Name</label>
-            <input type="text" className="loginInput" />
+            <input type="text" className="loginInput" required />
           </div>
 
           <div className="loginFieldGrp">
             <label htmlFor="email">Email</label>
-            <input type="email" className="loginInput" />
+            <input type="email" className="loginInput" required />
           </div>
 
           <div className="loginFieldGrp">
             <label htmlFor="password">Password</label>
-            <input type="password" className="loginInput" />
+            <input type="password" className="loginInput" required />
           </div>
 
           <button
@@ -43,7 +43,7 @@ const LoginPage = () => {
             Create account and Sign in
           </button>
 
-          <p>
+          <p className="xl:pl-5">
             Already have an account? Login{" "}
             <span
               className=" underline cursor-pointer"
@@ -62,12 +62,12 @@ const LoginPage = () => {
         <form className="loginForm">
           <div className="loginFieldGrp">
             <label htmlFor="email">Email</label>
-            <input type="email" className="loginInput" />
+            <input type="email" className="loginInput" required />
           </div>
 
           <div className="loginFieldGrp">
             <label htmlFor="password">Password</label>
-            <input type="password" className="loginInput" />
+            <input type="password" className="loginInput" required />
           </div>
 
           <button
@@ -79,7 +79,7 @@ const LoginPage = () => {
             Sign In
           </button>
 
-          <p>
+          <p className="xl:pl-5">
             Don't have an account? Create one here{" "}
             <span
               className=" underline cursor-pointer"
