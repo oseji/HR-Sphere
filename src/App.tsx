@@ -1,5 +1,5 @@
 import { Route, Switch } from "react-router-dom";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import LoginPage from "./LoginPage";
 import Menu from "./Menu";
@@ -21,6 +21,7 @@ function App() {
 
   const [menuToggled, setMenuToggled] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  useEffect(() => console.log(setIsLoggedIn));
 
   const openCloseMenu = () => {
     setMenuToggled(!menuToggled);
