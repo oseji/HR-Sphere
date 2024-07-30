@@ -63,7 +63,7 @@ const Menu = (props: menuProp) => {
             onClick={toggleMenuClass}
           >
             <img src={iconHome} alt="home icon" />
-            <p className="menutext">Home</p>
+            <p className="menutext">Overview</p>
           </div>
         </Link>
 
