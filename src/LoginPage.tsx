@@ -2,6 +2,13 @@ import { useState } from "react";
 
 const LoginPage = () => {
   const [loginHereClicked, setLoginHereClicked] = useState<boolean>(false);
+  const [firstName, setFirstName] = useState<string>("");
+  const [lastName, setLastName] = useState<string>("");
+  const [userEmail, setUserEmail] = useState<string>("");
+  const [userPassword, setUserPassword] = useState<string>("");
+
+  const [loginEmail, setLoginEmail] = useState<string>("");
+  const [loginPassword, setLoginPassword] = useState<string>("");
 
   return (
     <div className="loginPage">
@@ -16,22 +23,54 @@ const LoginPage = () => {
         <form className="loginForm">
           <div className="loginFieldGrp">
             <label htmlFor="email">First Name</label>
-            <input type="text" className="loginInput" required />
+            <input
+              type="text"
+              className="loginInput"
+              required
+              value={firstName}
+              onChange={(e) => {
+                setFirstName(e.target.value);
+              }}
+            />
           </div>
 
           <div className="loginFieldGrp">
             <label htmlFor="email">Last Name</label>
-            <input type="text" className="loginInput" required />
+            <input
+              type="text"
+              className="loginInput"
+              required
+              value={lastName}
+              onChange={(e) => {
+                setLastName(e.target.value);
+              }}
+            />
           </div>
 
           <div className="loginFieldGrp">
             <label htmlFor="email">Email</label>
-            <input type="email" className="loginInput" required />
+            <input
+              type="email"
+              className="loginInput"
+              required
+              value={userEmail}
+              onChange={(e) => {
+                setUserEmail(e.target.value);
+              }}
+            />
           </div>
 
           <div className="loginFieldGrp">
             <label htmlFor="password">Password</label>
-            <input type="password" className="loginInput" required />
+            <input
+              type="password"
+              className="loginInput"
+              required
+              value={userPassword}
+              onChange={(e) => {
+                setUserPassword(e.target.value);
+              }}
+            />
           </div>
 
           <button
@@ -62,12 +101,28 @@ const LoginPage = () => {
         <form className="loginForm">
           <div className="loginFieldGrp">
             <label htmlFor="email">Email</label>
-            <input type="email" className="loginInput" required />
+            <input
+              type="email"
+              className="loginInput"
+              required
+              value={loginEmail}
+              onChange={(e) => {
+                setLoginEmail(e.target.value);
+              }}
+            />
           </div>
 
           <div className="loginFieldGrp">
             <label htmlFor="password">Password</label>
-            <input type="password" className="loginInput" required />
+            <input
+              type="password"
+              className="loginInput"
+              required
+              value={loginPassword}
+              onChange={(e) => {
+                setLoginPassword(e.target.value);
+              }}
+            />
           </div>
 
           <button

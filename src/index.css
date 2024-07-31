@@ -102,7 +102,7 @@ header {
 }
 
 .loginForm {
-  @apply w-full md:w-2/3 xl:w-1/2 xl:min-h-screen flex flex-col items-start xl:justify-center gap-5 p-3 xl:bg-slate-300;
+  @apply w-full md:w-2/3 xl:w-1/2 xl:min-h-screen flex flex-col items-start xl:justify-center gap-5 p-3 xl:bg-slate-200;
 }
 
 .loginFieldGrp {
