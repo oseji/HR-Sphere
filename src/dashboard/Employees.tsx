@@ -51,6 +51,17 @@ const Employees = (props: EmployeeProps) => {
             <option value="all">on site</option>
           </select>
         </div>
+
+        <div className="employeeListGrp">
+          {props.dbData.map((element, index) => (
+            <div className="employeeItem" key={index}>
+              <p className="staffName">{element.employeeName}</p>
+              <p className="staffData">Department : {element.department}</p>
+              <p className="staffData">Job Title : {element.jobTitle}</p>
+              <p className="staffData">Work Mode : {element.workMode}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="addEmployeeForm w-full lg:w-1/3">
@@ -102,7 +113,7 @@ const Employees = (props: EmployeeProps) => {
           </div>
 
           <button
-            className=" bg-faintGreen text-black dark:text-white dark:bg-darkModeGreen px-4 py-2 rounded-md w-fit mt-3"
+            className=" bg-buttonGreen text-white dark:bg-darkModeGreen px-4 py-2 rounded-md w-fit mt-3"
             onClick={(e) => {
               e.preventDefault();
               addEmployee();

@@ -210,7 +210,7 @@ const Stats = () => {
 
             <div className="barChartInfo">
               <div className="flex flex-row items-center gap-2">
-                <span className="h-3 w-3 rounded bg-[#095256]"></span>
+                <span className="h-3 w-3 rounded bg-buttonGreen"></span>
                 <div className="text-[10px]">Retention Rate</div>
               </div>
 

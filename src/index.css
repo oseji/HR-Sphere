@@ -48,7 +48,7 @@ html {
 }
 
 .activePageNum {
-  @apply bg-[#095256] text-white dark:bg-[#A9F2F6] dark:text-black scale-110;
+  @apply bg-buttonGreen text-white dark:bg-[#A9F2F6] dark:text-black scale-110;
 }
 
 .totalEmployeeChart,
@@ -257,7 +257,7 @@ td {
 }
 
 .employeeSortBtn {
-  @apply bg-[#095256] text-white dark:bg-[#A9F2F6] dark:text-black  px-3 py-1.5 rounded-md hover:scale-110 transition ease-in-out duration-150;
+  @apply bg-buttonGreen text-white dark:bg-[#A9F2F6] dark:text-black  px-3 py-1.5 rounded-md hover:scale-110 transition ease-in-out duration-150;
 }
 
 /* SCHEDULE */
@@ -266,6 +266,22 @@ td {
 }
 
 /* EMPLOYEES SECTION */
+.employeeListGrp {
+  @apply flex flex-col gap-3 p-2;
+}
+
+.employeeItem {
+  @apply flex flex-col gap-1 p-2 rounded-md;
+}
+
+.staffName {
+  @apply font-bold capitalize;
+}
+
+.staffData {
+  @apply text-xs capitalize;
+}
+
 .employeeDataForm {
   @apply flex flex-col gap-5 mt-5;
 }
@@ -325,7 +341,7 @@ td {
 
 /* PAYROLL */
 .headingGrp {
-  @apply flex flex-row gap-2 text-[#095256] dark:text-[#A9F2F6] cursor-pointer;
+  @apply flex flex-row gap-2 text-buttonGreen dark:text-[#A9F2F6] cursor-pointer;
 }
 
 /* FILE MANAGER */
