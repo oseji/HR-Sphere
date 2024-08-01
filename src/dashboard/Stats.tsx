@@ -7,14 +7,14 @@ import {
   SyntheticEvent,
 } from "react";
 
-import { employeeOverview, chartData } from "./types";
+import { employeeOverview, chartData } from "../types";
 
-import userIcon from "./assets/stats user icon.svg";
-import jobIcon from "./assets/stats resignation icon.svg";
-import folderIcon from "./assets/stats folder icon.svg";
-import upGrowth from "./assets/up growth.svg";
-import downGrowth from "./assets/down growth.svg";
-import searchIcon from "./assets/circum_search.png";
+import userIcon from "../assets/stats user icon.svg";
+import jobIcon from "../assets/stats resignation icon.svg";
+import folderIcon from "../assets/stats folder icon.svg";
+import upGrowth from "../assets/up growth.svg";
+import downGrowth from "../assets/down growth.svg";
+import searchIcon from "../assets/circum_search.png";
 
 const Stats = () => {
   const employeeSortBtnRefs = [

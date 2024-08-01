@@ -1,12 +1,13 @@
 import { Route, Switch } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 
-import { db, auth } from "./config/firebase";
+import { db, auth } from "../config/firebase";
 import { getDocs, collection } from "firebase/firestore";
 
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signOut,
 } from "firebase/auth";
 
 import LoginPage from "./LoginPage";
@@ -16,12 +17,11 @@ import Performance from "./Performance";
 import Payroll from "./Payroll";
 import FileManager from "./FileManager";
 
-import menuIcon from "./assets/menu.svg";
-import closeMenu from "./assets/closeMenu.svg";
-import logo from "./assets/logo.png";
-import searchIcon from "./assets/circum_search.png";
-import bellIcon from "./assets/bellIcon.svg";
-import avatar from "./assets/esther.png";
+import menuIcon from "../assets/menu.svg";
+import closeMenu from "../assets/closeMenu.svg";
+import logo from "../assets/logo.png";
+import searchIcon from "../assets/circum_search.png";
+import avatar from "../assets/esther.png";
 
 export type dataType = {
   id: string;
@@ -59,6 +59,8 @@ function App() {
       await createUserWithEmailAndPassword(auth, userEmail, userPassword);
       setIsLoggedIn(true);
       alert("created account and logged in");
+      setUserEmail("");
+      setUserPassword("");
     } catch (err: any) {
       //  setErrorMessage(errorMessageCleanUp(err.message));
       //  errorMessageRef.current?.classList.remove("hidden");
@@ -79,6 +81,19 @@ function App() {
       //  setErrorMessage(errorMessageCleanUp(err.message));
       //  errorMessageRef.current?.classList.remove("hidden");
       setIsLoggedIn(false);
+    }
+  };
+
+  const logOut = async () => {
+    try {
+      await signOut(auth);
+      setIsLoggedIn(false);
+
+      setLoginEmail("");
+      setLoginPassword("");
+    } catch (err) {
+      console.error(err);
+      setIsLoggedIn(true);
     }
   };
 
@@ -157,12 +172,6 @@ function App() {
               </div>
 
               <div className="flex flex-row items-center gap-5">
-                <img
-                  src={bellIcon}
-                  alt="bell icon"
-                  className="border border-slate-300 rounded-full py-1.5 px-2.5 w-9 hidden md:block"
-                />
-
                 <div className="profileGrp">
                   <img src={avatar} alt="profile image" className="w-8" />
                   <div className="profileName">stephanie ukwade</div>
@@ -172,7 +181,7 @@ function App() {
           </header>
 
           <main className="lg:flex flex-row lg:max-h-screen max-w-[100dvw] relative">
-            <Menu menu={menuRef} app={appRef}></Menu>
+            <Menu menu={menuRef} app={appRef} logOut={logOut}></Menu>
 
             <Switch>
               <Route exact path="/" component={Overview} />

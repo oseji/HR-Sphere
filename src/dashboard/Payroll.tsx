@@ -1,9 +1,9 @@
 import { SyntheticEvent, useState } from "react";
-import { employeeOverview } from "./types";
+import { employeeOverview } from "../types";
 
-import print from "./assets/print.svg";
-import download from "./assets/download.svg";
-import filterIcon from "./assets/filter.svg";
+import print from "../assets/print.svg";
+import download from "../assets/download.svg";
+import filterIcon from "../assets/filter.svg";
 
 const Payroll = () => {
   const [departmentFilter, setDepartmentFilter] = useState<string>();

@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 
-import closedEye from "./assets/closedEye.svg";
-import openedEye from "./assets/openedEye.svg";
+import closedEye from "../assets/closedEye.svg";
+import openedEye from "../assets/openedEye.svg";
 
 type userEmail = string;
 type userPassword = string;

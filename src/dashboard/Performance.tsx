@@ -2,12 +2,12 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 import { LineChart, Line, XAxis, YAxis } from "recharts";
 
-import { data, efficiencyData, employeeOverview, keyIndicator } from "./types";
+import { data, efficiencyData, employeeOverview, keyIndicator } from "../types";
 
 import { useState, useRef, SyntheticEvent } from "react";
 
-import eomImg from "./assets/employee of the month.png";
-import upArrow from "./assets/up growth.svg";
+import eomImg from "../assets/employee of the month.png";
+import upArrow from "../assets/up growth.svg";
 
 const Performance = () => {
   const COLORS = ["#06D6A0", "#095256"];

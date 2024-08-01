@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { Calendar } from "./components/ui/calendar";
+import { Calendar } from "../components/ui/calendar";
 
-import calndarIcon from "./assets/calendarIcon.svg";
+import calndarIcon from "../assets/calendarIcon.svg";
 
 const Schedule = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());

@@ -1,20 +1,23 @@
 import { SyntheticEvent, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
-import iconHome from "./assets/octicon_home-24.svg";
-import iconUsers from "./assets/mynaui_users-group.svg";
-import iconPerformance from "./assets/fluent_arrow-growth-24-regular.svg";
-import iconPayroll from "./assets/healthicons_money-bag-outline.svg";
-import iconFolder from "./assets/fluent_document-folder-20-regular.svg";
-import iconHelp from "./assets/formkit_help.svg";
-import iconSettings from "./assets/fluent_settings-20-regular.svg";
-import iconLogout from "./assets/iconoir_log-out.svg";
-import sun from "./assets/sun.svg";
-import moon from "./assets/moon.svg";
+import iconHome from "../assets/octicon_home-24.svg";
+import iconUsers from "../assets/mynaui_users-group.svg";
+import iconPerformance from "../assets/fluent_arrow-growth-24-regular.svg";
+import iconPayroll from "../assets/healthicons_money-bag-outline.svg";
+import iconFolder from "../assets/fluent_document-folder-20-regular.svg";
+import iconHelp from "../assets/formkit_help.svg";
+import iconSettings from "../assets/fluent_settings-20-regular.svg";
+import iconLogout from "../assets/iconoir_log-out.svg";
+import sun from "../assets/sun.svg";
+import moon from "../assets/moon.svg";
+
+type logOut = () => Promise<void>;
 
 type menuProp = {
   menu: any;
   app: any;
+  logOut: logOut;
 };
 
 const Menu = (props: menuProp) => {
@@ -146,17 +149,19 @@ const Menu = (props: menuProp) => {
           </div>
         </Link>
 
-        <Link to={"/Logout"}>
-          <div
-            className="menuGrp"
-            ref={menuRefs[7]}
-            data-value="7"
-            onClick={toggleMenuClass}
-          >
-            <img src={iconLogout} alt="log out icon" />
-            <p className="menutext">Log out</p>
-          </div>
-        </Link>
+        <div
+          className="menuGrp"
+          ref={menuRefs[7]}
+          data-value="7"
+          onClick={(e) => {
+            e.preventDefault();
+            toggleMenuClass(e);
+            props.logOut();
+          }}
+        >
+          <img src={iconLogout} alt="log out icon" />
+          <p className="menutext">Log out</p>
+        </div>
       </div>
     </section>
   );

@@ -1,6 +1,6 @@
-import searchIcon from "./assets/circum_search.png";
-import dots from "./assets/3dots.png";
-import { folders, files } from "./types";
+import searchIcon from "../assets/circum_search.png";
+import dots from "../assets/3dots.png";
+import { folders, files } from "../types";
 import { SyntheticEvent, useEffect, useState } from "react";
 
 const FileManager = () => {
