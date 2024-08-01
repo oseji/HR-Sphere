@@ -14,7 +14,7 @@ const LoginPage = () => {
     <div className="loginPage">
       <div className="loginTextContainer">
         <h1 className=" text-3xl md:text-5xl lg:text-6xl font-bold text-center">
-          Welcome to HR-Sphere
+          Welcome To HR-Sphere
         </h1>
       </div>
 
