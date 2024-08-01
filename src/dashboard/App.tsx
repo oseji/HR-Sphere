@@ -45,6 +45,11 @@ function App() {
 
   const [loginEmail, setLoginEmail] = useState<string>("");
   const [loginPassword, setLoginPassword] = useState<string>("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const errorMessageRef = [
+    useRef<HTMLParagraphElement>(null),
+    useRef<HTMLParagraphElement>(null),
+  ];
 
   const [dbData, setDbData] = useState<dataType>([]);
 
@@ -54,6 +59,16 @@ function App() {
     menuBtn?.classList.toggle("menuClosed");
   };
 
+  const errorMessageCleanUp = (text: string) => {
+    return text
+      .replace("Firebase: ", "")
+      .replace("Error ", "")
+      .replace("auth/", "")
+      .replace("(", "")
+      .replace(")", "")
+      .replace(/-/g, " ");
+  };
+
   const createAccount = async () => {
     try {
       await createUserWithEmailAndPassword(auth, userEmail, userPassword);
@@ -61,10 +76,12 @@ function App() {
       alert("created account and logged in");
       setUserEmail("");
       setUserPassword("");
+      errorMessageRef[0].current?.classList.add("hidden");
     } catch (err: any) {
-      //  setErrorMessage(errorMessageCleanUp(err.message));
       //  errorMessageRef.current?.classList.remove("hidden");
       setIsLoggedIn(false);
+      setErrorMessage(errorMessageCleanUp(err.message));
+      errorMessageRef[0].current?.classList.remove("hidden");
     }
   };
 
@@ -77,10 +94,14 @@ function App() {
       setLoginEmail("");
       setLoginPassword("");
       alert("logged in");
+      errorMessageRef[1].current?.classList.add("hidden");
     } catch (err: any) {
-      //  setErrorMessage(errorMessageCleanUp(err.message));
+      console.error(err);
+
       //  errorMessageRef.current?.classList.remove("hidden");
       setIsLoggedIn(false);
+      setErrorMessage(errorMessageCleanUp(err.message));
+      errorMessageRef[1].current?.classList.remove("hidden");
     }
   };
 
@@ -140,6 +161,9 @@ function App() {
           setLoginPassword={setLoginPassword}
           signIn={signIn}
           createAccount={createAccount}
+          errorMessage={errorMessage}
+          setErrorMessage={setErrorMessage}
+          errorMessageRef={errorMessageRef}
         ></LoginPage>
       )}
 

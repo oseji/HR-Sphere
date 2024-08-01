@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, ForwardedRef } from "react";
 
 import closedEye from "../assets/closedEye.svg";
 import openedEye from "../assets/openedEye.svg";
@@ -16,6 +16,10 @@ type setLoginEmail = (text: string) => void;
 type createAccount = () => Promise<void>;
 type signIn = () => Promise<void>;
 
+type errorMessage = string;
+type setErrorMessage = (text: string) => void;
+type errorMessageRef = ForwardedRef<HTMLParagraphElement>[];
+
 type loginPageProps = {
   userEmail: userEmail;
   userPassword: userPassword;
@@ -28,10 +32,15 @@ type loginPageProps = {
 
   createAccount: createAccount;
   signIn: signIn;
+
+  errorMessage: errorMessage;
+  setErrorMessage: setErrorMessage;
+  errorMessageRef: errorMessageRef;
 };
 
 const LoginPage = (props: loginPageProps) => {
   const passwordRef = useRef<HTMLInputElement>(null);
+
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [loginHereClicked, setLoginHereClicked] = useState<boolean>(false);
 
@@ -119,6 +128,10 @@ const LoginPage = (props: loginPageProps) => {
             </div>
           </div>
 
+          <p className="errorMessage hidden" ref={props.errorMessageRef[0]}>
+            {props.errorMessage}
+          </p>
+
           <button
             className="loginBtn"
             onClick={(e) => {
@@ -192,6 +205,10 @@ const LoginPage = (props: loginPageProps) => {
               />
             </div>
           </div>
+
+          <p className="errorMessage hidden" ref={props.errorMessageRef[1]}>
+            {props.errorMessage}
+          </p>
 
           <button
             className="loginBtn"
