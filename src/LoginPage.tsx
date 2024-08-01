@@ -1,14 +1,39 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 
-const LoginPage = () => {
+import closedEye from "./assets/closedEye.svg";
+import openedEye from "./assets/openedEye.svg";
+
+type userEmail = string;
+type userPassword = string;
+type loginEmail = string;
+type loginPassword = string;
+
+type setUserEmail = (text: string) => void;
+type setUserPassword = (text: string) => void;
+type setLoginPassword = (text: string) => void;
+type setLoginEmail = (text: string) => void;
+
+type createAccount = () => Promise<void>;
+type signIn = () => Promise<void>;
+
+type loginPageProps = {
+  userEmail: userEmail;
+  userPassword: userPassword;
+  setUserEmail: setUserEmail;
+  setUserPassword: setUserPassword;
+  loginEmail: loginEmail;
+  loginPassword: loginPassword;
+  setLoginEmail: setLoginEmail;
+  setLoginPassword: setLoginPassword;
+
+  createAccount: createAccount;
+  signIn: signIn;
+};
+
+const LoginPage = (props: loginPageProps) => {
+  const passwordRef = useRef<HTMLInputElement>(null);
+  const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [loginHereClicked, setLoginHereClicked] = useState<boolean>(false);
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
-  const [userEmail, setUserEmail] = useState<string>("");
-  const [userPassword, setUserPassword] = useState<string>("");
-
-  const [loginEmail, setLoginEmail] = useState<string>("");
-  const [loginPassword, setLoginPassword] = useState<string>("");
 
   return (
     <div className="loginPage">
@@ -21,7 +46,7 @@ const LoginPage = () => {
       {/* REGISTRATION FORM */}
       {!loginHereClicked && (
         <form className="loginForm">
-          <div className="loginFieldGrp">
+          {/* <div className="loginFieldGrp">
             <label htmlFor="email">First Name</label>
             <input
               type="text"
@@ -45,38 +70,60 @@ const LoginPage = () => {
                 setLastName(e.target.value);
               }}
             />
-          </div>
+          </div> */}
+
+          <h1 className="loginFormHeading">CREATE AN ACCOUNT</h1>
 
           <div className="loginFieldGrp">
             <label htmlFor="email">Email</label>
             <input
               type="email"
+              placeholder="Email"
               className="loginInput"
               required
-              value={userEmail}
+              value={props.userEmail}
               onChange={(e) => {
-                setUserEmail(e.target.value);
+                props.setUserEmail(e.target.value);
               }}
             />
           </div>
 
           <div className="loginFieldGrp">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              className="loginInput"
-              required
-              value={userPassword}
-              onChange={(e) => {
-                setUserPassword(e.target.value);
-              }}
-            />
+            <div className="passwordBox">
+              <input
+                className="loginInput"
+                type="password"
+                placeholder="Password"
+                value={props.userPassword}
+                ref={passwordRef}
+                onChange={(e) => {
+                  props.setUserPassword(e.target.value);
+                }}
+                required
+              />
+
+              <img
+                className="h-6 cursor-pointer"
+                src={!passwordVisible ? closedEye : openedEye}
+                alt="eye icon"
+                onClick={() => {
+                  setPasswordVisible(!passwordVisible);
+                  const passwordType =
+                    passwordRef.current?.getAttribute("type") === "password"
+                      ? "text"
+                      : "password";
+
+                  passwordRef.current?.setAttribute("type", passwordType);
+                }}
+              />
+            </div>
           </div>
 
           <button
             className="loginBtn"
             onClick={(e) => {
               e.preventDefault();
+              props.createAccount();
             }}
           >
             Create account and Sign in
@@ -99,36 +146,58 @@ const LoginPage = () => {
       {/* LOGIN FORM */}
       {loginHereClicked && (
         <form className="loginForm">
+          <h1 className="loginFormHeading">LOGIN</h1>
+
           <div className="loginFieldGrp">
             <label htmlFor="email">Email</label>
             <input
               type="email"
+              placeholder="Email"
               className="loginInput"
               required
-              value={loginEmail}
+              value={props.loginEmail}
               onChange={(e) => {
-                setLoginEmail(e.target.value);
+                props.setLoginEmail(e.target.value);
               }}
             />
           </div>
 
           <div className="loginFieldGrp">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              className="loginInput"
-              required
-              value={loginPassword}
-              onChange={(e) => {
-                setLoginPassword(e.target.value);
-              }}
-            />
+            <div className="passwordBox">
+              <input
+                className="loginInput"
+                type="password"
+                placeholder="Password"
+                value={props.loginPassword}
+                ref={passwordRef}
+                onChange={(e) => {
+                  props.setLoginPassword(e.target.value);
+                }}
+                required
+              />
+
+              <img
+                className="h-6 cursor-pointer"
+                src={!passwordVisible ? closedEye : openedEye}
+                alt="eye icon"
+                onClick={() => {
+                  setPasswordVisible(!passwordVisible);
+                  const passwordType =
+                    passwordRef.current?.getAttribute("type") === "password"
+                      ? "text"
+                      : "password";
+
+                  passwordRef.current?.setAttribute("type", passwordType);
+                }}
+              />
+            </div>
           </div>
 
           <button
             className="loginBtn"
             onClick={(e) => {
               e.preventDefault();
+              props.signIn();
             }}
           >
             Sign In
