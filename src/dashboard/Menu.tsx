@@ -70,7 +70,7 @@ const Menu = (props: menuProp) => {
           </div>
         </Link>
 
-        <Link to={"/Profiles"}>
+        <Link to={"/Employees"}>
           <div
             className="menuGrp"
             ref={menuRefs[1]}
@@ -78,7 +78,7 @@ const Menu = (props: menuProp) => {
             onClick={toggleMenuClass}
           >
             <img src={iconUsers} alt="profile icon" />
-            <p className="menutext">Profiles</p>
+            <p className="menutext">Employees</p>
           </div>
         </Link>
 

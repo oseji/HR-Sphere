@@ -13,6 +13,7 @@ import {
 import LoginPage from "./LoginPage";
 import Menu from "./Menu";
 import Overview from "./Overview";
+import Employees from "./Employees";
 import Performance from "./Performance";
 import Payroll from "./Payroll";
 import FileManager from "./FileManager";
@@ -24,11 +25,11 @@ import searchIcon from "../assets/circum_search.png";
 import avatar from "../assets/esther.png";
 
 export type dataType = {
+  employeeName: string;
+  department: string;
+  jobTitle: string;
+  workMode: string;
   id: string;
-  text: string;
-  completed: boolean;
-  createdAt: any;
-  updatedAt: any;
 }[];
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
 
   const [menuToggled, setMenuToggled] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [user, setUser] = useState(auth.currentUser?.email);
 
   // const [firstName, setFirstName] = useState<string>("");
   // const [lastName, setLastName] = useState<string>("");
@@ -72,15 +74,16 @@ function App() {
   const createAccount = async () => {
     try {
       await createUserWithEmailAndPassword(auth, userEmail, userPassword);
+
       setIsLoggedIn(true);
-      alert("created account and logged in");
       setUserEmail("");
       setUserPassword("");
+
       errorMessageRef[0].current?.classList.add("hidden");
     } catch (err: any) {
-      //  errorMessageRef.current?.classList.remove("hidden");
       setIsLoggedIn(false);
       setErrorMessage(errorMessageCleanUp(err.message));
+
       errorMessageRef[0].current?.classList.remove("hidden");
     }
   };
@@ -90,17 +93,16 @@ function App() {
       await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
       setIsLoggedIn(true);
 
-      //  errorMessageRef.current?.classList.add("hidden");
       setLoginEmail("");
       setLoginPassword("");
-      alert("logged in");
+
       errorMessageRef[1].current?.classList.add("hidden");
     } catch (err: any) {
       console.error(err);
 
-      //  errorMessageRef.current?.classList.remove("hidden");
       setIsLoggedIn(false);
       setErrorMessage(errorMessageCleanUp(err.message));
+
       errorMessageRef[1].current?.classList.remove("hidden");
     }
   };
@@ -123,7 +125,7 @@ function App() {
 
     try {
       if (user) {
-        const q = collection(db, `users/${user.email}/userTodos`);
+        const q = collection(db, `users/${user.email}/employeeData`);
 
         const data = (await getDocs(q)).docs;
         const filteredData = data.map((doc) => ({
@@ -139,12 +141,18 @@ function App() {
   };
 
   useEffect(() => {
-    console.log(isLoggedIn);
     console.log(dbData);
 
     if (isLoggedIn) {
       getEmployeeData();
     }
+
+    if (auth.currentUser?.email) {
+      const name = auth.currentUser?.email?.split("@");
+      setUser(name[0]);
+    }
+
+    console.log(dbData);
   }, [isLoggedIn]);
   return (
     <div className="App" ref={appRef}>
@@ -198,7 +206,9 @@ function App() {
               <div className="flex flex-row items-center gap-5">
                 <div className="profileGrp">
                   <img src={avatar} alt="profile image" className="w-8" />
-                  <div className="profileName">stephanie ukwade</div>
+                  <div className="profileName">
+                    {user !== "" ? `Welcome back, ${user}` : ""}
+                  </div>
                 </div>
               </div>
             </div>
@@ -208,13 +218,28 @@ function App() {
             <Menu menu={menuRef} app={appRef} logOut={logOut}></Menu>
 
             <Switch>
-              <Route exact path="/" component={Overview} />
+              <Route exact path="/">
+                <Overview></Overview>
+              </Route>
 
-              <Route path="/Performance" component={Performance} />
+              <Route path={"/Employees"}>
+                <Employees
+                  getEmployeeData={getEmployeeData}
+                  dbData={dbData}
+                ></Employees>
+              </Route>
 
-              <Route path="/Payroll" component={Payroll} />
+              <Route path="/Performance">
+                <Performance></Performance>
+              </Route>
 
-              <Route path="/FileManager" component={FileManager} />
+              <Route path="/Payroll">
+                <Payroll></Payroll>
+              </Route>
+
+              <Route path="/FileManager">
+                <FileManager></FileManager>
+              </Route>
             </Switch>
           </main>
         </div>

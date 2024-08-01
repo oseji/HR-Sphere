@@ -12,7 +12,7 @@ html {
 }
 
 .App {
-  @apply font-Poppins text-[#6F6F6F] dark:text-[#908F8F] bg-[#ECECEC] dark:bg-black max-w-[100vw];
+  @apply font-Poppins text-[#6F6F6F] dark:text-[#c7c7c7] bg-[#ECECEC] dark:bg-black max-w-[100vw];
 }
 
 .screenSection {
@@ -56,8 +56,10 @@ html {
 .employeePerformanceTable,
 .teamEfficiencyGrp,
 .employeeOfTheMonth,
-.payrollTable {
-  @apply p-3 rounded bg-white dark:bg-[#0F0F0F];
+.payrollTable,
+.employeeList,
+.addEmployeeForm {
+  @apply p-3 rounded bg-white dark:bg-darkBg;
 }
 
 .boxHeading {
@@ -65,13 +67,18 @@ html {
 }
 
 select {
-  @apply cursor-pointer outline-0 p-2 border border-slate-300 bg-transparent text-[#6F6F6F] rounded capitalize text-[10px];
+  @apply bg-white dark:bg-darkBg cursor-pointer outline-0 p-2 border border-slate-300  text-[#6F6F6F] dark:text-white rounded capitalize text-[10px] shadow-none;
+}
+
+option {
+  @apply dark:bg-darkBg shadow-none;
 }
 
 input {
   @apply bg-transparent outline-none  dark:text-white focus:outline-0 focus:outline-none;
 }
 
+/* HEADER */
 header {
   @apply w-full  flex flex-row items-center py-3 md:px-10 px-3 border-b border-slate-300 bg-white dark:bg-[#0F0F0F];
 }
@@ -147,7 +154,7 @@ header {
 }
 
 .activeMenuGrp {
-  @apply bg-[#E9FBFB] dark:bg-[#0B1E26] font-semibold text-black dark:text-white;
+  @apply bg-faintGreen dark:bg-darkModeGreen font-semibold text-black dark:text-white;
 }
 
 /* STATS SECTION */
@@ -257,6 +264,27 @@ td {
 .calendarHeading {
   @apply flex flex-row justify-between items-center mb-5;
 }
+
+/* EMPLOYEES SECTION */
+.employeeDataForm {
+  @apply flex flex-col gap-5 mt-5;
+}
+
+.employeeDataInput {
+  @apply flex flex-col gap-1;
+}
+
+.employeeDataInput > input {
+  @apply border-b pt-2 pb-1 capitalize font-light text-xs;
+}
+
+.employeeDataInput > label {
+  @apply text-black dark:text-white capitalize;
+}
+
+/* .employeeDataInput > input {
+  @apply p-2 rounded-md bg-slate-200 dark:bg-[#2a2a2a];
+} */
 
 /* PERFORMANCE SCREEN */
 

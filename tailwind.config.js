@@ -20,6 +20,11 @@ module.exports = {
       fontFamily: {
         Poppins: ["Poppins"],
       },
+      colors: {
+        darkBg: "#0F0F0F",
+        faintGreen: "#E9FBFB",
+        darkModeGreen: "#0B1E26",
+      },
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
