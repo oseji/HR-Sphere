@@ -1,6 +1,6 @@
+import { SpeedInsights } from "@vercel/speed-insights/react";
 import { Route, Switch } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
-
 import { db, auth } from "../config/firebase";
 import { getDocs, collection } from "firebase/firestore";
 
@@ -244,6 +244,8 @@ function App() {
           </main>
         </div>
       )}
+
+      <SpeedInsights framework="react" />
     </div>
   );
 }
