@@ -1,9 +1,9 @@
 import { SyntheticEvent, useState } from "react";
-import { employeeOverview } from "./types";
+import { employeeOverview } from "../types";
 
-import print from "./assets/print.svg";
-import download from "./assets/download.svg";
-import filterIcon from "./assets/filter.svg";
+import print from "../assets/print.svg";
+import download from "../assets/download.svg";
+import filterIcon from "../assets/filter.svg";
 
 const Payroll = () => {
   const [departmentFilter, setDepartmentFilter] = useState<string>();
@@ -35,7 +35,7 @@ const Payroll = () => {
                 <p className="headingIconText">Download</p>
               </div>
 
-              <button className="text-white px-3 py-1.5 rounded bg-[#095256] dark:bg-[#A9F2F6] dark:text-black">
+              <button className="text-white px-3 py-1.5 rounded bg-buttonGreen dark:bg-[#A9F2F6] dark:text-black">
                 Add Payroll
               </button>
             </div>

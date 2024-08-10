@@ -2,12 +2,12 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 import { LineChart, Line, XAxis, YAxis } from "recharts";
 
-import { data, efficiencyData, employeeOverview, keyIndicator } from "./types";
+import { data, efficiencyData, employeeOverview, keyIndicator } from "../types";
 
 import { useState, useRef, SyntheticEvent } from "react";
 
-import eomImg from "./assets/employee of the month.png";
-import upArrow from "./assets/up growth.svg";
+import eomImg from "../assets/employee of the month.png";
+import upArrow from "../assets/up growth.svg";
 
 const Performance = () => {
   const COLORS = ["#06D6A0", "#095256"];
@@ -80,7 +80,7 @@ const Performance = () => {
 
             <div className="barChartInfo text-[10px] mt-5">
               <div className="flex flex-row items-center gap-2">
-                <span className="h-3 w-3 rounded bg-[#095256]"></span>
+                <span className="h-3 w-3 rounded bg-buttonGreen"></span>
                 <div>Contract staff</div>
               </div>
 

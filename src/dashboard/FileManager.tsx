@@ -1,6 +1,6 @@
-import searchIcon from "./assets/circum_search.png";
-import dots from "./assets/3dots.png";
-import { folders, files } from "./types";
+import searchIcon from "../assets/circum_search.png";
+import dots from "../assets/3dots.png";
+import { folders, files } from "../types";
 import { SyntheticEvent, useEffect, useState } from "react";
 
 const FileManager = () => {
@@ -54,7 +54,7 @@ const FileManager = () => {
             </h1>
           </div>
 
-          <button className="bg-[#095256] text-xs text-white dark:bg-[#A9F2F6] dark:text-black px-3 py-1.5 rounded-md hover:scale-110 transition ease-in-out duration-150">
+          <button className="bg-buttonGreen text-xs text-white dark:bg-[#A9F2F6] dark:text-black px-3 py-1.5 rounded-md hover:scale-110 transition ease-in-out duration-150">
             + New File
           </button>
         </div>
@@ -95,7 +95,7 @@ const FileManager = () => {
             <h1 className="text-base text-black dark:text-white">Folders</h1>
 
             <button
-              className="text-[#095256] dark:text-[#A9F2F6] underline text-xs"
+              className="text-buttonGreen dark:text-[#A9F2F6] underline text-xs"
               onClick={() => setFoldersToggled(!foldersToggled)}
             >
               {foldersToggled ? "See Less" : "See All"}
@@ -144,7 +144,7 @@ const FileManager = () => {
             </h1>
 
             <button
-              className="text-[#095256] dark:text-[#A9F2F6] underline text-xs"
+              className="text-buttonGreen dark:text-[#A9F2F6] underline text-xs"
               onClick={() => setFilesToggled(!filesToggled)}
             >
               {filesToggled ? "See Less" : "See All"}
