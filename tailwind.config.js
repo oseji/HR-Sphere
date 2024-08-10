@@ -22,6 +22,7 @@ module.exports = {
       },
       colors: {
         darkBg: "#0F0F0F",
+        lightBlack: "#0D0D0D",
         faintGreen: "#E9FBFB",
         darkModeGreen: "#0B1E26",
         buttonGreen: "#095256",
