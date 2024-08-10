@@ -26,9 +26,13 @@ import avatar from "../assets/esther.png";
 
 export type dataType = {
   employeeName: string;
+  employeeEmail: string;
+  employmentContract: string;
+  employeeSalary: number;
   department: string;
-  jobTitle: string;
+  role: string;
   workMode: string;
+  numberOfKPIs: number;
   id: string;
 }[];
 
@@ -140,6 +144,7 @@ function App() {
     }
   };
 
+  // get employee data and current username once logged in
   useEffect(() => {
     console.log(dbData);
 

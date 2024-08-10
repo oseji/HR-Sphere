@@ -78,6 +78,11 @@ input {
   @apply bg-transparent outline-none  dark:text-white focus:outline-0 focus:outline-none;
 }
 
+input::-webkit-inner-spin-button,
+::-webkit-outer-spin-button {
+  @apply hidden;
+}
+
 /* HEADER */
 header {
   @apply w-full  flex flex-row items-center py-3 md:px-10 px-3 border-b border-slate-300 bg-white dark:bg-[#0F0F0F];
@@ -286,8 +291,12 @@ td {
   @apply flex flex-col gap-5 mt-5;
 }
 
+.employeeFormInputGrp {
+  @apply flex flex-col md:flex-row md:items-center gap-5 xl:gap-4;
+}
+
 .employeeDataInput {
-  @apply flex flex-col gap-1;
+  @apply flex flex-col gap-1 md:w-1/2;
 }
 
 .employeeDataInput > input {

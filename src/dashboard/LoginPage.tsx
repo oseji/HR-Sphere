@@ -53,39 +53,14 @@ const LoginPage = (props: loginPageProps) => {
       </div>
 
       {/* REGISTRATION FORM */}
-      {!loginHereClicked && (
+      {loginHereClicked && (
         <form className="loginForm">
-          {/* <div className="loginFieldGrp">
-            <label htmlFor="email">First Name</label>
-            <input
-              type="text"
-              className="loginInput"
-              required
-              value={firstName}
-              onChange={(e) => {
-                setFirstName(e.target.value);
-              }}
-            />
-          </div>
-
-          <div className="loginFieldGrp">
-            <label htmlFor="email">Last Name</label>
-            <input
-              type="text"
-              className="loginInput"
-              required
-              value={lastName}
-              onChange={(e) => {
-                setLastName(e.target.value);
-              }}
-            />
-          </div> */}
-
           <h1 className="loginFormHeading">CREATE AN ACCOUNT</h1>
 
           <div className="loginFieldGrp">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="registerEmail">Email</label>
             <input
+              id="registerEmail"
               type="email"
               placeholder="Email"
               className="loginInput"
@@ -157,13 +132,14 @@ const LoginPage = (props: loginPageProps) => {
       )}
 
       {/* LOGIN FORM */}
-      {loginHereClicked && (
+      {!loginHereClicked && (
         <form className="loginForm">
           <h1 className="loginFormHeading">LOGIN</h1>
 
           <div className="loginFieldGrp">
-            <label htmlFor="email">Email</label>
+            <label htmlFor="loginEmail">Email</label>
             <input
+              id="loginEmail"
               type="email"
               placeholder="Email"
               className="loginInput"
