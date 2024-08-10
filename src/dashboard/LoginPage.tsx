@@ -1,8 +1,11 @@
 import { useState, useRef, ForwardedRef } from "react";
+import { Spinner } from "@chakra-ui/react";
 
 import closedEye from "../assets/closedEye.svg";
 import openedEye from "../assets/openedEye.svg";
 
+type loginLoading = boolean;
+type setIsLoginLoading = (loading: boolean) => void;
 type userEmail = string;
 type userPassword = string;
 type loginEmail = string;
@@ -21,6 +24,8 @@ type setErrorMessage = (text: string) => void;
 type errorMessageRef = ForwardedRef<HTMLParagraphElement>[];
 
 type loginPageProps = {
+  loginLoading: loginLoading;
+  setIsLoginLoading: setIsLoginLoading;
   userEmail: userEmail;
   userPassword: userPassword;
   setUserEmail: setUserEmail;
@@ -107,15 +112,21 @@ const LoginPage = (props: loginPageProps) => {
             {props.errorMessage}
           </p>
 
-          <button
-            className="loginBtn"
-            onClick={(e) => {
-              e.preventDefault();
-              props.createAccount();
-            }}
-          >
-            Create account and Sign in
-          </button>
+          <div className=" flex flex-row gap-14 justify-between items-center">
+            <button
+              className="loginBtn"
+              onClick={(e) => {
+                e.preventDefault();
+                props.createAccount();
+              }}
+            >
+              {props.loginLoading
+                ? "Creating account"
+                : "Create account and Sign in"}
+            </button>
+
+            {props.loginLoading && <Spinner></Spinner>}
+          </div>
 
           <p className="xl:pl-5">
             Already have an account? Login{" "}
@@ -186,15 +197,19 @@ const LoginPage = (props: loginPageProps) => {
             {props.errorMessage}
           </p>
 
-          <button
-            className="loginBtn"
-            onClick={(e) => {
-              e.preventDefault();
-              props.signIn();
-            }}
-          >
-            Sign In
-          </button>
+          <div className=" flex flex-row gap-14 justify-between items-center">
+            <button
+              className="loginBtn"
+              onClick={(e) => {
+                e.preventDefault();
+                props.signIn();
+              }}
+            >
+              {props.loginLoading ? "Signing In" : "Sign In"}
+            </button>
+
+            {props.loginLoading && <Spinner></Spinner>}
+          </div>
 
           <p className="xl:pl-5">
             Don't have an account? Create one here{" "}

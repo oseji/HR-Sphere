@@ -1,4 +1,5 @@
 import { SpeedInsights } from "@vercel/speed-insights/react";
+import { ChakraProvider, Spinner } from "@chakra-ui/react";
 import { Route, Switch } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { db, auth } from "../config/firebase";
@@ -40,12 +41,12 @@ function App() {
   const appRef = useRef<HTMLDivElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  const [loginLoading, setIsLoginLoading] = useState<boolean>(false);
+
   const [menuToggled, setMenuToggled] = useState<boolean>(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [user, setUser] = useState(auth.currentUser?.email);
+  const [admin, setAdmin] = useState(auth.currentUser?.email);
 
-  // const [firstName, setFirstName] = useState<string>("");
-  // const [lastName, setLastName] = useState<string>("");
   const [userEmail, setUserEmail] = useState<string>("");
   const [userPassword, setUserPassword] = useState<string>("");
 
@@ -93,6 +94,8 @@ function App() {
   };
 
   const signIn = async () => {
+    setIsLoginLoading(true);
+
     try {
       await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
       setIsLoggedIn(true);
@@ -108,10 +111,14 @@ function App() {
       setErrorMessage(errorMessageCleanUp(err.message));
 
       errorMessageRef[1].current?.classList.remove("hidden");
+    } finally {
+      setIsLoginLoading(false);
     }
   };
 
   const logOut = async () => {
+    setIsLoginLoading(true);
+
     try {
       await signOut(auth);
       setIsLoggedIn(false);
@@ -121,6 +128,8 @@ function App() {
     } catch (err) {
       console.error(err);
       setIsLoggedIn(true);
+    } finally {
+      setIsLoginLoading(false);
     }
   };
 
@@ -154,103 +163,113 @@ function App() {
 
     if (auth.currentUser?.email) {
       const name = auth.currentUser?.email?.split("@");
-      setUser(name[0]);
+      setAdmin(name[0]);
     }
 
     console.log(dbData);
   }, [isLoggedIn]);
   return (
     <div className="App" ref={appRef}>
-      {/* login screen */}
-      {!isLoggedIn && (
-        <LoginPage
-          userEmail={userEmail}
-          setUserEmail={setUserEmail}
-          userPassword={userPassword}
-          setUserPassword={setUserPassword}
-          loginEmail={loginEmail}
-          setLoginEmail={setLoginEmail}
-          loginPassword={loginPassword}
-          setLoginPassword={setLoginPassword}
-          signIn={signIn}
-          createAccount={createAccount}
-          errorMessage={errorMessage}
-          setErrorMessage={setErrorMessage}
-          errorMessageRef={errorMessageRef}
-        ></LoginPage>
-      )}
+      <ChakraProvider>
+        {/* login screen */}
+        {!isLoggedIn && !loginLoading && (
+          <LoginPage
+            loginLoading={loginLoading}
+            setIsLoginLoading={setIsLoginLoading}
+            userEmail={userEmail}
+            setUserEmail={setUserEmail}
+            userPassword={userPassword}
+            setUserPassword={setUserPassword}
+            loginEmail={loginEmail}
+            setLoginEmail={setLoginEmail}
+            loginPassword={loginPassword}
+            setLoginPassword={setLoginPassword}
+            signIn={signIn}
+            createAccount={createAccount}
+            errorMessage={errorMessage}
+            setErrorMessage={setErrorMessage}
+            errorMessageRef={errorMessageRef}
+          ></LoginPage>
+        )}
 
-      {/* dashboard interface */}
-      {isLoggedIn && (
-        <div className="dashboardInterface">
-          <header>
-            <div className="logoGrp">
-              <img src={logo} alt="logo" className="block" />
-              <h1 className="font-bold text-black dark:text-white">
-                HR Sphere
-              </h1>
-            </div>
+        {loginLoading && (
+          <div className=" flex flex-row items-center justify-center min-w-full min-h-screen">
+            <Spinner></Spinner>
+          </div>
+        )}
 
-            <div className="w-full flex flex-row items-center justify-between">
-              <img
-                src={menuToggled ? closeMenu : menuIcon}
-                alt="menu icon"
-                className="lg:hidden h-8"
-                onClick={openCloseMenu}
-              />
-
-              <div className="inputGrp">
-                <img src={searchIcon} alt="search icon" className="h-5" />
-                <input
-                  type="text"
-                  placeholder="Search"
-                  className="w-full text-sm placeholder:text-sm "
-                />
+        {/* dashboard interface */}
+        {isLoggedIn && !loginLoading && (
+          <div className="dashboardInterface">
+            <header>
+              <div className="logoGrp">
+                <img src={logo} alt="logo" className="block" />
+                <h1 className="font-bold text-black dark:text-white">
+                  HR Sphere
+                </h1>
               </div>
 
-              <div className="flex flex-row items-center gap-5">
-                <div className="profileGrp">
-                  <img src={avatar} alt="profile image" className="w-8" />
-                  <div className="profileName">
-                    {user !== "" ? `Welcome back, ${user}` : ""}
+              <div className="w-full flex flex-row items-center justify-between">
+                <img
+                  src={menuToggled ? closeMenu : menuIcon}
+                  alt="menu icon"
+                  className="lg:hidden h-8"
+                  onClick={openCloseMenu}
+                />
+
+                <div className="inputGrp">
+                  <img src={searchIcon} alt="search icon" className="h-5" />
+                  <input
+                    type="text"
+                    placeholder="Search"
+                    className="w-full text-sm placeholder:text-sm dark:placeholder:text-white"
+                  />
+                </div>
+
+                <div className="flex flex-row items-center gap-5">
+                  <div className="profileGrp">
+                    <img src={avatar} alt="profile image" className="w-8" />
+                    <div className="profileName">
+                      {admin !== "" ? `Welcome back, ${admin}` : ""}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </header>
+            </header>
 
-          <main className="lg:flex flex-row lg:max-h-screen max-w-[100dvw] relative">
-            <Menu menu={menuRef} app={appRef} logOut={logOut}></Menu>
+            <main className="lg:flex flex-row lg:max-h-screen max-w-[100dvw] relative">
+              <Menu menu={menuRef} app={appRef} logOut={logOut}></Menu>
 
-            <Switch>
-              <Route exact path="/">
-                <Overview></Overview>
-              </Route>
+              <Switch>
+                <Route exact path="/">
+                  <Overview></Overview>
+                </Route>
 
-              <Route path={"/Employees"}>
-                <Employees
-                  getEmployeeData={getEmployeeData}
-                  dbData={dbData}
-                ></Employees>
-              </Route>
+                <Route path={"/Employees"}>
+                  <Employees
+                    getEmployeeData={getEmployeeData}
+                    dbData={dbData}
+                  ></Employees>
+                </Route>
 
-              <Route path="/Performance">
-                <Performance></Performance>
-              </Route>
+                <Route path="/Performance">
+                  <Performance></Performance>
+                </Route>
 
-              <Route path="/Payroll">
-                <Payroll></Payroll>
-              </Route>
+                <Route path="/Payroll">
+                  <Payroll></Payroll>
+                </Route>
 
-              <Route path="/FileManager">
-                <FileManager></FileManager>
-              </Route>
-            </Switch>
-          </main>
-        </div>
-      )}
+                <Route path="/FileManager">
+                  <FileManager></FileManager>
+                </Route>
+              </Switch>
+            </main>
+          </div>
+        )}
 
-      <SpeedInsights framework="react" />
+        <SpeedInsights framework="react" />
+      </ChakraProvider>
     </div>
   );
 }
