@@ -10,12 +10,16 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@chakra-ui/react": "^2.8.2",
+    "@emotion/react": "^11.13.0",
+    "@emotion/styled": "^11.13.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@vercel/speed-insights": "^1.0.12",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "firebase": "^10.12.4",
+    "framer-motion": "^11.3.24",
     "lucide-react": "^0.383.0",
     "react": "^18.2.0",
     "react-day-picker": "^8.10.1",
