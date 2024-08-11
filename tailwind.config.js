@@ -21,8 +21,7 @@ module.exports = {
         Poppins: ["Poppins"],
       },
       colors: {
-        darkBg: "#0F0F0F",
-        lightBlack: "#0D0D0D",
+        darkBg: "#0D0D0D",
         faintGreen: "#E9FBFB",
         darkModeGreen: "#0B1E26",
         buttonGreen: "#095256",

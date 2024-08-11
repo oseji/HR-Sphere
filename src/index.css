@@ -12,7 +12,7 @@ html {
 }
 
 .App {
-  @apply font-Poppins text-[#6F6F6F] dark:text-[#c7c7c7] bg-[#ECECEC] dark:bg-black max-w-[100vw];
+  @apply font-Poppins text-[#6F6F6F] dark:text-[#c7c7c7] bg-[#ECECEC] dark:bg-black max-w-[100vw] min-h-screen;
 }
 
 .screenSection {
@@ -114,7 +114,7 @@ header {
 }
 
 .loginForm {
-  @apply w-full md:w-2/3 xl:w-1/2 xl:min-h-screen flex flex-col items-start xl:justify-center gap-5 p-3 xl:bg-slate-200 xl:dark:bg-lightBlack;
+  @apply w-full md:w-2/3 xl:w-1/2 xl:min-h-screen flex flex-col items-start xl:justify-center gap-5 p-3 xl:bg-slate-200 xl:dark:bg-darkBg;
 }
 
 .loginFormHeading {
@@ -272,7 +272,11 @@ td {
 
 /* EMPLOYEES SECTION */
 .employeeListGrp {
-  @apply flex flex-col gap-3 p-2;
+  @apply grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-3 p-2;
+}
+
+.employeeScreenSearchGrp {
+  @apply w-60 hidden md:flex flex-row items-center gap-2 border border-slate-300 rounded p-1.5;
 }
 
 .employeeItem {
@@ -306,10 +310,6 @@ td {
 .employeeDataInput > label {
   @apply text-black dark:text-white capitalize;
 }
-
-/* .employeeDataInput > input {
-  @apply p-2 rounded-md bg-slate-200 dark:bg-[#2a2a2a];
-} */
 
 /* PERFORMANCE SCREEN */
 

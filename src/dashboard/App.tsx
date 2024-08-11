@@ -1,5 +1,5 @@
 import { SpeedInsights } from "@vercel/speed-insights/react";
-import { ChakraProvider, Spinner } from "@chakra-ui/react";
+import { ChakraProvider } from "@chakra-ui/react";
 import { Route, Switch } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { db, auth } from "../config/firebase";
@@ -172,7 +172,7 @@ function App() {
     <div className="App" ref={appRef}>
       <ChakraProvider>
         {/* login screen */}
-        {!isLoggedIn && !loginLoading && (
+        {!isLoggedIn && (
           <LoginPage
             loginLoading={loginLoading}
             setIsLoginLoading={setIsLoginLoading}
@@ -192,14 +192,14 @@ function App() {
           ></LoginPage>
         )}
 
-        {loginLoading && (
+        {/* {loginLoading && (
           <div className=" flex flex-row items-center justify-center min-w-full min-h-screen">
             <Spinner></Spinner>
           </div>
-        )}
+        )} */}
 
         {/* dashboard interface */}
-        {isLoggedIn && !loginLoading && (
+        {isLoggedIn && (
           <div className="dashboardInterface">
             <header>
               <div className="logoGrp">

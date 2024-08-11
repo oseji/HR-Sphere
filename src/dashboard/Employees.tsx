@@ -1,8 +1,12 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { db, auth } from "../config/firebase";
 import { addDoc, collection } from "firebase/firestore";
 import { dataType } from "./App";
+
+import { Spinner } from "@chakra-ui/react";
+
+import searchIcon from "../assets/circum_search.png";
 
 type getEmployeeData = () => Promise<void>;
 
@@ -12,9 +16,7 @@ type EmployeeProps = {
 };
 
 const Employees = (props: EmployeeProps) => {
-  useEffect(() => {
-    console.log(props.dbData);
-  }, [props.dbData]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [employeeName, setEmployeeName] = useState<string>();
   const [department, setDepartment] = useState<string>();
@@ -26,7 +28,9 @@ const Employees = (props: EmployeeProps) => {
   const [numberOfKPIs, setNumberOfKPIs] = useState<number>();
 
   const addEmployee = async () => {
+    setIsLoading(true);
     const user = auth.currentUser;
+
     try {
       if (user) {
         await addDoc(collection(db, `users/${user.email}/employeeData`), {
@@ -49,12 +53,14 @@ const Employees = (props: EmployeeProps) => {
 
       setEmployeeName("");
       setEmployeeEmail("");
-      setEmploymentContract("");
+      setEmploymentContract("Full-time");
       setEmployeeSalary(0);
       setDepartment("");
       setJobTitle("");
-      setWorkMode("");
+      setWorkMode("On site");
       setNumberOfKPIs(0);
+
+      setIsLoading(false);
     }
   };
 
@@ -65,6 +71,16 @@ const Employees = (props: EmployeeProps) => {
           <h1 className="boxHeading">Employees</h1>
 
           <div className=" flex flex-row items-center gap-3">
+            <div className="employeeScreenSearchGrp">
+              <img src={searchIcon} alt="search icon" className="h-5" />
+
+              <input
+                type="text"
+                placeholder="Search for employee"
+                className="w-full text-xs placeholder:text-xs dark:placeholder:text-white"
+              />
+            </div>
+
             <select>
               <option value="remote">remote</option>
               <option value="on site">on site</option>
@@ -78,33 +94,41 @@ const Employees = (props: EmployeeProps) => {
           </div>
         </div>
 
-        <div className="employeeListGrp">
-          {props.dbData.map((element, index) => (
-            <div className="employeeItem" key={index}>
-              <p className="staffName">{element.employeeName}</p>
+        {!isLoading && (
+          <div className="employeeListGrp">
+            {props.dbData.map((element, index) => (
+              <div className="employeeItem" key={index}>
+                <p className="staffName">{element.employeeName}</p>
 
-              <p className=" text-xs">Email : {element.employeeEmail}</p>
+                <p className=" text-xs">Email : {element.employeeEmail}</p>
 
-              <p className="staffData">Department : {element.department}</p>
+                <p className="staffData">Department : {element.department}</p>
 
-              <p className="staffData">Role : {element.role}</p>
+                <p className="staffData">Role : {element.role}</p>
 
-              <p className="staffData">
-                Salary : {element.employeeSalary.toLocaleString()}
-              </p>
+                <p className="staffData">
+                  Salary : {element.employeeSalary.toLocaleString()}
+                </p>
 
-              <p className="staffData">
-                Contract : {element.employmentContract}
-              </p>
+                <p className="staffData">
+                  Contract : {element.employmentContract}
+                </p>
 
-              <p className="staffData">Work Mode : {element.workMode}</p>
+                <p className="staffData">Work Mode : {element.workMode}</p>
 
-              <p className="staffData">
-                Number of KPIs : {element.numberOfKPIs}
-              </p>
-            </div>
-          ))}
-        </div>
+                <p className="staffData">
+                  Number of KPIs : {element.numberOfKPIs}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {isLoading && (
+          <div className=" flex flex-row items-center justify-center w-full min-h-screen">
+            <Spinner></Spinner>
+          </div>
+        )}
       </div>
 
       <div className="addEmployeeForm w-full lg:w-1/3">
