@@ -2,14 +2,20 @@ import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
 
 import { LineChart, Line, XAxis, YAxis } from "recharts";
 
-import { data, efficiencyData, employeeOverview, keyIndicator } from "../types";
+import { data, efficiencyData, keyIndicator } from "../types";
 
-import { useState, useRef, SyntheticEvent } from "react";
+import { useState, useRef, ChangeEvent } from "react";
 
 import eomImg from "../assets/employee of the month.png";
 import upArrow from "../assets/up growth.svg";
+import avatar from "../assets/arlene.png";
 
-const Performance = () => {
+import { dataType } from "./App";
+type performanceProps = {
+  dbData: dataType;
+};
+
+const Performance = (props: performanceProps) => {
   const COLORS = ["#06D6A0", "#095256"];
   const efficiencyCOLORS = ["#06D6A0", "#EBEBEB"];
 
@@ -26,8 +32,9 @@ const Performance = () => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   let numberOfPages = Math.ceil(
-    Object.values(employeeOverview).filter(
-      (e) => !departmentFilter || e.department === departmentFilter
+    Object.values(props.dbData).filter(
+      (e) =>
+        !departmentFilter || e.department.toLowerCase() === departmentFilter
     ).length / itemsPerPage
   );
 
@@ -40,8 +47,9 @@ const Performance = () => {
   const handleNextBtn = () => {
     if (
       endIndex <
-      Object.values(employeeOverview).filter(
-        (e) => !departmentFilter || e.department === departmentFilter
+      Object.values(props.dbData).filter(
+        (e) =>
+          !departmentFilter || e.department.toLowerCase() === departmentFilter
       ).length
     ) {
       setCurrentPage(currentPage + 1);
@@ -150,7 +158,7 @@ const Performance = () => {
                 </select>
 
                 <select
-                  onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
+                  onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                     setDepartmentFilter(e.currentTarget.value);
                   }}
                 >
@@ -174,35 +182,38 @@ const Performance = () => {
               </thead>
 
               <tbody>
-                {Object.values(employeeOverview)
+                {Object.values(props.dbData)
                   .filter(
                     (e) =>
-                      !departmentFilter || e.department === departmentFilter
+                      !departmentFilter ||
+                      e.department.toLowerCase() === departmentFilter
                   )
                   .slice(startIndex, endIndex)
                   .map((value, index) => (
                     <tr key={index}>
                       <td className="employeeName">
-                        <img src={value.img} alt="profile image" />
-                        <p> {value.name}</p>
+                        <img src={avatar} alt="profile image" />
+                        <p> {value.employeeName}</p>
                       </td>
-                      <td>{value.jobTitle}</td>
+                      <td>{value.role}</td>
                       <td>{value.numberOfKPIs}</td>
-                      <td>{value.KPIScore}</td>
+                      <td>{value.numberOfKPIs}</td>
                       <td
-                        className={
-                          value.monthlyAvg < 39
-                            ? "text-[#D00000]"
-                            : value.monthlyAvg >= 39 && value.monthlyAvg < 60
-                            ? "text-[#F48B02]"
-                            : value.monthlyAvg >= 60 && value.monthlyAvg < 70
-                            ? "text-[#02AB02]"
-                            : value.monthlyAvg >= 70
-                            ? "text-[#02AB02]"
-                            : ""
-                        }
+                      // FIX THIS WHEN YOU HAVE IMPLEMENTED KPI OBJECT
+                      // className={
+                      //   value.monthlyAvg < 39
+                      //     ? "text-[#D00000]"
+                      //     : value.monthlyAvg >= 39 && value.monthlyAvg < 60
+                      //     ? "text-[#F48B02]"
+                      //     : value.monthlyAvg >= 60 && value.monthlyAvg < 70
+                      //     ? "text-[#02AB02]"
+                      //     : value.monthlyAvg >= 70
+                      //     ? "text-[#02AB02]"
+                      //     : ""
+                      // }
                       >
-                        {value.monthlyAvg}%
+                        {/* {value.monthlyAvg}% */}
+                        avg
                       </td>
                     </tr>
                   ))}
@@ -228,8 +239,10 @@ const Performance = () => {
             <button
               className={`employeeSortBtn ${
                 endIndex >=
-                Object.values(employeeOverview).filter(
-                  (e) => !departmentFilter || e.department === departmentFilter
+                Object.values(props.dbData).filter(
+                  (e) =>
+                    !departmentFilter ||
+                    e.department.toLowerCase() === departmentFilter
                 ).length
                   ? "hidden"
                   : ""

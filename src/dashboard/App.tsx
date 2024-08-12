@@ -168,6 +168,7 @@ function App() {
 
     console.log(dbData);
   }, [isLoggedIn]);
+
   return (
     <div className="App" ref={appRef}>
       <ChakraProvider>
@@ -242,7 +243,7 @@ function App() {
 
               <Switch>
                 <Route exact path="/">
-                  <Overview></Overview>
+                  <Overview dbData={dbData}></Overview>
                 </Route>
 
                 <Route path={"/Employees"}>
@@ -253,11 +254,11 @@ function App() {
                 </Route>
 
                 <Route path="/Performance">
-                  <Performance></Performance>
+                  <Performance dbData={dbData}></Performance>
                 </Route>
 
                 <Route path="/Payroll">
-                  <Payroll></Payroll>
+                  <Payroll dbData={dbData}></Payroll>
                 </Route>
 
                 <Route path="/FileManager">

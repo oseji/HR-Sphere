@@ -1,13 +1,9 @@
 import { BarChart, Bar, Rectangle, XAxis, Tooltip } from "recharts";
-import {
-  ChangeEvent,
-  useState,
-  useEffect,
-  useRef,
-  SyntheticEvent,
-} from "react";
+import { ChangeEvent, useState, useEffect, useRef } from "react";
 
-import { employeeOverview, chartData } from "../types";
+import { chartData } from "../types";
+
+import { dataType } from "./App";
 
 import userIcon from "../assets/stats user icon.svg";
 import jobIcon from "../assets/stats resignation icon.svg";
@@ -15,8 +11,13 @@ import folderIcon from "../assets/stats folder icon.svg";
 import upGrowth from "../assets/up growth.svg";
 import downGrowth from "../assets/down growth.svg";
 import searchIcon from "../assets/circum_search.png";
+import avatar from "../assets/arlene.png";
 
-const Stats = () => {
+type statsProps = {
+  dbData: dataType;
+};
+
+const Stats = (props: statsProps) => {
   const employeeSortBtnRefs = [
     useRef<HTMLButtonElement>(null),
     useRef<HTMLButtonElement>(null),
@@ -29,6 +30,14 @@ const Stats = () => {
   const [departmentFilter, setDepartmentFilter] = useState<string>();
   const [jobTitleFilter, setJobTitleFilter] = useState<string>();
   const [workTypeFilter, setWorkTypeFilter] = useState<string>();
+
+  const listOfDepartments = [
+    ...new Set(props.dbData.map((item) => item.department)),
+  ];
+  const listOfWorkmodes = [
+    ...new Set(props.dbData.map((item) => item.workMode)),
+  ];
+  const listOfRoles = [...new Set(props.dbData.map((item) => item.role))];
 
   const toggleChartData = (e: ChangeEvent<HTMLSelectElement>) => {
     const yearVal = e.target.value;
@@ -56,12 +65,14 @@ const Stats = () => {
   const itemsPerPage = 5;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
+
   let numberOfPages = Math.ceil(
-    Object.values(employeeOverview).filter(
+    Object.values(props.dbData).filter(
       (e) =>
-        (!departmentFilter || e.department === departmentFilter) &&
-        (!workTypeFilter || e.status === workTypeFilter) &&
-        (!jobTitleFilter || e.jobTitle === jobTitleFilter)
+        (!departmentFilter ||
+          e.department.toLowerCase() === departmentFilter) &&
+        (!workTypeFilter || e.workMode.toLowerCase() === workTypeFilter) &&
+        (!jobTitleFilter || e.role.toLowerCase() === jobTitleFilter)
     ).length / itemsPerPage
   );
 
@@ -74,11 +85,12 @@ const Stats = () => {
   const handleNextBtn = () => {
     if (
       endIndex <
-      Object.values(employeeOverview).filter(
+      Object.values(props.dbData).filter(
         (e) =>
-          (!departmentFilter || e.department === departmentFilter) &&
-          (!workTypeFilter || e.status === workTypeFilter) &&
-          (!jobTitleFilter || e.jobTitle === jobTitleFilter)
+          (!departmentFilter ||
+            e.department.toLowerCase() === departmentFilter) &&
+          (!workTypeFilter || e.workMode.toLowerCase() === workTypeFilter) &&
+          (!jobTitleFilter || e.role.toLowerCase() === jobTitleFilter)
       ).length
     ) {
       setCurrentPage(currentPage + 1);
@@ -262,7 +274,7 @@ const Stats = () => {
                 placeholder="Search for employee"
                 className="text-xs placeholder:text-xs"
                 value={searchFilter}
-                onChange={(e: SyntheticEvent<HTMLInputElement>) => {
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   setSearchFilter(e.currentTarget.value);
                 }}
               />
@@ -273,43 +285,47 @@ const Stats = () => {
             {/* work type */}
             <select
               className="tableFilter"
-              onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
-                setWorkTypeFilter(e.currentTarget.value)
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                setWorkTypeFilter(e.currentTarget.value.toLowerCase())
               }
             >
               <option value="">All employees</option>
-              <option value="remote">Remote</option>
-              <option value="on site">on site</option>
+              {listOfWorkmodes.map((element) => (
+                <option key={element} value={element.toLowerCase()}>
+                  {element}
+                </option>
+              ))}
             </select>
 
             {/* job titles */}
             <select
               className="tableFilter"
-              onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
-                setJobTitleFilter(e.currentTarget.value)
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                setJobTitleFilter(e.currentTarget.value.toLowerCase())
               }
             >
               <option value="">All job titles</option>
-              <option value="front-end engineer">front-end engineer</option>
-              <option value="back-end engineer">back-end engineer</option>
-              <option value="fullstack engineer">fullstack engineer</option>
-              <option value="product manager">product manager</option>
-              <option value="product designer">product designer</option>
-              <option value="devOps engineer">devOps</option>
-              <option value="HR">HR</option>
+              {listOfRoles.map((element) => (
+                <option key={element} value={element.toLowerCase()}>
+                  {element}
+                </option>
+              ))}
             </select>
 
             {/* departments */}
             <select
               className="tableFilter"
-              onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
-                setDepartmentFilter(e.currentTarget.value)
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                setDepartmentFilter(e.currentTarget.value.toLowerCase())
               }
             >
               <option value="">All departments</option>
-              <option value="engineering">engineering</option>
-              <option value="product">product</option>
-              <option value="human resources">human resources</option>
+
+              {listOfDepartments.map((element) => (
+                <option key={element} value={element.toLowerCase()}>
+                  {element}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -325,26 +341,41 @@ const Stats = () => {
             </thead>
 
             <tbody>
-              {Object.values(employeeOverview)
+              {Object.values(props.dbData)
                 .filter(
                   (e) =>
-                    (!departmentFilter || e.department === departmentFilter) &&
-                    (!workTypeFilter || e.status === workTypeFilter) &&
-                    (!jobTitleFilter || e.jobTitle === jobTitleFilter) &&
+                    (!departmentFilter ||
+                      e.department.toLowerCase() === departmentFilter) &&
+                    (!workTypeFilter ||
+                      e.workMode.toLowerCase() === workTypeFilter) &&
+                    (!jobTitleFilter ||
+                      e.role.toLowerCase() === jobTitleFilter) &&
                     (!searchFilter ||
-                      e.name.toLowerCase().includes(searchFilter.toLowerCase()))
+                      e.employeeName
+                        .toLowerCase()
+                        .includes(searchFilter.toLowerCase()))
                 )
                 .slice(startIndex, endIndex)
                 .map((value, index) => (
                   <tr key={index}>
                     <td className="employeeName">
-                      <img src={value.img} alt="profile image" />
-                      <p> {value.name}</p>
+                      <img src={avatar} alt="profile image" />
+                      <p> {value.employeeName}</p>
                     </td>
-                    <td>{value.jobTitle}</td>
+                    <td>{value.role}</td>
                     <td>{value.department}</td>
-                    <td>{value.email}</td>
-                    <td className={value.statusColor}>{value.status}</td>
+                    <td>{value.employeeEmail}</td>
+                    <td
+                      className={`${
+                        value.workMode.toLowerCase() === "remote"
+                          ? "text-[#047E04]"
+                          : value.workMode.toLowerCase() === "on site"
+                          ? "text-[#EF5F04]"
+                          : "text-yellow-400"
+                      }`}
+                    >
+                      {value.workMode}
+                    </td>
                   </tr>
                 ))}
             </tbody>
@@ -369,11 +400,13 @@ const Stats = () => {
           <button
             className={`employeeSortBtn ${
               endIndex >=
-              Object.values(employeeOverview).filter(
+              Object.values(props.dbData).filter(
                 (e) =>
-                  (!departmentFilter || e.department === departmentFilter) &&
-                  (!workTypeFilter || e.status === workTypeFilter) &&
-                  (!jobTitleFilter || e.jobTitle === jobTitleFilter)
+                  (!departmentFilter ||
+                    e.department.toLowerCase() === departmentFilter) &&
+                  (!workTypeFilter ||
+                    e.workMode.toLowerCase() === workTypeFilter) &&
+                  (!jobTitleFilter || e.role.toLowerCase() === jobTitleFilter)
               ).length
                 ? "hidden"
                 : ""

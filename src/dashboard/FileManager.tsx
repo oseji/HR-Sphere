@@ -1,7 +1,7 @@
 import searchIcon from "../assets/circum_search.png";
 import dots from "../assets/3dots.png";
 import { folders, files } from "../types";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 const FileManager = () => {
   const numberOfFiles = files.length;
@@ -63,7 +63,7 @@ const FileManager = () => {
         <div className="flex flex-row justify-between items-center mt-5">
           <div className="flex flex-row items-center justify-between w-full">
             <select
-              onChange={(e: SyntheticEvent<HTMLSelectElement>) => {
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                 setFolderFilter(e.currentTarget.value);
                 setFileFilter(e.currentTarget.value);
               }}
@@ -81,7 +81,7 @@ const FileManager = () => {
                 placeholder="Search for a file"
                 className="w-full outline-0 text-xs placeholder:text-xs"
                 value={searchFilter}
-                onChange={(e: SyntheticEvent<HTMLInputElement>) =>
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
                   setSearchFilter(e.currentTarget.value)
                 }
               />

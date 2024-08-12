@@ -1,11 +1,16 @@
-import { SyntheticEvent, useState } from "react";
-import { employeeOverview } from "../types";
+import { ChangeEvent, useState } from "react";
 
 import print from "../assets/print.svg";
 import download from "../assets/download.svg";
 import filterIcon from "../assets/filter.svg";
+import avatar from "../assets/arlene.png";
 
-const Payroll = () => {
+import { dataType } from "./App";
+type payrollProps = {
+  dbData: dataType;
+};
+
+const Payroll = (props: payrollProps) => {
   const [departmentFilter, setDepartmentFilter] = useState<string>();
   const [workTypeFilter, setWorkTypeFilter] = useState<string>();
 
@@ -44,7 +49,7 @@ const Payroll = () => {
           <div className="flex flex-row items-center gap-3 p-3">
             {/* work type */}
             <select
-              onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                 setWorkTypeFilter(e.currentTarget.value)
               }
             >
@@ -55,7 +60,7 @@ const Payroll = () => {
 
             {/* departments */}
             <select
-              onChange={(e: SyntheticEvent<HTMLSelectElement>) =>
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                 setDepartmentFilter(e.currentTarget.value)
               }
             >
@@ -85,34 +90,38 @@ const Payroll = () => {
             </thead>
 
             <tbody>
-              {Object.values(employeeOverview)
+              {Object.values(props.dbData)
                 .filter(
                   (e) =>
-                    (!departmentFilter || e.department === departmentFilter) &&
-                    (!workTypeFilter || e.status === workTypeFilter)
+                    (!departmentFilter ||
+                      e.department.toLowerCase() === departmentFilter) &&
+                    (!workTypeFilter ||
+                      e.workMode.toLowerCase() === workTypeFilter)
                 )
                 .map((value, index) => (
                   <tr key={index}>
                     <td className="employeeName">
-                      <img src={value.img} alt="profile image" />
-                      <p> {value.name}</p>
+                      <img src={avatar} alt="profile image" />
+                      <p> {value.employeeName}</p>
                     </td>
-                    <td>${value.totalSalary.toLocaleString()}</td>
-                    <td>${value.grossSalary.toLocaleString()}</td>
-                    <td>${value.taxes.toLocaleString()}</td>
-                    <td>${value.netSalary.toLocaleString()}</td>
+                    <td>${value.employeeSalary.toLocaleString()}</td>
+                    <td>${value.employeeSalary.toLocaleString()}</td>
+                    <td>${value.employeeSalary.toLocaleString()}</td>
+                    <td>${value.employeeSalary.toLocaleString()}</td>
                     <td
-                      className={
-                        value.salaryStatus === "pending"
-                          ? "text-[#F48B02]"
-                          : value.salaryStatus === "paid"
-                          ? "text-[#029202]"
-                          : value.salaryStatus === "not paid"
-                          ? "text-[#D00000]"
-                          : ""
-                      }
+                    // FIX THIS WHEN YOU HAVE IMPLEMENTED SALARY OBJECT
+                    // className={
+                    //   value.salaryStatus === "pending"
+                    //     ? "text-[#F48B02]"
+                    //     : value.salaryStatus === "paid"
+                    //     ? "text-[#029202]"
+                    //     : value.salaryStatus === "not paid"
+                    //     ? "text-[#D00000]"
+                    //     : ""
+                    // }
                     >
-                      {value.salaryStatus}
+                      {/* {value.salaryStatus} */}
+                      pending
                     </td>
                   </tr>
                 ))}

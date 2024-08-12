@@ -1,11 +1,17 @@
 import Stats from "./Stats";
 import Schedule from "./Schedule";
 
-const Overview = () => {
+import { dataType } from "./App";
+
+type overviewProps = {
+  dbData: dataType;
+};
+
+const Overview = (props: overviewProps) => {
   return (
     <section className="overviewScreen">
       <div className="overviewSection">
-        <Stats></Stats>
+        <Stats dbData={props.dbData}></Stats>
         <Schedule></Schedule>
       </div>
     </section>
