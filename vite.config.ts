@@ -9,4 +9,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    host: true,  // This allows access from outside the container
+    port: 4173,  // Ensure the port matches the EXPOSE port in Dockerfile
+  },
 })
