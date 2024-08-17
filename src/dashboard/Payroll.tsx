@@ -12,7 +12,16 @@ type payrollProps = {
 
 const Payroll = (props: payrollProps) => {
   const [departmentFilter, setDepartmentFilter] = useState<string>();
-  const [workTypeFilter, setWorkTypeFilter] = useState<string>();
+  const [contractFilter, setContractFilter] = useState<string>();
+
+  const listOfDepartments = [
+    ...new Set(props.dbData.map((item) => item.department.toLowerCase())),
+  ];
+  const listOfContracts = [
+    ...new Set(
+      props.dbData.map((item) => item.employmentContract.toLowerCase())
+    ),
+  ];
 
   return (
     <section className="screenSection w-full">
@@ -47,15 +56,19 @@ const Payroll = (props: payrollProps) => {
           </div>
 
           <div className="flex flex-row items-center gap-3 p-3">
-            {/* work type */}
+            {/* contract type */}
             <select
               onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                setWorkTypeFilter(e.currentTarget.value)
+                setContractFilter(e.currentTarget.value)
               }
             >
               <option value="">all employees</option>
-              <option value="on site">on site</option>
-              <option value="remote">remote</option>
+
+              {listOfContracts.map((element, index) => (
+                <option value={element.toLowerCase()} key={index}>
+                  {element}
+                </option>
+              ))}
             </select>
 
             {/* departments */}
@@ -65,9 +78,12 @@ const Payroll = (props: payrollProps) => {
               }
             >
               <option value="">all departments</option>
-              <option value="engineering">engineering</option>
-              <option value="product">product</option>
-              <option value="human resources">Human resources</option>
+
+              {listOfDepartments.map((element, index) => (
+                <option value={element.toLowerCase()} key={index}>
+                  {element}
+                </option>
+              ))}
             </select>
 
             <img
@@ -95,8 +111,8 @@ const Payroll = (props: payrollProps) => {
                   (e) =>
                     (!departmentFilter ||
                       e.department.toLowerCase() === departmentFilter) &&
-                    (!workTypeFilter ||
-                      e.workMode.toLowerCase() === workTypeFilter)
+                    (!contractFilter ||
+                      e.employmentContract.toLowerCase() === contractFilter)
                 )
                 .map((value, index) => (
                   <tr key={index}>

@@ -56,6 +56,10 @@ const Performance = (props: performanceProps) => {
     }
   };
 
+  const listOfDepartments = [
+    ...new Set(props.dbData.map((item) => item.department.toLowerCase())),
+  ];
+
   return (
     <section className="performanceSection screenSection">
       <div className="flex flex-col gap-3">
@@ -163,9 +167,12 @@ const Performance = (props: performanceProps) => {
                   }}
                 >
                   <option value="">all departments</option>
-                  <option value="engineering">engineering</option>
-                  <option value="product">product</option>
-                  <option value="human resources">Human resources</option>
+
+                  {listOfDepartments.map((element) => (
+                    <option key={element} value={element.toLowerCase()}>
+                      {element}
+                    </option>
+                  ))}
                 </select>
               </div>
             </div>

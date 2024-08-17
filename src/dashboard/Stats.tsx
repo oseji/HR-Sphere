@@ -32,12 +32,14 @@ const Stats = (props: statsProps) => {
   const [workTypeFilter, setWorkTypeFilter] = useState<string>();
 
   const listOfDepartments = [
-    ...new Set(props.dbData.map((item) => item.department)),
+    ...new Set(props.dbData.map((item) => item.department.toLowerCase())),
   ];
   const listOfWorkmodes = [
-    ...new Set(props.dbData.map((item) => item.workMode)),
+    ...new Set(props.dbData.map((item) => item.workMode.toLowerCase())),
   ];
-  const listOfRoles = [...new Set(props.dbData.map((item) => item.role))];
+  const listOfRoles = [
+    ...new Set(props.dbData.map((item) => item.role.toLowerCase())),
+  ];
 
   const toggleChartData = (e: ChangeEvent<HTMLSelectElement>) => {
     const yearVal = e.target.value;
@@ -290,6 +292,7 @@ const Stats = (props: statsProps) => {
               }
             >
               <option value="">All employees</option>
+
               {listOfWorkmodes.map((element) => (
                 <option key={element} value={element.toLowerCase()}>
                   {element}
@@ -305,6 +308,7 @@ const Stats = (props: statsProps) => {
               }
             >
               <option value="">All job titles</option>
+
               {listOfRoles.map((element) => (
                 <option key={element} value={element.toLowerCase()}>
                   {element}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 
 import { db, auth } from "../config/firebase";
 import { addDoc, collection } from "firebase/firestore";
@@ -26,6 +26,19 @@ const Employees = (props: EmployeeProps) => {
   const [employeeSalary, setEmployeeSalary] = useState<number>();
   const [employeeEmail, setEmployeeEmail] = useState<string>();
   const [numberOfKPIs, setNumberOfKPIs] = useState<number>();
+
+  const [searchFilter, setSearchFilter] = useState<string>();
+  const [contractFilter, setContractFilter] = useState<string>();
+  const [workModeFilter, setWorkModeFilter] = useState<string>();
+
+  const listOfWorkmodes = [
+    ...new Set(props.dbData.map((item) => item.workMode.toLowerCase())),
+  ];
+  const listOfContracts = [
+    ...new Set(
+      props.dbData.map((item) => item.employmentContract.toLowerCase())
+    ),
+  ];
 
   const addEmployee = async () => {
     setIsLoading(true);
@@ -67,6 +80,7 @@ const Employees = (props: EmployeeProps) => {
   return (
     <section className="screenSection w-full flex flex-col lg:flex-row lg:justify-between gap-3 text-sm">
       <div className="employeeList w-full lg:w-2/3">
+        {/* HEADER */}
         <div className="flex flex-row items-center justify-between">
           <h1 className="boxHeading">Employees</h1>
 
@@ -74,53 +88,89 @@ const Employees = (props: EmployeeProps) => {
             <div className="employeeScreenSearchGrp">
               <img src={searchIcon} alt="search icon" className="h-5" />
 
+              {/* SEARCH FILTER */}
               <input
                 type="text"
                 placeholder="Search for employee"
                 className="w-full text-xs placeholder:text-xs dark:placeholder:text-white"
+                value={searchFilter}
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                  setSearchFilter(e.currentTarget.value);
+                }}
               />
             </div>
 
-            <select>
-              <option value="remote">remote</option>
-              <option value="on site">on site</option>
+            {/* WORKMODES FILTER */}
+            <select
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                setWorkModeFilter(e.target.value);
+              }}
+            >
+              <option value="">All</option>
+
+              {listOfWorkmodes.map((element, index) => (
+                <option value={element.toLowerCase()} key={index}>
+                  {element}
+                </option>
+              ))}
             </select>
 
-            <select>
-              <option value="full-time">full-time</option>
-              <option value="part-time">part-time</option>
-              <option value="internship">internship</option>
+            {/* CONTRACT FILTER */}
+            <select
+              onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                setContractFilter(e.target.value);
+              }}
+            >
+              <option value="">All</option>
+
+              {listOfContracts.map((element, index) => (
+                <option value={element.toLowerCase()} key={index}>
+                  {element}
+                </option>
+              ))}
             </select>
           </div>
         </div>
 
         {!isLoading && (
           <div className="employeeListGrp">
-            {props.dbData.map((element, index) => (
-              <div className="employeeItem" key={index}>
-                <p className="staffName">{element.employeeName}</p>
+            {props.dbData
+              .filter(
+                (e) =>
+                  (!searchFilter ||
+                    e.employeeName
+                      .toLowerCase()
+                      .includes(searchFilter.toLowerCase())) &&
+                  (!workModeFilter ||
+                    e.workMode.toLowerCase() === workModeFilter) &&
+                  (!contractFilter ||
+                    e.employmentContract.toLowerCase() === contractFilter)
+              )
+              .map((element, index) => (
+                <div className="employeeItem" key={index}>
+                  <p className="staffName">{element.employeeName}</p>
 
-                <p className=" text-xs">Email : {element.employeeEmail}</p>
+                  <p className=" text-xs">Email : {element.employeeEmail}</p>
 
-                <p className="staffData">Department : {element.department}</p>
+                  <p className="staffData">Department : {element.department}</p>
 
-                <p className="staffData">Role : {element.role}</p>
+                  <p className="staffData">Role : {element.role}</p>
 
-                <p className="staffData">
-                  Salary : {element.employeeSalary.toLocaleString()}
-                </p>
+                  <p className="staffData">
+                    Salary : {element.employeeSalary.toLocaleString()}
+                  </p>
 
-                <p className="staffData">
-                  Contract : {element.employmentContract}
-                </p>
+                  <p className="staffData">
+                    Contract : {element.employmentContract}
+                  </p>
 
-                <p className="staffData">Work Mode : {element.workMode}</p>
+                  <p className="staffData">Work Mode : {element.workMode}</p>
 
-                <p className="staffData">
-                  Number of KPIs : {element.numberOfKPIs}
-                </p>
-              </div>
-            ))}
+                  <p className="staffData">
+                    Number of KPIs : {element.numberOfKPIs}
+                  </p>
+                </div>
+              ))}
           </div>
         )}
 
@@ -131,6 +181,7 @@ const Employees = (props: EmployeeProps) => {
         )}
       </div>
 
+      {/* ADD EMPLOYEE FORM */}
       <div className="addEmployeeForm w-full lg:w-1/3">
         <h1 className="boxHeading">Add new employee</h1>
 
