@@ -8,8 +8,8 @@ import { dataType } from "./App";
 import userIcon from "../assets/stats user icon.svg";
 import jobIcon from "../assets/stats resignation icon.svg";
 import folderIcon from "../assets/stats folder icon.svg";
-import upGrowth from "../assets/up growth.svg";
-import downGrowth from "../assets/down growth.svg";
+// import upGrowth from "../assets/up growth.svg";
+// import downGrowth from "../assets/down growth.svg";
 import searchIcon from "../assets/circum_search.png";
 import avatar from "../assets/arlene.png";
 
@@ -129,7 +129,7 @@ const Stats = (props: statsProps) => {
           <p className="statsHeading">Employees</p>
 
           <div className="statsCardNumGrp">
-            <p className="statsNum">400</p>
+            <p className="statsNum">{props.dbData.length}</p>
             <img
               src={userIcon}
               alt="user icon"
@@ -137,17 +137,17 @@ const Stats = (props: statsProps) => {
             />
           </div>
 
-          <div className="bottomStatsCard">
+          {/* <div className="bottomStatsCard">
             <img src={upGrowth} alt="" />
             <p className="bottomText">+2.4% vs previous month</p>
-          </div>
+          </div> */}
         </div>
 
         <div className="statsCard">
           <p className="statsHeading">Resignations</p>
 
           <div className="statsCardNumGrp">
-            <p className="statsNum">9</p>
+            <p className="statsNum">0</p>
             <img
               src={jobIcon}
               alt="user icon"
@@ -155,17 +155,17 @@ const Stats = (props: statsProps) => {
             />
           </div>
 
-          <div className="bottomStatsCard">
+          {/* <div className="bottomStatsCard">
             <img src={downGrowth} alt="" />
             <p className="bottomText">-5.4% vs previous month</p>
-          </div>
+          </div> */}
         </div>
 
         <div className="statsCard">
           <p className="statsHeading">New Applicants</p>
 
           <div className="statsCardNumGrp">
-            <p className="statsNum">40</p>
+            <p className="statsNum">0</p>
             <img
               src={folderIcon}
               alt="user icon"
@@ -173,10 +173,10 @@ const Stats = (props: statsProps) => {
             />
           </div>
 
-          <div className="bottomStatsCard">
+          {/* <div className="bottomStatsCard">
             <img src={upGrowth} alt="" />
             <p className="bottomText">+6.7% vs previous month</p>
-          </div>
+          </div> */}
         </div>
       </div>
 
@@ -243,23 +243,45 @@ const Stats = (props: statsProps) => {
 
           <div className="requestTextGrp border-b border-slate-300">
             <p className="requestText">sick leave</p>
-            <p className="requestNum">2</p>
+            <p className="requestNum">
+              {props.dbData.filter((items) => items.requests.sickLeave).length}
+            </p>
           </div>
           <div className="requestTextGrp border-b border-slate-300">
             <p className="requestText">maternity leave</p>
-            <p className="requestNum">4</p>
+            <p className="requestNum">
+              {
+                props.dbData.filter((items) => items.requests.maternityLeave)
+                  .length
+              }
+            </p>
           </div>
           <div className="requestTextGrp border-b border-slate-300">
             <p className="requestText">annual leave</p>
-            <p className="requestNum">2</p>
+            <p className="requestNum">
+              {
+                props.dbData.filter((items) => items.requests.annualLeave)
+                  .length
+              }
+            </p>
           </div>
           <div className="requestTextGrp border-b border-slate-300">
             <p className="requestText">resume update</p>
-            <p className="requestNum">1</p>
+            <p className="requestNum">
+              {
+                props.dbData.filter((items) => items.requests.resumeUpdate)
+                  .length
+              }
+            </p>
           </div>
           <div className="requestTextGrp">
             <p className="requestText">profile update</p>
-            <p className="requestNum">1</p>
+            <p className="requestNum">
+              {
+                props.dbData.filter((items) => items.requests.profileUpdate)
+                  .length
+              }
+            </p>
           </div>
         </div>
       </div>

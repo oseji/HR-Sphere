@@ -29,11 +29,24 @@ export type dataType = {
   employeeName: string;
   employeeEmail: string;
   employmentContract: string;
-  employeeSalary: number;
+  employeeFinances: {
+    monthlySalary: number;
+    totalSalary: number;
+    taxes: number;
+    netSalary: number;
+    isSalaryPaid: boolean;
+  };
   department: string;
   role: string;
   workMode: string;
   numberOfKPIs: number;
+  requests: {
+    sickLeave: boolean;
+    maternityLeave: boolean;
+    annualLeave: boolean;
+    resumeUpdate: boolean;
+    profileUpdate: boolean;
+  };
   id: string;
 }[];
 

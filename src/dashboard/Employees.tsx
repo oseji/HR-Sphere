@@ -23,7 +23,7 @@ const Employees = (props: EmployeeProps) => {
   const [jobTitle, setJobTitle] = useState<string>();
   const [workMode, setWorkMode] = useState<string>();
   const [employmentContract, setEmploymentContract] = useState<string>("");
-  const [employeeSalary, setEmployeeSalary] = useState<number>();
+  const [employeeSalary, setEmployeeSalary] = useState<number>(0);
   const [employeeEmail, setEmployeeEmail] = useState<string>();
   const [numberOfKPIs, setNumberOfKPIs] = useState<number>();
 
@@ -43,6 +43,18 @@ const Employees = (props: EmployeeProps) => {
   const addEmployee = async () => {
     setIsLoading(true);
     const user = auth.currentUser;
+    const taxRate =
+      employeeSalary <= 25000
+        ? 7
+        : employeeSalary <= 50000
+        ? 11
+        : employeeSalary <= 91667
+        ? 15
+        : employeeSalary <= 133334
+        ? 19
+        : employeeSalary <= 266667
+        ? 21
+        : 24;
 
     try {
       if (user) {
@@ -50,11 +62,26 @@ const Employees = (props: EmployeeProps) => {
           employeeName: employeeName,
           employeeEmail: employeeEmail,
           employmentContract: employmentContract,
-          employeeSalary: employeeSalary,
+          employeeFinances: {
+            monthlySalary: employeeSalary,
+            totalSalary: employeeSalary * 12,
+            taxes: (employeeSalary * 12 * taxRate) / 100,
+            netSalary:
+              employeeSalary * 12 - (employeeSalary * 12 * taxRate) / 100,
+            isSalaryPaid: false,
+          },
           department: department,
           role: jobTitle,
           workMode: workMode,
           numberOfKPIs: numberOfKPIs,
+
+          requests: {
+            sickLeave: false,
+            maternityLeave: false,
+            annualLeave: false,
+            resumeUpdate: false,
+            profileUpdate: false,
+          },
 
           userID: auth?.currentUser?.uid,
         });
@@ -157,7 +184,8 @@ const Employees = (props: EmployeeProps) => {
                   <p className="staffData">Role : {element.role}</p>
 
                   <p className="staffData">
-                    Salary : {element.employeeSalary.toLocaleString()}
+                    Salary :{" "}
+                    {element.employeeFinances.monthlySalary.toLocaleString()}
                   </p>
 
                   <p className="staffData">

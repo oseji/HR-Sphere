@@ -98,9 +98,9 @@ const Payroll = (props: payrollProps) => {
               <tr>
                 <th>employee</th>
                 <th>total salary</th>
-                <th>gross salary</th>
-                <th>taxes</th>
-                <th>net salary</th>
+                <th>per month</th>
+                <th>annual tax</th>
+                <th>net total salary</th>
                 <th>status</th>
               </tr>
             </thead>
@@ -120,24 +120,26 @@ const Payroll = (props: payrollProps) => {
                       <img src={avatar} alt="profile image" />
                       <p> {value.employeeName}</p>
                     </td>
-                    <td>${value.employeeSalary.toLocaleString()}</td>
-                    <td>${value.employeeSalary.toLocaleString()}</td>
-                    <td>${value.employeeSalary.toLocaleString()}</td>
-                    <td>${value.employeeSalary.toLocaleString()}</td>
+                    <td>
+                      ₦{value.employeeFinances.totalSalary.toLocaleString()}
+                    </td>
+                    <td>
+                      ₦{value.employeeFinances.monthlySalary.toLocaleString()}
+                    </td>
+                    <td>₦{value.employeeFinances.taxes.toLocaleString()}</td>
+                    <td>
+                      ₦{value.employeeFinances.netSalary.toLocaleString()}
+                    </td>
                     <td
-                    // FIX THIS WHEN YOU HAVE IMPLEMENTED SALARY OBJECT
-                    // className={
-                    //   value.salaryStatus === "pending"
-                    //     ? "text-[#F48B02]"
-                    //     : value.salaryStatus === "paid"
-                    //     ? "text-[#029202]"
-                    //     : value.salaryStatus === "not paid"
-                    //     ? "text-[#D00000]"
-                    //     : ""
-                    // }
+                      className={
+                        value.employeeFinances.isSalaryPaid
+                          ? "text-[#029202]"
+                          : "text-[#D00000]"
+                      }
                     >
-                      {/* {value.salaryStatus} */}
-                      pending
+                      {value.employeeFinances.isSalaryPaid
+                        ? "Paid"
+                        : "Not paid"}
                     </td>
                   </tr>
                 ))}

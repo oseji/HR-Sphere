@@ -125,7 +125,7 @@ const LoginPage = (props: loginPageProps) => {
                 : "Create account and Sign in"}
             </button>
 
-            {props.loginLoading && <Spinner></Spinner>}
+            {props.loginLoading && <Spinner className=" mt-2"></Spinner>}
           </div>
 
           <p className="xl:pl-5">
@@ -208,7 +208,7 @@ const LoginPage = (props: loginPageProps) => {
               {props.loginLoading ? "Signing In" : "Sign In"}
             </button>
 
-            {props.loginLoading && <Spinner></Spinner>}
+            {props.loginLoading && <Spinner className=" mt-2"></Spinner>}
           </div>
 
           <p className="xl:pl-5">
