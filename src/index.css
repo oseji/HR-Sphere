@@ -288,7 +288,7 @@ td {
 }
 
 .staffData {
-  @apply text-xs capitalize;
+  @apply text-xs capitalize font-semibold;
 }
 
 .employeeDataForm {

@@ -177,25 +177,44 @@ const Employees = (props: EmployeeProps) => {
                 <div className="employeeItem" key={index}>
                   <p className="staffName">{element.employeeName}</p>
 
-                  <p className=" text-xs">Email : {element.employeeEmail}</p>
+                  <p className=" text-xs font-semibold">
+                    Email :{" "}
+                    <span className=" font-normal">
+                      {element.employeeEmail}
+                    </span>
+                  </p>
 
-                  <p className="staffData">Department : {element.department}</p>
+                  <p className="staffData">
+                    Dept. :{" "}
+                    <span className=" font-normal">{element.department}</span>
+                  </p>
 
-                  <p className="staffData">Role : {element.role}</p>
+                  <p className="staffData">
+                    Role : <span className=" font-normal">{element.role}</span>
+                  </p>
 
                   <p className="staffData">
                     Salary :{" "}
-                    {element.employeeFinances.monthlySalary.toLocaleString()}
+                    <span className=" font-normal">
+                      ₦{element.employeeFinances.monthlySalary.toLocaleString()}
+                    </span>
                   </p>
 
                   <p className="staffData">
-                    Contract : {element.employmentContract}
+                    Contract :{" "}
+                    <span className=" font-normal">
+                      {element.employmentContract}
+                    </span>
                   </p>
 
-                  <p className="staffData">Work Mode : {element.workMode}</p>
+                  <p className="staffData">
+                    Work Mode :{" "}
+                    <span className=" font-normal">{element.workMode}</span>
+                  </p>
 
                   <p className="staffData">
-                    Number of KPIs : {element.numberOfKPIs}
+                    Number of KPIs :{" "}
+                    <span className=" font-normal">{element.numberOfKPIs}</span>
                   </p>
                 </div>
               ))}
