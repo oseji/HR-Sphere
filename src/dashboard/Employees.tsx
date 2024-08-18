@@ -105,8 +105,8 @@ const Employees = (props: EmployeeProps) => {
   };
 
   return (
-    <section className="screenSection w-full flex flex-col lg:flex-row lg:justify-between gap-3 text-sm">
-      <div className="employeeList w-full lg:w-2/3">
+    <section className="screenSection w-full flex flex-col xl:flex-row xl:justify-between gap-3 text-sm">
+      <div className="employeeList">
         {/* HEADER */}
         <div className="flex flex-row items-center justify-between">
           <h1 className="boxHeading">Employees</h1>
@@ -229,7 +229,7 @@ const Employees = (props: EmployeeProps) => {
       </div>
 
       {/* ADD EMPLOYEE FORM */}
-      <div className="addEmployeeForm w-full lg:w-1/3">
+      <div className="addEmployeeForm">
         <h1 className="boxHeading">Add new employee</h1>
 
         <form className="employeeDataForm">

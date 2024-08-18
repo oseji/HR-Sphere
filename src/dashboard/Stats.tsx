@@ -123,7 +123,7 @@ const Stats = (props: statsProps) => {
   }, [chartYears]);
 
   return (
-    <section className="flex flex-col gap-3 p-3 w-full lg:max-w-[730px]">
+    <section className="flex flex-col gap-3 p-3 w-full xl:max-w-[730px]">
       <div className="statsCardGrp">
         <div className="statsCard">
           <p className="statsHeading">Employees</p>

@@ -206,30 +206,33 @@ function App() {
           ></LoginPage>
         )}
 
-        {/* {loginLoading && (
-          <div className=" flex flex-row items-center justify-center min-w-full min-h-screen">
-            <Spinner></Spinner>
-          </div>
-        )} */}
-
         {/* dashboard interface */}
         {isLoggedIn && (
           <div className="dashboardInterface">
             <header>
-              <div className="logoGrp">
-                <img src={logo} alt="logo" className="block" />
-                <h1 className="font-bold text-black dark:text-white">
-                  HR Sphere
-                </h1>
-              </div>
-
-              <div className="w-full flex flex-row items-center justify-between">
+              <div className=" flex flex-row items-center gap-10">
                 <img
                   src={menuToggled ? closeMenu : menuIcon}
                   alt="menu icon"
                   className="lg:hidden h-8"
                   onClick={openCloseMenu}
                 />
+
+                <div className="logoGrp">
+                  <img src={logo} alt="logo" className="block" />
+                  <h1 className="font-bold text-black dark:text-white w-[150px]">
+                    HR Sphere
+                  </h1>
+                </div>
+              </div>
+
+              <div className="w-full flex flex-row items-center justify-end lg:justify-between">
+                {/* <img
+                  src={menuToggled ? closeMenu : menuIcon}
+                  alt="menu icon"
+                  className="md:hidden h-8"
+                  onClick={openCloseMenu}
+                /> */}
 
                 <div className="inputGrp">
                   <img src={searchIcon} alt="search icon" className="h-5" />

@@ -62,7 +62,7 @@ const Performance = (props: performanceProps) => {
 
   return (
     <section className="performanceSection screenSection">
-      <div className="flex flex-col gap-3">
+      <div className="flex flex-col gap-3 w-full xl:w-auto">
         <div className="flex flex-col lg:flex-row gap-3">
           <div className="totalEmployeeChart  min-w-[227px]">
             <div className="flex flex-row justify-between items-center boxHeading">
@@ -104,7 +104,7 @@ const Performance = (props: performanceProps) => {
           </div>
 
           <div className="overflow-x-scroll lg:overflow-x-hidden">
-            <div className="keyIndicatorsChart w-[466px]">
+            <div className="keyIndicatorsChart">
               <div className="flex flex-row items-center justify-between text-black mb-5">
                 <h2 className="boxHeading">Key Performance Indicators</h2>
 

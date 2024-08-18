@@ -24,7 +24,7 @@ html {
 }
 
 .overviewSection {
-  @apply flex flex-col-reverse lg:flex-row;
+  @apply flex flex-col-reverse xl:flex-row;
 }
 
 .overviewScreen {
@@ -36,7 +36,7 @@ html {
 }
 
 .performanceSection {
-  @apply flex flex-col-reverse lg:flex-row gap-3 text-sm;
+  @apply flex flex-col-reverse xl:flex-row gap-3 text-sm;
 }
 
 .pageNumGrp {
@@ -89,7 +89,7 @@ header {
 }
 
 .logoGrp {
-  @apply hidden w-[150px] md:flex flex-row items-center gap-2 mr-20;
+  @apply hidden w-full lg:w-[150px] md:flex flex-row items-center gap-2 mr-20;
 }
 
 .inputGrp {
@@ -147,7 +147,7 @@ header {
 }
 
 .menuClosed {
-  @apply -translate-x-96 max-w-[220px] lg:-translate-x-0;
+  @apply -translate-x-96 max-w-[220px]  lg:-translate-x-0;
 }
 
 .menuCollection {
@@ -209,7 +209,7 @@ header {
 }
 
 .requestBox {
-  @apply lg:w-[280px] p-3 bg-white dark:bg-[#0F0F0F] rounded text-sm;
+  @apply w-full xl:w-[280px] p-3 bg-white dark:bg-[#0F0F0F] rounded text-sm;
 }
 
 .requestTextGrp {
@@ -271,8 +271,12 @@ td {
 }
 
 /* EMPLOYEES SECTION */
+.employeeList {
+  @apply w-full xl:w-2/3;
+}
+
 .employeeListGrp {
-  @apply grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2 xl:grid-cols-3 gap-3 p-2;
+  @apply grid grid-cols-1 md:grid-cols-3  xl:grid-cols-3 gap-3 p-2;
 }
 
 .employeeScreenSearchGrp {
@@ -289,6 +293,10 @@ td {
 
 .staffData {
   @apply text-xs capitalize font-semibold;
+}
+
+.addEmployeeForm {
+  @apply w-full xl:w-1/3;
 }
 
 .employeeDataForm {
@@ -330,6 +338,10 @@ td {
 
 .efficiencyTextGrp {
   @apply flex flex-col gap-2;
+}
+
+.keyIndicatorsChart {
+  @apply w-[466px] md:w-full xl:w-[466px];
 }
 
 .eomPerformanceGrp {
