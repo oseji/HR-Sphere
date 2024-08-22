@@ -78,8 +78,10 @@ const LoginPage = (props: loginPageProps) => {
           </div>
 
           <div className="loginFieldGrp">
+            <label htmlFor="registerPassword">Password</label>
             <div className="passwordBox">
               <input
+                id="registerPassword"
                 className="loginInput"
                 type="password"
                 placeholder="Password"
@@ -163,8 +165,10 @@ const LoginPage = (props: loginPageProps) => {
           </div>
 
           <div className="loginFieldGrp">
+            <label htmlFor="loginPassword">Password</label>
             <div className="passwordBox">
               <input
+                id="loginPassword"
                 className="loginInput"
                 type="password"
                 placeholder="Password"
