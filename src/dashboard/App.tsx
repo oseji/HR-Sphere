@@ -65,6 +65,7 @@ function App() {
 
   const [loginEmail, setLoginEmail] = useState<string>("");
   const [loginPassword, setLoginPassword] = useState<string>("");
+  const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const errorMessageRef = [
     useRef<HTMLParagraphElement>(null),
@@ -91,13 +92,17 @@ function App() {
 
   const createAccount = async () => {
     try {
-      await createUserWithEmailAndPassword(auth, userEmail, userPassword);
+      if (userPassword === confirmPassword) {
+        await createUserWithEmailAndPassword(auth, userEmail, userPassword);
 
-      setIsLoggedIn(true);
-      setUserEmail("");
-      setUserPassword("");
+        setIsLoggedIn(true);
+        setUserEmail("");
+        setUserPassword("");
 
-      errorMessageRef[0].current?.classList.add("hidden");
+        errorMessageRef[0].current?.classList.add("hidden");
+      } else {
+        throw new Error("Password does not match");
+      }
     } catch (err: any) {
       setIsLoggedIn(false);
       setErrorMessage(errorMessageCleanUp(err.message));
@@ -198,6 +203,8 @@ function App() {
             setLoginEmail={setLoginEmail}
             loginPassword={loginPassword}
             setLoginPassword={setLoginPassword}
+            confirmPassword={confirmPassword}
+            setConfirmPassword={setConfirmPassword}
             signIn={signIn}
             createAccount={createAccount}
             errorMessage={errorMessage}

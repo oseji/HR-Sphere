@@ -16,6 +16,9 @@ type setUserPassword = (text: string) => void;
 type setLoginPassword = (text: string) => void;
 type setLoginEmail = (text: string) => void;
 
+type confirmPassword = string;
+type setConfirmPassword = (text: string) => void;
+
 type createAccount = () => Promise<void>;
 type signIn = () => Promise<void>;
 
@@ -34,6 +37,8 @@ type loginPageProps = {
   loginPassword: loginPassword;
   setLoginEmail: setLoginEmail;
   setLoginPassword: setLoginPassword;
+  confirmPassword: confirmPassword;
+  setConfirmPassword: setConfirmPassword;
 
   createAccount: createAccount;
   signIn: signIn;
@@ -44,7 +49,10 @@ type loginPageProps = {
 };
 
 const LoginPage = (props: loginPageProps) => {
-  const passwordRef = useRef<HTMLInputElement>(null);
+  const passwordRef = [
+    useRef<HTMLInputElement>(null),
+    useRef<HTMLInputElement>(null),
+  ];
 
   const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
   const [loginHereClicked, setLoginHereClicked] = useState<boolean>(false);
@@ -86,7 +94,7 @@ const LoginPage = (props: loginPageProps) => {
                 type="password"
                 placeholder="Password"
                 value={props.userPassword}
-                ref={passwordRef}
+                ref={passwordRef[0]}
                 onChange={(e) => {
                   props.setUserPassword(e.target.value);
                 }}
@@ -100,13 +108,46 @@ const LoginPage = (props: loginPageProps) => {
                 onClick={() => {
                   setPasswordVisible(!passwordVisible);
                   const passwordType =
-                    passwordRef.current?.getAttribute("type") === "password"
+                    passwordRef[0].current?.getAttribute("type") === "password"
                       ? "text"
                       : "password";
 
-                  passwordRef.current?.setAttribute("type", passwordType);
+                  passwordRef[0].current?.setAttribute("type", passwordType);
                 }}
               />
+            </div>
+          </div>
+
+          <div className="loginFieldGrp">
+            <label htmlFor="registerPassword">Confirm Password</label>
+            <div className="passwordBox">
+              <input
+                id="registerPassword"
+                className="loginInput"
+                type="password"
+                placeholder="Re-enter Password"
+                value={props.confirmPassword}
+                ref={passwordRef[1]}
+                onChange={(e) => {
+                  props.setConfirmPassword(e.target.value);
+                }}
+                required
+              />
+
+              {/* <img
+                className="h-6 cursor-pointer"
+                src={!passwordVisible ? closedEye : openedEye}
+                alt="eye icon"
+                onClick={() => {
+                  setPasswordVisible(!passwordVisible);
+                  const passwordType =
+                    passwordRef[1].current?.getAttribute("type") === "password"
+                      ? "text"
+                      : "password";
+
+                  passwordRef[1].current?.setAttribute("type", passwordType);
+                }}
+              /> */}
             </div>
           </div>
 
@@ -173,7 +214,7 @@ const LoginPage = (props: loginPageProps) => {
                 type="password"
                 placeholder="Password"
                 value={props.loginPassword}
-                ref={passwordRef}
+                ref={passwordRef[0]}
                 onChange={(e) => {
                   props.setLoginPassword(e.target.value);
                 }}
@@ -187,11 +228,11 @@ const LoginPage = (props: loginPageProps) => {
                 onClick={() => {
                   setPasswordVisible(!passwordVisible);
                   const passwordType =
-                    passwordRef.current?.getAttribute("type") === "password"
+                    passwordRef[0].current?.getAttribute("type") === "password"
                       ? "text"
                       : "password";
 
-                  passwordRef.current?.setAttribute("type", passwordType);
+                  passwordRef[0].current?.setAttribute("type", passwordType);
                 }}
               />
             </div>
