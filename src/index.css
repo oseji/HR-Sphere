@@ -213,7 +213,7 @@ header {
 }
 
 .requestTextGrp {
-  @apply flex flex-row justify-between py-3;
+  @apply flex flex-row justify-between py-3 cursor-default;
 }
 
 .requestText {
@@ -222,6 +222,10 @@ header {
 
 .requestNum {
   @apply font-semibold text-sm;
+}
+
+.requestPopup {
+  @apply p-2 rounded-lg  ml-10 bg-white opacity-75 text-sm capitalize;
 }
 
 /* table group */
@@ -288,7 +292,7 @@ td {
 }
 
 .staffName {
-  @apply font-bold capitalize;
+  @apply font-bold uppercase text-black dark:text-white;
 }
 
 .staffData {

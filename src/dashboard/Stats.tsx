@@ -23,6 +23,14 @@ const Stats = (props: statsProps) => {
     useRef<HTMLButtonElement>(null),
   ];
 
+  const requestPopupRefs = [
+    useRef<HTMLParagraphElement>(null),
+    useRef<HTMLParagraphElement>(null),
+    useRef<HTMLParagraphElement>(null),
+    useRef<HTMLParagraphElement>(null),
+    useRef<HTMLParagraphElement>(null),
+  ];
+
   const [chartYears, setChartYears] = useState<number>(5);
   const [currentChartData, setCurrentChartData] = useState(chartData);
 
@@ -97,6 +105,24 @@ const Stats = (props: statsProps) => {
     ) {
       setCurrentPage(currentPage + 1);
     }
+  };
+
+  const showRequestPopup = (id: number) => {
+    requestPopupRefs.forEach((element, index) => {
+      if (id === index) {
+        element.current?.classList.add("absolute");
+        element.current?.classList.toggle("hidden");
+      }
+    });
+  };
+
+  const hideRequestPopup = (id: number) => {
+    requestPopupRefs.forEach((element, index) => {
+      if (id === index) {
+        element.current?.classList.remove("absolute");
+        element.current?.classList.add("hidden");
+      }
+    });
   };
 
   //update barchart
@@ -241,13 +267,36 @@ const Stats = (props: statsProps) => {
             Requests
           </h1>
 
-          <div className="requestTextGrp border-b border-slate-300">
+          <div
+            className="requestTextGrp border-b border-slate-300"
+            onMouseEnter={() => showRequestPopup(0)}
+            onMouseLeave={() => hideRequestPopup(0)}
+          >
             <p className="requestText">sick leave</p>
             <p className="requestNum">
               {props.dbData.filter((items) => items.requests.sickLeave).length}
             </p>
+
+            {props.dbData.filter((items) => items.requests.sickLeave).length ===
+            0 ? (
+              <p className="requestPopup hidden" ref={requestPopupRefs[0]}>
+                No entries
+              </p>
+            ) : (
+              <p className="requestPopup hidden" ref={requestPopupRefs[0]}>
+                {props.dbData
+                  .filter((items) => items.requests.sickLeave)
+                  .map((element) => element.employeeName)
+                  .join(", ")}
+              </p>
+            )}
           </div>
-          <div className="requestTextGrp border-b border-slate-300">
+
+          <div
+            className="requestTextGrp border-b border-slate-300"
+            onMouseEnter={() => showRequestPopup(1)}
+            onMouseLeave={() => hideRequestPopup(1)}
+          >
             <p className="requestText">maternity leave</p>
             <p className="requestNum">
               {
@@ -255,8 +304,27 @@ const Stats = (props: statsProps) => {
                   .length
               }
             </p>
+
+            {props.dbData.filter((items) => items.requests.maternityLeave)
+              .length === 0 ? (
+              <p className="requestPopup hidden" ref={requestPopupRefs[1]}>
+                No entries
+              </p>
+            ) : (
+              <p className="requestPopup hidden" ref={requestPopupRefs[1]}>
+                {props.dbData
+                  .filter((items) => items.requests.maternityLeave)
+                  .map((element) => element.employeeName)
+                  .join(", ")}
+              </p>
+            )}
           </div>
-          <div className="requestTextGrp border-b border-slate-300">
+
+          <div
+            className="requestTextGrp border-b border-slate-300"
+            onMouseEnter={() => showRequestPopup(2)}
+            onMouseLeave={() => hideRequestPopup(2)}
+          >
             <p className="requestText">annual leave</p>
             <p className="requestNum">
               {
@@ -264,8 +332,27 @@ const Stats = (props: statsProps) => {
                   .length
               }
             </p>
+
+            {props.dbData.filter((items) => items.requests.annualLeave)
+              .length === 0 ? (
+              <p className="requestPopup hidden" ref={requestPopupRefs[2]}>
+                No entries
+              </p>
+            ) : (
+              <p className="requestPopup hidden" ref={requestPopupRefs[2]}>
+                {props.dbData
+                  .filter((items) => items.requests.annualLeave)
+                  .map((element) => element.employeeName)
+                  .join(", ")}
+              </p>
+            )}
           </div>
-          <div className="requestTextGrp border-b border-slate-300">
+
+          <div
+            className="requestTextGrp border-b border-slate-300"
+            onMouseEnter={() => showRequestPopup(3)}
+            onMouseLeave={() => hideRequestPopup(3)}
+          >
             <p className="requestText">resume update</p>
             <p className="requestNum">
               {
@@ -273,8 +360,27 @@ const Stats = (props: statsProps) => {
                   .length
               }
             </p>
+
+            {props.dbData.filter((items) => items.requests.resumeUpdate)
+              .length === 0 ? (
+              <p className="requestPopup hidden" ref={requestPopupRefs[3]}>
+                No entries
+              </p>
+            ) : (
+              <p className="requestPopup hidden" ref={requestPopupRefs[3]}>
+                {props.dbData
+                  .filter((items) => items.requests.resumeUpdate)
+                  .map((element) => element.employeeName)
+                  .join(", ")}
+              </p>
+            )}
           </div>
-          <div className="requestTextGrp">
+
+          <div
+            className="requestTextGrp"
+            onMouseEnter={() => showRequestPopup(4)}
+            onMouseLeave={() => hideRequestPopup(4)}
+          >
             <p className="requestText">profile update</p>
             <p className="requestNum">
               {
@@ -282,6 +388,20 @@ const Stats = (props: statsProps) => {
                   .length
               }
             </p>
+
+            {props.dbData.filter((items) => items.requests.profileUpdate)
+              .length === 0 ? (
+              <p className="requestPopup hidden" ref={requestPopupRefs[4]}>
+                No entries
+              </p>
+            ) : (
+              <p className="requestPopup hidden" ref={requestPopupRefs[4]}>
+                {props.dbData
+                  .filter((items) => items.requests.profileUpdate)
+                  .map((element) => element.employeeName)
+                  .join(", ")}
+              </p>
+            )}
           </div>
         </div>
       </div>
