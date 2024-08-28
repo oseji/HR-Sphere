@@ -118,10 +118,10 @@ const Menu = (props: menuProp) => {
           </div>
         </Link>
 
-        <p className="menuGrp" onClick={toggleTheme}>
+        <div className="menuGrp" onClick={toggleTheme}>
           <img src={!isToggled ? moon : sun} alt="theme icon" className="h-5" />
           <p>{!isToggled ? "Dark mode" : "Light mode"}</p>
-        </p>
+        </div>
       </div>
 
       <div className="menuCollection">
