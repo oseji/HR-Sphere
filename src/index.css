@@ -213,7 +213,7 @@ header {
 }
 
 .requestTextGrp {
-  @apply flex flex-row justify-between py-3 cursor-default;
+  @apply flex flex-row justify-between py-3 cursor-default relative;
 }
 
 .requestText {
