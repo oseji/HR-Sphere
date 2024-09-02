@@ -27,7 +27,7 @@ spec:
     spec:
       containers:
         - name: hr-sphere
-          image: johnoziegbe/hr-sphere:v1
+          image: johnoziegbe/hr-sphere:v2
           resources:
             limits:
               memory: "128Mi"
