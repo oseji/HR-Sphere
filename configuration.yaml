@@ -28,6 +28,7 @@ spec:
       containers:
         - name: hr-sphere
           image: johnoziegbe/hr-sphere:v2
+          imagePullPolicy: Always
           resources:
             limits:
               memory: "128Mi"
