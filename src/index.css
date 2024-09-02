@@ -225,7 +225,7 @@ header {
 }
 
 .requestPopup {
-  @apply p-2 rounded-lg  ml-10 bg-white opacity-75 text-sm capitalize;
+  @apply p-2 rounded-lg  ml-10 bg-gray-600 text-white bg-opacity-65 text-sm capitalize;
 }
 
 /* table group */
