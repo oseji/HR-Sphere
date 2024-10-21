@@ -11,6 +11,13 @@ html {
   @apply scroll-smooth;
 }
 
+::-webkit-scrollbar {
+  @apply w-1;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-500 hover:bg-gray-700 rounded-md;
+}
+
 .App {
   @apply font-Poppins text-[#6F6F6F] dark:text-[#c7c7c7] bg-[#ECECEC] dark:bg-black max-w-[100vw]     min-h-screen;
 }

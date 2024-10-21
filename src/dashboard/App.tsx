@@ -63,8 +63,8 @@ function App() {
   const [userEmail, setUserEmail] = useState<string>("");
   const [userPassword, setUserPassword] = useState<string>("");
 
-  const [loginEmail, setLoginEmail] = useState<string>("");
-  const [loginPassword, setLoginPassword] = useState<string>("");
+  const [loginEmail, setLoginEmail] = useState<string>("fake@gmail.com");
+  const [loginPassword, setLoginPassword] = useState<string>("fakepassword");
   const [confirmPassword, setConfirmPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
   const errorMessageRef = [
