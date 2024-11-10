@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { useState, useRef, ChangeEvent } from "react";
 
 import { db, auth } from "../config/firebase";
 import { addDoc, collection } from "firebase/firestore";
@@ -16,6 +16,11 @@ type EmployeeProps = {
 };
 
 const Employees = (props: EmployeeProps) => {
+  const navigationBtnRefs = [
+    useRef<HTMLButtonElement>(null),
+    useRef<HTMLButtonElement>(null),
+  ];
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [employeeName, setEmployeeName] = useState<string>();
@@ -30,6 +35,27 @@ const Employees = (props: EmployeeProps) => {
   const [searchFilter, setSearchFilter] = useState<string>();
   const [contractFilter, setContractFilter] = useState<string>();
   const [workModeFilter, setWorkModeFilter] = useState<string>();
+
+  // handle pagination
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = window.innerWidth < 500 ? 3 : 6;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  let numberOfPages = Math.ceil(
+    Object.values(props.dbData).length / itemsPerPage
+  );
+
+  const handlePrevBtn = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextBtn = () => {
+    if (endIndex < Object.values(props.dbData).length) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
   const listOfWorkmodes = [
     ...new Set(props.dbData.map((item) => item.workMode.toLowerCase())),
@@ -160,64 +186,113 @@ const Employees = (props: EmployeeProps) => {
         </div>
 
         {!isLoading && (
-          <div className="employeeListGrp">
-            {props.dbData
-              .filter(
-                (e) =>
-                  (!searchFilter ||
-                    e.employeeName
-                      .toLowerCase()
-                      .includes(searchFilter.toLowerCase())) &&
-                  (!workModeFilter ||
-                    e.workMode.toLowerCase() === workModeFilter) &&
-                  (!contractFilter ||
-                    e.employmentContract.toLowerCase() === contractFilter)
-              )
-              .map((element, index) => (
-                <div className="employeeItem" key={index}>
-                  <p className="staffName">{element.employeeName}</p>
+          <div className=" flex flex-col justify-between h-[90%]">
+            <div className="employeeListGrp">
+              {props.dbData
+                .filter(
+                  (e) =>
+                    (!searchFilter ||
+                      e.employeeName
+                        .toLowerCase()
+                        .includes(searchFilter.toLowerCase())) &&
+                    (!workModeFilter ||
+                      e.workMode.toLowerCase() === workModeFilter) &&
+                    (!contractFilter ||
+                      e.employmentContract.toLowerCase() === contractFilter)
+                )
+                .slice(startIndex, endIndex)
+                .map((element, index) => (
+                  <div className="employeeItem" key={index}>
+                    <p className="staffName">{element.employeeName}</p>
 
-                  <p className=" text-xs font-semibold">
-                    Email :{" "}
-                    <span className=" font-normal">
-                      {element.employeeEmail}
-                    </span>
-                  </p>
+                    <p className=" text-xs font-semibold">
+                      Email :{" "}
+                      <span className=" font-normal">
+                        {element.employeeEmail}
+                      </span>
+                    </p>
 
-                  <p className="staffData">
-                    Dept. :{" "}
-                    <span className=" font-normal">{element.department}</span>
-                  </p>
+                    <p className="staffData">
+                      Dept. :{" "}
+                      <span className=" font-normal">{element.department}</span>
+                    </p>
 
-                  <p className="staffData">
-                    Role : <span className=" font-normal">{element.role}</span>
-                  </p>
+                    <p className="staffData">
+                      Role :{" "}
+                      <span className=" font-normal">{element.role}</span>
+                    </p>
 
-                  <p className="staffData">
-                    Salary :{" "}
-                    <span className=" font-normal">
-                      ₦{element.employeeFinances.monthlySalary.toLocaleString()}
-                    </span>
-                  </p>
+                    <p className="staffData">
+                      Salary :{" "}
+                      <span className=" font-normal">
+                        ₦
+                        {element.employeeFinances.monthlySalary.toLocaleString()}
+                      </span>
+                    </p>
 
-                  <p className="staffData">
-                    Contract :{" "}
-                    <span className=" font-normal">
-                      {element.employmentContract}
-                    </span>
-                  </p>
+                    <p className="staffData">
+                      Contract :{" "}
+                      <span className=" font-normal">
+                        {element.employmentContract}
+                      </span>
+                    </p>
 
-                  <p className="staffData">
-                    Work Mode :{" "}
-                    <span className=" font-normal">{element.workMode}</span>
-                  </p>
+                    <p className="staffData">
+                      Work Mode :{" "}
+                      <span className=" font-normal">{element.workMode}</span>
+                    </p>
 
-                  <p className="staffData">
-                    Number of KPIs :{" "}
-                    <span className=" font-normal">{element.numberOfKPIs}</span>
-                  </p>
-                </div>
-              ))}
+                    <p className="staffData">
+                      Number of KPIs :{" "}
+                      <span className=" font-normal">
+                        {element.numberOfKPIs}
+                      </span>
+                    </p>
+                  </div>
+                ))}
+            </div>
+
+            <div className="employeeSort">
+              <div className="flex flex-row items-center gap-5">
+                <button
+                  className={`employeeSortBtn activeSortBtn ${
+                    currentPage === 1 ? "hidden" : ""
+                  }`}
+                  onClick={handlePrevBtn}
+                  ref={navigationBtnRefs[0]}
+                  value={0}
+                  disabled={currentPage === 1}
+                >
+                  Previous
+                </button>
+
+                <button
+                  className={`employeeSortBtn ${
+                    endIndex >= Object.values(props.dbData).length
+                      ? "hidden"
+                      : ""
+                  }`}
+                  onClick={handleNextBtn}
+                  ref={navigationBtnRefs[1]}
+                  value={1}
+                >
+                  Next
+                </button>
+              </div>
+
+              <div className="pageNumGrp">
+                {Array.from({ length: numberOfPages }, (_, index) => (
+                  <button
+                    key={index + 1}
+                    className={`pageNum ${
+                      currentPage === index + 1 ? "activePageNum" : "bg-white"
+                    }`}
+                  >
+                    {index + 1}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
         )}
 

@@ -11,11 +11,15 @@ html {
   @apply scroll-smooth;
 }
 
+input::-webkit-inner-spin-button {
+  @apply hidden;
+}
+
 ::-webkit-scrollbar {
-  @apply w-1;
+  @apply w-1.5;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-500 hover:bg-gray-700 rounded-md;
+  @apply bg-gray-500 hover:bg-gray-700 rounded-md cursor-pointer;
 }
 
 .App {
@@ -283,7 +287,7 @@ td {
 
 /* EMPLOYEES SECTION */
 .employeeList {
-  @apply w-full xl:w-2/3;
+  @apply w-full xl:w-2/3 max-h-screen overflow-y-scroll;
 }
 
 .employeeListGrp {
