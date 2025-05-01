@@ -1,5 +1,5 @@
 import Stats from "./Stats";
-import Schedule from "./Schedule";
+// import Schedule from "./Schedule";
 
 import { dataType } from "./App";
 
@@ -12,7 +12,7 @@ const Overview = (props: overviewProps) => {
     <section className="overviewScreen">
       <div className="overviewSection">
         <Stats dbData={props.dbData}></Stats>
-        <Schedule></Schedule>
+        {/* <Schedule></Schedule> */}
       </div>
     </section>
   );

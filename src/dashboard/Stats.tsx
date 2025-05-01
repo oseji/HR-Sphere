@@ -76,7 +76,7 @@ const Stats = (props: statsProps) => {
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
 
-  let numberOfPages = Math.ceil(
+  const numberOfPages = Math.ceil(
     Object.values(props.dbData).filter(
       (e) =>
         (!departmentFilter ||
@@ -136,8 +136,6 @@ const Stats = (props: statsProps) => {
         chart = chartData.slice(1, 5);
       } else if (chartYears === 3) {
         chart = chartData.slice(2, 5);
-      } else if (chartYears === 3) {
-        chart = chartData.slice(3, 5);
       } else if (chartYears === 2) {
         chart = chartData.slice(-2);
       } else if (chartYears === 1) {
@@ -149,7 +147,7 @@ const Stats = (props: statsProps) => {
   }, [chartYears]);
 
   return (
-    <section className="flex flex-col gap-3 p-3 w-full xl:max-w-[730px]">
+    <section className="flex flex-col gap-3 p-3 w-full ">
       <div className="statsCardGrp">
         <div className="statsCard">
           <p className="statsHeading">Employees</p>

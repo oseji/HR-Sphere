@@ -31,7 +31,7 @@ const Performance = (props: performanceProps) => {
   const itemsPerPage = 5;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  let numberOfPages = Math.ceil(
+  const numberOfPages = Math.ceil(
     Object.values(props.dbData).filter(
       (e) =>
         !departmentFilter || e.department.toLowerCase() === departmentFilter
@@ -155,10 +155,10 @@ const Performance = (props: performanceProps) => {
 
               <div className="flex flex-row items-center gap-3">
                 <select>
-                  <option value="qtr1 2024">quater 1 2024</option>
-                  <option value="qtr2 2024">quater 2 2024</option>
-                  <option value="qtr3 2024">quater 3 2024</option>
-                  <option value="qtr4 2024">quater 4 2024</option>
+                  <option value="qtr1">quater 1</option>
+                  <option value="qtr2">quater 2</option>
+                  <option value="qtr3">quater 3</option>
+                  <option value="qtr4">quater 4</option>
                 </select>
 
                 <select
@@ -182,9 +182,7 @@ const Performance = (props: performanceProps) => {
                 <tr>
                   <th>employee</th>
                   <th>job title</th>
-                  <th>number of KPIs</th>
-                  <th>KPI score</th>
-                  <th>AVG/month</th>
+                  <th>performance</th>
                 </tr>
               </thead>
 
@@ -203,24 +201,15 @@ const Performance = (props: performanceProps) => {
                         <p> {value.employeeName}</p>
                       </td>
                       <td>{value.role}</td>
-                      <td>{value.numberOfKPIs}</td>
-                      <td>{value.numberOfKPIs}</td>
-                      <td
-                      // FIX THIS WHEN YOU HAVE IMPLEMENTED KPI OBJECT
-                      // className={
-                      //   value.monthlyAvg < 39
-                      //     ? "text-[#D00000]"
-                      //     : value.monthlyAvg >= 39 && value.monthlyAvg < 60
-                      //     ? "text-[#F48B02]"
-                      //     : value.monthlyAvg >= 60 && value.monthlyAvg < 70
-                      //     ? "text-[#02AB02]"
-                      //     : value.monthlyAvg >= 70
-                      //     ? "text-[#02AB02]"
-                      //     : ""
-                      // }
-                      >
-                        {/* {value.monthlyAvg}% */}
-                        avg
+                      <td>
+                        {((num) =>
+                          num === 1
+                            ? "Poor"
+                            : num === 2
+                            ? "Average"
+                            : num === 3
+                            ? "Above Average"
+                            : "Excellent")(Math.floor(Math.random() * 4) + 1)}
                       </td>
                     </tr>
                   ))}

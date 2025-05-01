@@ -38,7 +38,7 @@ const FileManager = () => {
   }, [filesToggled]);
 
   return (
-    <section className="flex flex-col-reverse lg:flex-row gap-3 lg:gap-0">
+    <section className=" w-full flex flex-col-reverse lg:flex-row gap-3 lg:gap-0">
       {/* file cards */}
       <div className="screenSection w-full">
         {/* header */}
@@ -187,9 +187,9 @@ const FileManager = () => {
       </div>
 
       {/* file activity */}
-      <div className=" w-full lg:w-[220px] bg-white dark:bg-black dark:text-white p-2">
+      {/* <div className=" w-full lg:w-[220px] bg-white dark:bg-black dark:text-white p-2">
         <h2 className="boxHeading">recent activity</h2>
-      </div>
+      </div> */}
     </section>
   );
 };

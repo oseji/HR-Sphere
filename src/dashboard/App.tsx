@@ -103,9 +103,13 @@ function App() {
       } else {
         throw new Error("Password does not match");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       setIsLoggedIn(false);
-      setErrorMessage(errorMessageCleanUp(err.message));
+      if (err instanceof Error) {
+        setErrorMessage(errorMessageCleanUp(err.message));
+      } else {
+        setErrorMessage("An unexpected error occurred.");
+      }
 
       errorMessageRef[0].current?.classList.remove("hidden");
     }
@@ -122,11 +126,16 @@ function App() {
       setLoginPassword("");
 
       errorMessageRef[1].current?.classList.add("hidden");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
 
       setIsLoggedIn(false);
-      setErrorMessage(errorMessageCleanUp(err.message));
+
+      if (err instanceof Error) {
+        setErrorMessage(errorMessageCleanUp(err.message));
+      } else {
+        setErrorMessage("An unexpected error occurred.");
+      }
 
       errorMessageRef[1].current?.classList.remove("hidden");
     } finally {
@@ -261,7 +270,7 @@ function App() {
               </div>
             </header>
 
-            <main className="lg:flex flex-row lg:max-h-screen max-w-[100dvw] relative">
+            <main className="lg:flex flex-row lg:max-h-screen max-w-[100dvw] relative ">
               <Menu menu={menuRef} app={appRef} logOut={logOut}></Menu>
 
               <Switch>

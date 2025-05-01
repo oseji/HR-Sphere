@@ -190,7 +190,7 @@ const Employees = (props: EmployeeProps) => {
         {!isLoading && (
           <div>
             {props.dbData.length > 0 ? (
-              <div className=" flex flex-col justify-between h-[90%]">
+              <div className=" flex flex-col justify-between h-[85dvh]">
                 <div className="employeeListGrp">
                   {props.dbData
                     .filter(
@@ -452,7 +452,7 @@ const Employees = (props: EmployeeProps) => {
               department !== "" &&
               jobTitle !== "" &&
               employeeSalary !== 0 &&
-              numberOfKPIs !== 0
+              isLoading === true
                 ? false
                 : true
             }

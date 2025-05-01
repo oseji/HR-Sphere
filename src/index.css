@@ -27,7 +27,7 @@ input::-webkit-inner-spin-button {
 }
 
 .screenSection {
-  @apply min-h-screen p-3 overflow-y-scroll;
+  @apply min-h-[100dvh] max-h-[100dvh] p-3 overflow-y-scroll;
 }
 
 .screenSection::-webkit-scrollbar {
@@ -39,7 +39,7 @@ input::-webkit-inner-spin-button {
 }
 
 .overviewScreen {
-  @apply overflow-y-scroll w-full pr-3;
+  @apply min-h-[100dvh] max-h-[100dvh] overflow-y-scroll w-full pr-3;
 }
 
 .overviewScreen::-webkit-scrollbar {
@@ -154,7 +154,7 @@ header {
 
 /* MENU */
 .menuScreen {
-  @apply flex flex-col justify-between py-5 px-3 bg-white dark:bg-[#0F0F0F] absolute z-10 min-h-screen lg:relative shadow-xl lg:shadow-none transition ease-in-out duration-200;
+  @apply flex flex-col justify-between py-5 px-3 bg-white dark:bg-[#0F0F0F] absolute z-10 min-h-[100dvh] lg:relative shadow-xl lg:shadow-none transition ease-in-out duration-200;
 }
 
 .menuClosed {
@@ -204,11 +204,11 @@ header {
 
 /* chart group */
 .chartGrp {
-  @apply flex flex-col lg:flex-row gap-3;
+  @apply w-full flex flex-col lg:flex-row gap-3;
 }
 
 .chartBox {
-  @apply w-[450px] bg-white dark:bg-[#0F0F0F] p-3;
+  @apply w-[450px] lg:w-full bg-white dark:bg-[#0F0F0F] p-3 mx-auto;
 }
 
 .chartHeadingGrp {
@@ -220,7 +220,7 @@ header {
 }
 
 .requestBox {
-  @apply w-full xl:w-[280px] p-3 bg-white dark:bg-[#0F0F0F] rounded text-sm;
+  @apply w-full  p-3 bg-white dark:bg-[#0F0F0F] rounded text-sm;
 }
 
 .requestTextGrp {
@@ -273,7 +273,7 @@ td {
 }
 
 .employeeSort {
-  @apply flex flex-row justify-between items-center gap-5 text-xs;
+  @apply flex flex-row justify-between items-center gap-5 text-xs mt-auto;
 }
 
 .employeeSortBtn {
@@ -327,7 +327,7 @@ td {
 }
 
 .employeeDataInput > input {
-  @apply border-b pt-2 pb-1 capitalize font-light text-xs;
+  @apply border-b pt-2 pb-1  font-light text-xs;
 }
 
 .employeeDataInput > label {

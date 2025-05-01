@@ -125,29 +125,25 @@ const Menu = (props: menuProp) => {
       </div>
 
       <div className="menuCollection">
-        <Link to={"/HelpSupport"}>
-          <div
-            className="menuGrp"
-            ref={menuRefs[5]}
-            data-value="5"
-            onClick={toggleMenuClass}
-          >
-            <img src={iconHelp} alt="help icon" />
-            <p className="menutext">Help/support</p>
-          </div>
-        </Link>
+        <div
+          className="menuGrp"
+          ref={menuRefs[5]}
+          data-value="5"
+          onClick={toggleMenuClass}
+        >
+          <img src={iconHelp} alt="help icon" />
+          <p className="menutext">Help/support</p>
+        </div>
 
-        <Link to={"/Settings"}>
-          <div
-            className="menuGrp"
-            ref={menuRefs[6]}
-            data-value="6"
-            onClick={toggleMenuClass}
-          >
-            <img src={iconSettings} alt="settings icon" />
-            <p className="menutext">Setting</p>
-          </div>
-        </Link>
+        <div
+          className="menuGrp"
+          ref={menuRefs[6]}
+          data-value="6"
+          onClick={toggleMenuClass}
+        >
+          <img src={iconSettings} alt="settings icon" />
+          <p className="menutext">Setting</p>
+        </div>
 
         <div
           className="menuGrp"
