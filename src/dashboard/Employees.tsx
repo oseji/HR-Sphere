@@ -23,7 +23,8 @@ const Employees = (props: EmployeeProps) => {
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const [employeeName, setEmployeeName] = useState<string>();
+  const [employeeFirstName, setEmployeeFirstName] = useState<string>();
+  const [employeeLastName, setEmployeeLastName] = useState<string>();
   const [department, setDepartment] = useState<string>();
   const [jobTitle, setJobTitle] = useState<string>();
   const [workMode, setWorkMode] = useState<string>();
@@ -41,7 +42,7 @@ const Employees = (props: EmployeeProps) => {
   const itemsPerPage = window.innerWidth < 500 ? 3 : 6;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  let numberOfPages = Math.ceil(
+  const numberOfPages = Math.ceil(
     Object.values(props.dbData).length / itemsPerPage
   );
 
@@ -85,7 +86,7 @@ const Employees = (props: EmployeeProps) => {
     try {
       if (user) {
         await addDoc(collection(db, `users/${user.email}/employeeData`), {
-          employeeName: employeeName,
+          employeeName: employeeFirstName + " " + employeeLastName,
           employeeEmail: employeeEmail,
           employmentContract: employmentContract,
           employeeFinances: {
@@ -99,7 +100,7 @@ const Employees = (props: EmployeeProps) => {
           department: department,
           role: jobTitle,
           workMode: workMode,
-          numberOfKPIs: numberOfKPIs,
+          // numberOfKPIs: numberOfKPIs,
 
           requests: {
             sickLeave: false,
@@ -117,7 +118,8 @@ const Employees = (props: EmployeeProps) => {
     } finally {
       props.getEmployeeData();
 
-      setEmployeeName("");
+      setEmployeeFirstName("");
+      setEmployeeLastName("");
       setEmployeeEmail("");
       setEmploymentContract("Full-time");
       setEmployeeSalary(0);
@@ -186,113 +188,120 @@ const Employees = (props: EmployeeProps) => {
         </div>
 
         {!isLoading && (
-          <div className=" flex flex-col justify-between h-[90%]">
-            <div className="employeeListGrp">
-              {props.dbData
-                .filter(
-                  (e) =>
-                    (!searchFilter ||
-                      e.employeeName
-                        .toLowerCase()
-                        .includes(searchFilter.toLowerCase())) &&
-                    (!workModeFilter ||
-                      e.workMode.toLowerCase() === workModeFilter) &&
-                    (!contractFilter ||
-                      e.employmentContract.toLowerCase() === contractFilter)
-                )
-                .slice(startIndex, endIndex)
-                .map((element, index) => (
-                  <div className="employeeItem" key={index}>
-                    <p className="staffName">{element.employeeName}</p>
+          <div>
+            {props.dbData.length > 0 ? (
+              <div className=" flex flex-col justify-between h-[90%]">
+                <div className="employeeListGrp">
+                  {props.dbData
+                    .filter(
+                      (e) =>
+                        (!searchFilter ||
+                          e.employeeName
+                            .toLowerCase()
+                            .includes(searchFilter.toLowerCase())) &&
+                        (!workModeFilter ||
+                          e.workMode.toLowerCase() === workModeFilter) &&
+                        (!contractFilter ||
+                          e.employmentContract.toLowerCase() === contractFilter)
+                    )
+                    .slice(startIndex, endIndex)
+                    .map((element, index) => (
+                      <div className="employeeItem" key={index}>
+                        <p className="staffName">{element.employeeName}</p>
 
-                    <p className=" text-xs font-semibold">
-                      Email :{" "}
-                      <span className=" font-normal">
-                        {element.employeeEmail}
-                      </span>
-                    </p>
+                        <p className=" text-xs font-semibold">
+                          Email :{" "}
+                          <span className=" font-normal">
+                            {element.employeeEmail}
+                          </span>
+                        </p>
 
-                    <p className="staffData">
-                      Dept. :{" "}
-                      <span className=" font-normal">{element.department}</span>
-                    </p>
+                        <p className="staffData">
+                          Dept. :{" "}
+                          <span className=" font-normal">
+                            {element.department}
+                          </span>
+                        </p>
 
-                    <p className="staffData">
-                      Role :{" "}
-                      <span className=" font-normal">{element.role}</span>
-                    </p>
+                        <p className="staffData">
+                          Role :{" "}
+                          <span className=" font-normal">{element.role}</span>
+                        </p>
 
-                    <p className="staffData">
-                      Salary :{" "}
-                      <span className=" font-normal">
-                        ₦
-                        {element.employeeFinances.monthlySalary.toLocaleString()}
-                      </span>
-                    </p>
+                        <p className="staffData">
+                          Salary :{" "}
+                          <span className=" font-normal">
+                            ₦
+                            {element.employeeFinances.monthlySalary.toLocaleString()}
+                          </span>
+                        </p>
 
-                    <p className="staffData">
-                      Contract :{" "}
-                      <span className=" font-normal">
-                        {element.employmentContract}
-                      </span>
-                    </p>
+                        <p className="staffData">
+                          Contract :{" "}
+                          <span className=" font-normal">
+                            {element.employmentContract}
+                          </span>
+                        </p>
 
-                    <p className="staffData">
-                      Work Mode :{" "}
-                      <span className=" font-normal">{element.workMode}</span>
-                    </p>
+                        <p className="staffData">
+                          Work Mode :{" "}
+                          <span className=" font-normal">
+                            {element.workMode}
+                          </span>
+                        </p>
+                      </div>
+                    ))}
+                </div>
 
-                    <p className="staffData">
-                      Number of KPIs :{" "}
-                      <span className=" font-normal">
-                        {element.numberOfKPIs}
-                      </span>
-                    </p>
+                <div className="employeeSort">
+                  <div className="flex flex-row items-center gap-5">
+                    <button
+                      className={`employeeSortBtn activeSortBtn ${
+                        currentPage === 1 ? "hidden" : ""
+                      }`}
+                      onClick={handlePrevBtn}
+                      ref={navigationBtnRefs[0]}
+                      value={0}
+                      disabled={currentPage === 1}
+                    >
+                      Previous
+                    </button>
+
+                    <button
+                      className={`employeeSortBtn ${
+                        endIndex >= Object.values(props.dbData).length
+                          ? "hidden"
+                          : ""
+                      }`}
+                      onClick={handleNextBtn}
+                      ref={navigationBtnRefs[1]}
+                      value={1}
+                    >
+                      Next
+                    </button>
                   </div>
-                ))}
-            </div>
 
-            <div className="employeeSort">
-              <div className="flex flex-row items-center gap-5">
-                <button
-                  className={`employeeSortBtn activeSortBtn ${
-                    currentPage === 1 ? "hidden" : ""
-                  }`}
-                  onClick={handlePrevBtn}
-                  ref={navigationBtnRefs[0]}
-                  value={0}
-                  disabled={currentPage === 1}
-                >
-                  Previous
-                </button>
-
-                <button
-                  className={`employeeSortBtn ${
-                    endIndex >= Object.values(props.dbData).length
-                      ? "hidden"
-                      : ""
-                  }`}
-                  onClick={handleNextBtn}
-                  ref={navigationBtnRefs[1]}
-                  value={1}
-                >
-                  Next
-                </button>
+                  <div className="pageNumGrp">
+                    {Array.from({ length: numberOfPages }, (_, index) => (
+                      <button
+                        key={index + 1}
+                        className={`pageNum ${
+                          currentPage === index + 1
+                            ? "activePageNum"
+                            : "bg-white"
+                        }`}
+                      >
+                        {index + 1}
+                      </button>
+                    ))}
+                  </div>
+                </div>
               </div>
-
-              <div className="pageNumGrp">
-                {Array.from({ length: numberOfPages }, (_, index) => (
-                  <button
-                    key={index + 1}
-                    className={`pageNum ${
-                      currentPage === index + 1 ? "activePageNum" : "bg-white"
-                    }`}
-                  >
-                    {index + 1}
-                  </button>
-                ))}
+            ) : (
+              <div className=" flex flex-row items-center justify-center w-full min-h-screen">
+                <p className="text-center">No employee data available</p>
               </div>
-            </div>
+            )}
           </div>
         )}
 
@@ -310,26 +319,26 @@ const Employees = (props: EmployeeProps) => {
         <form className="employeeDataForm">
           <div className="employeeFormInputGrp">
             <div className="employeeDataInput">
-              <label htmlFor="employeeName">Name</label>
+              <label htmlFor="employeeName">First Name</label>
               <input
                 required
                 type="text"
                 id="employeeName"
                 placeholder="Enter name"
-                value={employeeName}
-                onChange={(e) => setEmployeeName(e.target.value)}
+                value={employeeFirstName}
+                onChange={(e) => setEmployeeFirstName(e.target.value)}
               />
             </div>
 
             <div className="employeeDataInput">
-              <label htmlFor="employeeEmail">Email</label>
+              <label htmlFor="employeeName">Last Name</label>
               <input
                 required
-                type="email"
-                id="employeeEmail"
-                placeholder="Enter email"
-                value={employeeEmail}
-                onChange={(e) => setEmployeeEmail(e.target.value)}
+                type="text"
+                id="employeeName"
+                placeholder="Enter name"
+                value={employeeLastName}
+                onChange={(e) => setEmployeeLastName(e.target.value)}
               />
             </div>
           </div>
@@ -348,14 +357,14 @@ const Employees = (props: EmployeeProps) => {
             </div>
 
             <div className="employeeDataInput">
-              <label htmlFor="employeeJobTitle">Job title</label>
+              <label htmlFor="employeeEmail">Email</label>
               <input
                 required
-                type="text"
-                id="employeeJobTitle"
-                placeholder="Enter job title"
-                value={jobTitle}
-                onChange={(e) => setJobTitle(e.target.value)}
+                type="email"
+                id="employeeEmail"
+                placeholder="Enter email"
+                value={employeeEmail}
+                onChange={(e) => setEmployeeEmail(e.target.value)}
               />
             </div>
           </div>
@@ -408,24 +417,45 @@ const Employees = (props: EmployeeProps) => {
             </div>
 
             <div className="employeeDataInput">
-              <label htmlFor="numberOfKPIs">Number of KPIs</label>
+              <label htmlFor="employeeJobTitle">Job title</label>
               <input
                 required
-                type="number"
-                id="numberOfKPIs"
-                placeholder="Enter number of KPIs"
-                value={numberOfKPIs === 0 ? "" : numberOfKPIs}
-                onChange={(e) => setNumberOfKPIs(Number(e.target.value))}
+                type="text"
+                id="employeeJobTitle"
+                placeholder="Enter job title"
+                value={jobTitle}
+                onChange={(e) => setJobTitle(e.target.value)}
               />
             </div>
           </div>
 
           <button
-            className=" bg-buttonGreen text-white dark:bg-darkModeGreen px-4 py-2 rounded-md w-fit mt-3"
+            className={` ${
+              employeeFirstName !== "" &&
+              employeeLastName !== "" &&
+              employeeEmail !== "" &&
+              department !== "" &&
+              jobTitle !== "" &&
+              employeeSalary !== 0 &&
+              numberOfKPIs !== 0
+                ? " bg-buttonGreen text-white dark:bg-darkModeGreen"
+                : "bg-slate-200 text-black cursor-not-allowed"
+            }  px-4 py-2 rounded-md w-fit mt-3`}
             onClick={(e) => {
               e.preventDefault();
               addEmployee();
             }}
+            disabled={
+              employeeFirstName !== "" &&
+              employeeLastName !== "" &&
+              employeeEmail !== "" &&
+              department !== "" &&
+              jobTitle !== "" &&
+              employeeSalary !== 0 &&
+              numberOfKPIs !== 0
+                ? false
+                : true
+            }
           >
             Add Employee
           </button>
