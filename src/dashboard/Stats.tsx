@@ -1,582 +1,425 @@
-import { BarChart, Bar, Rectangle, XAxis, Tooltip } from "recharts";
-import { ChangeEvent, useState, useEffect, useRef } from "react";
+import { BarChart, Bar, Rectangle, XAxis, Tooltip, ResponsiveContainer } from "recharts";
+import { ChangeEvent, useState } from "react";
+import { Users, UserMinus, UserPlus, CheckCircle2, XCircle, ChevronRight } from "lucide-react";
 
 import { chartData } from "../types";
+import { useApp, RequestType } from "../context/AppContext";
 
-import { dataType } from "./App";
+// ─── Helpers ─────────────────────────────────────────────────────────────────
 
-import userIcon from "../assets/stats user icon.svg";
-import jobIcon from "../assets/stats resignation icon.svg";
-import folderIcon from "../assets/stats folder icon.svg";
-// import upGrowth from "../assets/up growth.svg";
-// import downGrowth from "../assets/down growth.svg";
-import searchIcon from "../assets/circum_search.png";
-import avatar from "../assets/arlene.png";
-
-type statsProps = {
-  dbData: dataType;
+const workModeBadge = (mode: string) => {
+  const m = mode.toLowerCase();
+  if (m === "remote") return "badge-info";
+  if (m === "on site" || m === "onsite") return "badge-success";
+  return "badge-warning";
 };
 
-const Stats = (props: statsProps) => {
-  const employeeSortBtnRefs = [
-    useRef<HTMLButtonElement>(null),
-    useRef<HTMLButtonElement>(null),
-  ];
+const initials = (name: string) =>
+  name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
 
-  const requestPopupRefs = [
-    useRef<HTMLParagraphElement>(null),
-    useRef<HTMLParagraphElement>(null),
-    useRef<HTMLParagraphElement>(null),
-    useRef<HTMLParagraphElement>(null),
-    useRef<HTMLParagraphElement>(null),
-  ];
+// ─── Request types ────────────────────────────────────────────────────────────
 
-  const [chartYears, setChartYears] = useState<number>(5);
-  const [currentChartData, setCurrentChartData] = useState(chartData);
+type RequestMeta = { key: RequestType; label: string };
 
-  const [searchFilter, setSearchFilter] = useState<string>();
-  const [departmentFilter, setDepartmentFilter] = useState<string>();
-  const [jobTitleFilter, setJobTitleFilter] = useState<string>();
-  const [workTypeFilter, setWorkTypeFilter] = useState<string>();
+const REQUEST_TYPES: RequestMeta[] = [
+  { key: "sickLeave", label: "Sick Leave" },
+  { key: "maternityLeave", label: "Maternity Leave" },
+  { key: "annualLeave", label: "Annual Leave" },
+  { key: "resumeUpdate", label: "Resume Update" },
+  { key: "profileUpdate", label: "Profile Update" },
+];
 
-  const listOfDepartments = [
-    ...new Set(props.dbData.map((item) => item.department.toLowerCase())),
-  ];
-  const listOfWorkmodes = [
-    ...new Set(props.dbData.map((item) => item.workMode.toLowerCase())),
-  ];
-  const listOfRoles = [
-    ...new Set(props.dbData.map((item) => item.role.toLowerCase())),
-  ];
+// ─── Component ────────────────────────────────────────────────────────────────
 
-  const toggleChartData = (e: ChangeEvent<HTMLSelectElement>) => {
-    const yearVal = e.target.value;
+const Stats = () => {
+  const { dbData, toggleRequest } = useApp();
 
-    setChartYears((prev) => {
-      let year = prev;
+  const [chartYears, setChartYears] = useState(5);
+  const currentChartData = chartData.slice(chartData.length - chartYears);
 
-      if (yearVal === "5") {
-        year = 5;
-      } else if (yearVal === "4") {
-        year = 4;
-      } else if (yearVal === "3") {
-        year = 3;
-      } else if (yearVal === "2") {
-        year = 2;
-      } else if (yearVal === "1") {
-        year = 1;
-      }
+  const [searchFilter, setSearchFilter] = useState("");
+  const [departmentFilter, setDepartmentFilter] = useState("");
+  const [jobTitleFilter, setJobTitleFilter] = useState("");
+  const [workTypeFilter, setWorkTypeFilter] = useState("");
 
-      return year;
-    });
-  };
+  const [expandedRequest, setExpandedRequest] = useState<RequestType | null>(null);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
 
+  // Pagination
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
 
-  const numberOfPages = Math.ceil(
-    Object.values(props.dbData).filter(
-      (e) =>
-        (!departmentFilter ||
-          e.department.toLowerCase() === departmentFilter) &&
-        (!workTypeFilter || e.workMode.toLowerCase() === workTypeFilter) &&
-        (!jobTitleFilter || e.role.toLowerCase() === jobTitleFilter)
-    ).length / itemsPerPage
+  const listOfDepartments = [...new Set(dbData.map((e) => e.department.toLowerCase()))];
+  const listOfWorkmodes  = [...new Set(dbData.map((e) => e.workMode.toLowerCase()))];
+  const listOfRoles      = [...new Set(dbData.map((e) => e.role.toLowerCase()))];
+
+  const filtered = dbData.filter(
+    (e) =>
+      (!departmentFilter || e.department.toLowerCase() === departmentFilter) &&
+      (!workTypeFilter   || e.workMode.toLowerCase()   === workTypeFilter) &&
+      (!jobTitleFilter   || e.role.toLowerCase()       === jobTitleFilter) &&
+      (!searchFilter     || e.employeeName.toLowerCase().includes(searchFilter.toLowerCase()))
   );
 
-  const handlePrevBtn = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
+  const numberOfPages = Math.ceil(filtered.length / itemsPerPage);
+  const pageSlice = filtered.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  const handleRequest = async (
+    employeeId: string,
+    requestType: RequestType,
+    approve: boolean
+  ) => {
+    const key = `${employeeId}-${requestType}`;
+    setActionLoading(key);
+    try {
+      await toggleRequest(employeeId, requestType, approve);
+    } finally {
+      setActionLoading(null);
     }
   };
 
-  const handleNextBtn = () => {
-    if (
-      endIndex <
-      Object.values(props.dbData).filter(
-        (e) =>
-          (!departmentFilter ||
-            e.department.toLowerCase() === departmentFilter) &&
-          (!workTypeFilter || e.workMode.toLowerCase() === workTypeFilter) &&
-          (!jobTitleFilter || e.role.toLowerCase() === jobTitleFilter)
-      ).length
-    ) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
-
-  const showRequestPopup = (id: number) => {
-    requestPopupRefs.forEach((element, index) => {
-      if (id === index) {
-        element.current?.classList.add("absolute");
-        element.current?.classList.toggle("hidden");
-      }
-    });
-  };
-
-  const hideRequestPopup = (id: number) => {
-    requestPopupRefs.forEach((element, index) => {
-      if (id === index) {
-        element.current?.classList.remove("absolute");
-        element.current?.classList.add("hidden");
-      }
-    });
-  };
-
-  //update barchart
-  useEffect(() => {
-    setCurrentChartData((prev) => {
-      let chart = prev;
-
-      if (chartYears === 5) {
-        chart = chartData;
-      } else if (chartYears === 4) {
-        chart = chartData.slice(1, 5);
-      } else if (chartYears === 3) {
-        chart = chartData.slice(2, 5);
-      } else if (chartYears === 2) {
-        chart = chartData.slice(-2);
-      } else if (chartYears === 1) {
-        chart = chartData.slice(-1);
-      }
-
-      return chart;
-    });
-  }, [chartYears]);
+  // ── Total pending requests count
+  const totalPending = dbData.reduce((acc, e) => {
+    return (
+      acc +
+      Object.values(e.requests).filter(Boolean).length
+    );
+  }, 0);
 
   return (
-    <section className="flex flex-col gap-3 p-3 w-full ">
-      <div className="statsCardGrp">
-        <div className="statsCard">
-          <p className="statsHeading">Employees</p>
-
-          <div className="statsCardNumGrp">
-            <p className="statsNum">{props.dbData.length}</p>
-            <img
-              src={userIcon}
-              alt="user icon"
-              className="p-2 bg-green-100 dark:bg-[#011B1D] rounded-lg"
-            />
+    <div className="flex flex-col gap-5 p-5">
+      {/* ── Stat cards ───────────────────────────────────────────── */}
+      <div className="stats-grid">
+        {/* Employees */}
+        <div className="stat-card flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+              Total Employees
+            </p>
+            <div className="stat-icon-wrap bg-faintGreen dark:bg-darkModeGreen">
+              <Users className="w-5 h-5 text-buttonGreen dark:text-[#A9F2F6]" />
+            </div>
           </div>
-
-          {/* <div className="bottomStatsCard">
-            <img src={upGrowth} alt="" />
-            <p className="bottomText">+2.4% vs previous month</p>
-          </div> */}
+          <p className="text-3xl font-bold text-slate-900 dark:text-white">
+            {dbData.length}
+          </p>
+          <p className="text-xs text-slate-400">Active headcount</p>
         </div>
 
-        <div className="statsCard">
-          <p className="statsHeading">Resignations</p>
-
-          <div className="statsCardNumGrp">
-            <p className="statsNum">0</p>
-            <img
-              src={jobIcon}
-              alt="user icon"
-              className="p-2 bg-green-100 dark:bg-[#011B1D] rounded-lg"
-            />
+        {/* Resignations */}
+        <div className="stat-card flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+              Resignations
+            </p>
+            <div className="stat-icon-wrap bg-red-50 dark:bg-red-900/20">
+              <UserMinus className="w-5 h-5 text-red-500" />
+            </div>
           </div>
-
-          {/* <div className="bottomStatsCard">
-            <img src={downGrowth} alt="" />
-            <p className="bottomText">-5.4% vs previous month</p>
-          </div> */}
+          <p className="text-3xl font-bold text-slate-900 dark:text-white">0</p>
+          <p className="text-xs text-slate-400">This month</p>
         </div>
 
-        <div className="statsCard">
-          <p className="statsHeading">New Applicants</p>
-
-          <div className="statsCardNumGrp">
-            <p className="statsNum">0</p>
-            <img
-              src={folderIcon}
-              alt="user icon"
-              className="p-2 bg-green-100 dark:bg-[#011B1D] rounded-lg"
-            />
+        {/* Pending requests */}
+        <div className="stat-card flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide">
+              Pending Requests
+            </p>
+            <div className="stat-icon-wrap bg-amber-50 dark:bg-amber-900/20">
+              <UserPlus className="w-5 h-5 text-amber-500" />
+            </div>
           </div>
-
-          {/* <div className="bottomStatsCard">
-            <img src={upGrowth} alt="" />
-            <p className="bottomText">+6.7% vs previous month</p>
-          </div> */}
+          <p className="text-3xl font-bold text-slate-900 dark:text-white">
+            {totalPending}
+          </p>
+          <p className="text-xs text-slate-400">Awaiting review</p>
         </div>
       </div>
 
-      <div className="chartGrp">
-        <div className="overflow-x-scroll lg:overflow-x-hidden lg:min-w-fit bg-white dark:bg-[#0F0F0F] rounded-md">
-          <div className="chartBox">
-            <div className="chartHeadingGrp">
-              <h1 className="boxHeading">Retention & Turnover Rate</h1>
-
-              <select id="chartSelection" onChange={toggleChartData}>
-                <option value="5">Last 5 years</option>
-                <option value="4">Last 4 years</option>
-                <option value="3">Last 3 years</option>
-                <option value="2">Last 2 years</option>
-                <option value="1">Last 1 year</option>
-              </select>
-            </div>
-
-            <BarChart
-              width={432}
-              height={190}
-              data={currentChartData}
-              margin={{
-                top: 40,
-                right: 30,
-                left: 20,
-                bottom: 5,
-              }}
+      {/* ── Chart + Requests ─────────────────────────────────────── */}
+      <div className="flex flex-col lg:flex-row gap-5">
+        {/* Bar chart */}
+        <div className="card p-5 flex-1 min-w-0 overflow-x-auto">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="section-title">Retention & Turnover Rate</h3>
+            <select
+              className="form-select w-auto text-xs py-1.5"
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                setChartYears(Number(e.target.value))
+              }
             >
-              <XAxis dataKey="name" className="font-bold text-black" />
-
-              <Tooltip />
-
-              <Bar
-                dataKey="RetentionRate"
-                fill="#095256"
-                activeBar={<Rectangle fill="#074144" stroke="white" />}
-              />
-              <Bar
-                dataKey="TurnoverRate"
-                fill="#06D6A0"
-                activeBar={<Rectangle fill="#05B587" stroke="white" />}
-              />
-            </BarChart>
-
-            <div className="barChartInfo">
-              <div className="flex flex-row items-center gap-2">
-                <span className="h-3 w-3 rounded bg-buttonGreen"></span>
-                <div className="text-[10px]">Retention Rate</div>
-              </div>
-
-              <div className="flex flex-row items-center gap-2">
-                <span className="h-3 w-3 rounded bg-[#06D6A0]"></span>
-                <div className="text-[10px]">Turnover Rate</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div className="requestBox">
-          <h1 className="boxHeading pb-3 border-b border-black  w-full">
-            Requests
-          </h1>
-
-          <div
-            className="requestTextGrp border-b border-slate-300"
-            onMouseEnter={() => showRequestPopup(0)}
-            onMouseLeave={() => hideRequestPopup(0)}
-          >
-            <p className="requestText">sick leave</p>
-            <p className="requestNum">
-              {props.dbData.filter((items) => items.requests.sickLeave).length}
-            </p>
-
-            {props.dbData.filter((items) => items.requests.sickLeave).length ===
-            0 ? (
-              <p className="requestPopup hidden" ref={requestPopupRefs[0]}>
-                No entries
-              </p>
-            ) : (
-              <p className="requestPopup hidden" ref={requestPopupRefs[0]}>
-                {props.dbData
-                  .filter((items) => items.requests.sickLeave)
-                  .map((element) => element.employeeName)
-                  .join(", ")}
-              </p>
-            )}
+              {[5, 4, 3, 2, 1].map((y) => (
+                <option key={y} value={y}>
+                  Last {y} year{y > 1 ? "s" : ""}
+                </option>
+              ))}
+            </select>
           </div>
 
-          <div
-            className="requestTextGrp border-b border-slate-300"
-            onMouseEnter={() => showRequestPopup(1)}
-            onMouseLeave={() => hideRequestPopup(1)}
-          >
-            <p className="requestText">maternity leave</p>
-            <p className="requestNum">
-              {
-                props.dbData.filter((items) => items.requests.maternityLeave)
-                  .length
-              }
-            </p>
-
-            {props.dbData.filter((items) => items.requests.maternityLeave)
-              .length === 0 ? (
-              <p className="requestPopup hidden" ref={requestPopupRefs[1]}>
-                No entries
-              </p>
-            ) : (
-              <p className="requestPopup hidden" ref={requestPopupRefs[1]}>
-                {props.dbData
-                  .filter((items) => items.requests.maternityLeave)
-                  .map((element) => element.employeeName)
-                  .join(", ")}
-              </p>
-            )}
-          </div>
-
-          <div
-            className="requestTextGrp border-b border-slate-300"
-            onMouseEnter={() => showRequestPopup(2)}
-            onMouseLeave={() => hideRequestPopup(2)}
-          >
-            <p className="requestText">annual leave</p>
-            <p className="requestNum">
-              {
-                props.dbData.filter((items) => items.requests.annualLeave)
-                  .length
-              }
-            </p>
-
-            {props.dbData.filter((items) => items.requests.annualLeave)
-              .length === 0 ? (
-              <p className="requestPopup hidden" ref={requestPopupRefs[2]}>
-                No entries
-              </p>
-            ) : (
-              <p className="requestPopup hidden" ref={requestPopupRefs[2]}>
-                {props.dbData
-                  .filter((items) => items.requests.annualLeave)
-                  .map((element) => element.employeeName)
-                  .join(", ")}
-              </p>
-            )}
-          </div>
-
-          <div
-            className="requestTextGrp border-b border-slate-300"
-            onMouseEnter={() => showRequestPopup(3)}
-            onMouseLeave={() => hideRequestPopup(3)}
-          >
-            <p className="requestText">resume update</p>
-            <p className="requestNum">
-              {
-                props.dbData.filter((items) => items.requests.resumeUpdate)
-                  .length
-              }
-            </p>
-
-            {props.dbData.filter((items) => items.requests.resumeUpdate)
-              .length === 0 ? (
-              <p className="requestPopup hidden" ref={requestPopupRefs[3]}>
-                No entries
-              </p>
-            ) : (
-              <p className="requestPopup hidden" ref={requestPopupRefs[3]}>
-                {props.dbData
-                  .filter((items) => items.requests.resumeUpdate)
-                  .map((element) => element.employeeName)
-                  .join(", ")}
-              </p>
-            )}
-          </div>
-
-          <div
-            className="requestTextGrp"
-            onMouseEnter={() => showRequestPopup(4)}
-            onMouseLeave={() => hideRequestPopup(4)}
-          >
-            <p className="requestText">profile update</p>
-            <p className="requestNum">
-              {
-                props.dbData.filter((items) => items.requests.profileUpdate)
-                  .length
-              }
-            </p>
-
-            {props.dbData.filter((items) => items.requests.profileUpdate)
-              .length === 0 ? (
-              <p className="requestPopup hidden" ref={requestPopupRefs[4]}>
-                No entries
-              </p>
-            ) : (
-              <p className="requestPopup hidden" ref={requestPopupRefs[4]}>
-                {props.dbData
-                  .filter((items) => items.requests.profileUpdate)
-                  .map((element) => element.employeeName)
-                  .join(", ")}
-              </p>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="overflow-x-scroll lg:overflow-x-hidden">
-        <div className="tableGrp">
-          <div className="tableGrpHeader">
-            <h1 className="boxHeading">Employees</h1>
-
-            <div className="tableSearchGrp">
-              <img src={searchIcon} alt="search icon" className="h-5" />
-              <input
-                type="text"
-                placeholder="Search for employee"
-                className="text-xs placeholder:text-xs"
-                value={searchFilter}
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  setSearchFilter(e.currentTarget.value);
+          <ResponsiveContainer width="100%" height={180}>
+            <BarChart data={currentChartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
+              <XAxis dataKey="name" tick={{ fontSize: 11, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
+              <Tooltip
+                contentStyle={{
+                  background: "var(--tw-bg-opacity, #fff)",
+                  border: "1px solid #e2e8f0",
+                  borderRadius: 8,
+                  fontSize: 12,
                 }}
               />
+              <Bar dataKey="RetentionRate" fill="#095256" radius={[4, 4, 0, 0]} activeBar={<Rectangle fill="#074144" />} />
+              <Bar dataKey="TurnoverRate"  fill="#06D6A0" radius={[4, 4, 0, 0]} activeBar={<Rectangle fill="#05B587" />} />
+            </BarChart>
+          </ResponsiveContainer>
+
+          <div className="chart-legend">
+            <div className="chart-legend-item flex items-center gap-2">
+              <span className="chart-legend-dot bg-buttonGreen" />
+              <span className="text-xs text-slate-500 dark:text-slate-400">Retention Rate</span>
+            </div>
+            <div className="chart-legend-item flex items-center gap-2">
+              <span className="chart-legend-dot bg-[#06D6A0]" />
+              <span className="text-xs text-slate-500 dark:text-slate-400">Turnover Rate</span>
             </div>
           </div>
+        </div>
 
-          <div className="tableFilterGrp">
-            {/* work type */}
+        {/* Requests */}
+        <div className="card p-5 w-full lg:w-72 flex-shrink-0">
+          <h3 className="section-title mb-4">Leave Requests</h3>
+
+          <div className="flex flex-col">
+            {REQUEST_TYPES.map(({ key, label }) => {
+              const requesters = dbData.filter((e) => e.requests[key]);
+              const count = requesters.length;
+              const isExpanded = expandedRequest === key;
+
+              return (
+                <div key={key}>
+                  <button
+                    className="request-row w-full"
+                    onClick={() =>
+                      setExpandedRequest(isExpanded ? null : key)
+                    }
+                  >
+                    <span className="text-xs font-medium text-slate-700 dark:text-slate-300">
+                      {label}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      {count > 0 && (
+                        <span className="badge badge-warning text-xs">
+                          {count}
+                        </span>
+                      )}
+                      <ChevronRight
+                        className={`w-3.5 h-3.5 text-slate-400 transition-transform duration-200 ${
+                          isExpanded ? "rotate-90" : ""
+                        }`}
+                      />
+                    </div>
+                  </button>
+
+                  {/* Expanded requester list */}
+                  {isExpanded && (
+                    <div className="ml-2 mb-2 flex flex-col gap-1.5">
+                      {count === 0 ? (
+                        <p className="text-xs text-slate-400 py-1 px-2">
+                          No pending requests
+                        </p>
+                      ) : (
+                        requesters.map((emp) => {
+                          const loadKey = `${emp.id}-${key}`;
+                          return (
+                            <div
+                              key={emp.id}
+                              className="flex items-center justify-between bg-slate-50 dark:bg-slate-800/50 rounded-lg px-2 py-1.5"
+                            >
+                              <span className="text-xs text-slate-700 dark:text-slate-300 capitalize truncate max-w-[100px]">
+                                {emp.employeeName}
+                              </span>
+                              <div className="flex items-center gap-1">
+                                <button
+                                  onClick={() => handleRequest(emp.id, key, true)}
+                                  disabled={actionLoading === loadKey}
+                                  className="p-1 rounded-md text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 disabled:opacity-50 transition-colors"
+                                  aria-label="Approve"
+                                >
+                                  <CheckCircle2 className="w-3.5 h-3.5" />
+                                </button>
+                                <button
+                                  onClick={() => handleRequest(emp.id, key, false)}
+                                  disabled={actionLoading === loadKey}
+                                  className="p-1 rounded-md text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 transition-colors"
+                                  aria-label="Deny"
+                                >
+                                  <XCircle className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </div>
+                          );
+                        })
+                      )}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+
+      {/* ── Employee table ────────────────────────────────────────── */}
+      <div className="card overflow-hidden">
+        {/* Table header */}
+        <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-wrap gap-3 items-center justify-between">
+          <h3 className="section-title">Employees</h3>
+
+          <div className="flex flex-wrap gap-2 items-center">
+            <input
+              type="text"
+              placeholder="Search…"
+              className="form-input w-44 py-1.5 text-xs"
+              value={searchFilter}
+              onChange={(e) => {
+                setSearchFilter(e.target.value);
+                setCurrentPage(1);
+              }}
+            />
+
             <select
-              className="tableFilter"
-              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                setWorkTypeFilter(e.currentTarget.value.toLowerCase())
-              }
+              className="form-select w-auto py-1.5 text-xs"
+              onChange={(e) => {
+                setWorkTypeFilter(e.target.value.toLowerCase());
+                setCurrentPage(1);
+              }}
             >
-              <option value="">All employees</option>
-
-              {listOfWorkmodes.map((element) => (
-                <option key={element} value={element.toLowerCase()}>
-                  {element}
-                </option>
+              <option value="">All work modes</option>
+              {listOfWorkmodes.map((m) => (
+                <option key={m} value={m}>{m}</option>
               ))}
             </select>
 
-            {/* job titles */}
             <select
-              className="tableFilter"
-              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                setJobTitleFilter(e.currentTarget.value.toLowerCase())
-              }
+              className="form-select w-auto py-1.5 text-xs"
+              onChange={(e) => {
+                setJobTitleFilter(e.target.value.toLowerCase());
+                setCurrentPage(1);
+              }}
             >
-              <option value="">All job titles</option>
-
-              {listOfRoles.map((element) => (
-                <option key={element} value={element.toLowerCase()}>
-                  {element}
-                </option>
+              <option value="">All roles</option>
+              {listOfRoles.map((r) => (
+                <option key={r} value={r}>{r}</option>
               ))}
             </select>
 
-            {/* departments */}
             <select
-              className="tableFilter"
-              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
-                setDepartmentFilter(e.currentTarget.value.toLowerCase())
-              }
+              className="form-select w-auto py-1.5 text-xs"
+              onChange={(e) => {
+                setDepartmentFilter(e.target.value.toLowerCase());
+                setCurrentPage(1);
+              }}
             >
               <option value="">All departments</option>
-
-              {listOfDepartments.map((element) => (
-                <option key={element} value={element.toLowerCase()}>
-                  {element}
-                </option>
+              {listOfDepartments.map((d) => (
+                <option key={d} value={d}>{d}</option>
               ))}
             </select>
           </div>
+        </div>
 
-          <table className="text-xs">
+        {/* Table */}
+        <div className="overflow-x-auto">
+          <table className="modern-table">
             <thead>
               <tr>
-                <th>employee</th>
-                <th>job title</th>
-                <th>department</th>
-                <th>email</th>
-                <th>status</th>
+                <th>Employee</th>
+                <th>Job title</th>
+                <th>Department</th>
+                <th>Email</th>
+                <th>Work mode</th>
               </tr>
             </thead>
-
             <tbody>
-              {Object.values(props.dbData)
-                .filter(
-                  (e) =>
-                    (!departmentFilter ||
-                      e.department.toLowerCase() === departmentFilter) &&
-                    (!workTypeFilter ||
-                      e.workMode.toLowerCase() === workTypeFilter) &&
-                    (!jobTitleFilter ||
-                      e.role.toLowerCase() === jobTitleFilter) &&
-                    (!searchFilter ||
-                      e.employeeName
-                        .toLowerCase()
-                        .includes(searchFilter.toLowerCase()))
-                )
-                .slice(startIndex, endIndex)
-                .map((value, index) => (
-                  <tr key={index}>
-                    <td className="employeeName">
-                      <img src={avatar} alt="profile image" />
-                      <p> {value.employeeName}</p>
+              {pageSlice.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="py-16 text-center text-slate-400">
+                    {dbData.length === 0
+                      ? "No employees yet. Add your first employee."
+                      : "No employees match the current filters."}
+                  </td>
+                </tr>
+              ) : (
+                pageSlice.map((emp) => (
+                  <tr key={emp.id}>
+                    <td>
+                      <div className="employee-cell">
+                        <div className="employee-avatar">{initials(emp.employeeName)}</div>
+                        {emp.employeeName}
+                      </div>
                     </td>
-                    <td>{value.role}</td>
-                    <td>{value.department}</td>
-                    <td>{value.employeeEmail}</td>
-                    <td
-                      className={`${
-                        value.workMode.toLowerCase() === "remote"
-                          ? "text-[#047E04]"
-                          : value.workMode.toLowerCase() === "on site"
-                          ? "text-[#EF5F04]"
-                          : "text-yellow-400"
-                      }`}
-                    >
-                      {value.workMode}
+                    <td className="capitalize">{emp.role}</td>
+                    <td className="capitalize">{emp.department}</td>
+                    <td className="lowercase">{emp.employeeEmail}</td>
+                    <td>
+                      <span className={workModeBadge(emp.workMode)}>
+                        {emp.workMode}
+                      </span>
                     </td>
                   </tr>
-                ))}
+                ))
+              )}
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
+        {numberOfPages > 1 && (
+          <div className="px-5 py-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <p className="text-xs text-slate-500 dark:text-slate-400">
+              Showing {(currentPage - 1) * itemsPerPage + 1}–
+              {Math.min(currentPage * itemsPerPage, filtered.length)} of{" "}
+              {filtered.length}
+            </p>
+            <div className="pagination">
+              <button
+                className="btn btn-ghost btn-xs"
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+              >
+                Prev
+              </button>
+              {Array.from({ length: numberOfPages }, (_, i) => (
+                <button
+                  key={i}
+                  className={`page-btn ${currentPage === i + 1 ? "active" : ""}`}
+                  onClick={() => setCurrentPage(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              ))}
+              <button
+                className="btn btn-ghost btn-xs"
+                onClick={() =>
+                  setCurrentPage((p) => Math.min(p + 1, numberOfPages))
+                }
+                disabled={currentPage === numberOfPages}
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-
-      <div className="employeeSort">
-        <div className="flex flex-row items-center gap-5">
-          <button
-            className={`employeeSortBtn activeSortBtn ${
-              currentPage === 1 ? "hidden" : ""
-            }`}
-            onClick={handlePrevBtn}
-            ref={employeeSortBtnRefs[0]}
-            value={0}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </button>
-
-          <button
-            className={`employeeSortBtn ${
-              endIndex >=
-              Object.values(props.dbData).filter(
-                (e) =>
-                  (!departmentFilter ||
-                    e.department.toLowerCase() === departmentFilter) &&
-                  (!workTypeFilter ||
-                    e.workMode.toLowerCase() === workTypeFilter) &&
-                  (!jobTitleFilter || e.role.toLowerCase() === jobTitleFilter)
-              ).length
-                ? "hidden"
-                : ""
-            }`}
-            onClick={handleNextBtn}
-            ref={employeeSortBtnRefs[1]}
-            value={1}
-          >
-            Next
-          </button>
-        </div>
-
-        <div className="pageNumGrp">
-          {Array.from({ length: numberOfPages }, (_, index) => (
-            <button
-              key={index + 1}
-              className={`pageNum ${
-                currentPage === index + 1 ? "activePageNum" : "bg-white"
-              }`}
-            >
-              {index + 1}
-            </button>
-          ))}
-        </div>
-      </div>
-    </section>
+    </div>
   );
 };
 

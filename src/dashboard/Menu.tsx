@@ -1,165 +1,120 @@
-import { SyntheticEvent, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import {
+  LayoutDashboard,
+  Users,
+  TrendingUp,
+  DollarSign,
+  FolderOpen,
+  Calendar,
+  HelpCircle,
+  Settings,
+  LogOut,
+  Sun,
+  Moon,
+} from "lucide-react";
+import { useApp } from "../context/AppContext";
+import { ConfirmModal } from "../components/Modal";
+import { useState } from "react";
 
-import iconHome from "../assets/octicon_home-24.svg";
-import iconUsers from "../assets/mynaui_users-group.svg";
-import iconPerformance from "../assets/fluent_arrow-growth-24-regular.svg";
-import iconPayroll from "../assets/healthicons_money-bag-outline.svg";
-import iconFolder from "../assets/fluent_document-folder-20-regular.svg";
-import iconHelp from "../assets/formkit_help.svg";
-import iconSettings from "../assets/fluent_settings-20-regular.svg";
-import iconLogout from "../assets/iconoir_log-out.svg";
-import sun from "../assets/sun.svg";
-import moon from "../assets/moon.svg";
+interface MenuProps {
+  sidebarOpen: boolean;
+  onClose: () => void;
+}
 
-type logOut = () => Promise<void>;
+const navItems = [
+  { path: "/", label: "Overview", icon: LayoutDashboard, exact: true },
+  { path: "/Employees", label: "Employees", icon: Users },
+  { path: "/Performance", label: "Performance", icon: TrendingUp },
+  { path: "/Payroll", label: "Payroll", icon: DollarSign },
+  { path: "/FileManager", label: "File Manager", icon: FolderOpen },
+  { path: "/schedule", label: "Schedule", icon: Calendar },
+];
 
-type menuProp = {
-  menu: any;
-  app: any;
-  logOut: logOut;
-};
+const bottomItems = [
+  { label: "Help & Support", icon: HelpCircle },
+  { label: "Settings", icon: Settings },
+];
 
-const Menu = (props: menuProp) => {
-  const menuRefs = [
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-    useRef<HTMLDivElement>(null),
-  ];
+const Menu = ({ sidebarOpen, onClose }: MenuProps) => {
+  const { logOut, isDark, toggleTheme } = useApp();
+  const location = useLocation();
+  const [logoutOpen, setLogoutOpen] = useState(false);
 
-  const appRef = props.app;
-
-  const [isToggled, setIsToggled] = useState(false);
-
-  const toggleTheme = () => {
-    appRef.current?.classList.toggle("dark");
-    setIsToggled(!isToggled);
-  };
-
-  const toggleMenuClass = (e: SyntheticEvent) => {
-    const clicked = Number(e.currentTarget.getAttribute("data-value"));
-
-    menuRefs.forEach((element, index) => {
-      const menu = element.current;
-
-      if (index === clicked) {
-        menu?.classList.add("activeMenuGrp");
-      } else {
-        menu?.classList.remove("activeMenuGrp");
-      }
-    });
+  const isActive = (path: string, exact?: boolean) => {
+    if (exact) return location.pathname === path;
+    return location.pathname.startsWith(path);
   };
 
   return (
-    <section className="menuScreen menuClosed" ref={props.menu}>
-      <div className="menuCollection">
-        <Link to={"/"}>
-          <div
-            className="menuGrp activeMenuGrp"
-            ref={menuRefs[0]}
-            data-value="0"
-            onClick={toggleMenuClass}
-          >
-            <img src={iconHome} alt="home icon" />
-            <p className="menutext">Overview</p>
-          </div>
-        </Link>
+    <>
+      <nav
+        className={`sidebar ${sidebarOpen ? "open" : ""}`}
+        aria-label="Sidebar navigation"
+      >
+        {/* Main nav */}
+        <div className="sidebar-group">
+          <p className="text-[10px] uppercase tracking-widest font-semibold text-slate-400 dark:text-slate-500 px-3 mb-2">
+            Menu
+          </p>
 
-        <Link to={"/Employees"}>
-          <div
-            className="menuGrp"
-            ref={menuRefs[1]}
-            data-value="1"
-            onClick={toggleMenuClass}
-          >
-            <img src={iconUsers} alt="profile icon" />
-            <p className="menutext">Employees</p>
-          </div>
-        </Link>
-
-        <Link to={"/Performance"}>
-          <div
-            className="menuGrp"
-            ref={menuRefs[2]}
-            data-value="2"
-            onClick={toggleMenuClass}
-          >
-            <img src={iconPerformance} alt="performance icon" />
-            <p className="menutext">Performance</p>
-          </div>
-        </Link>
-
-        <Link to={"/Payroll"}>
-          <div
-            className="menuGrp"
-            ref={menuRefs[3]}
-            data-value="3"
-            onClick={toggleMenuClass}
-          >
-            <img src={iconPayroll} alt="payroll icon" />
-            <p className="menutext">Payroll</p>
-          </div>
-        </Link>
-
-        <Link to={"/FileManager"}>
-          <div
-            className="menuGrp"
-            ref={menuRefs[4]}
-            data-value="4"
-            onClick={toggleMenuClass}
-          >
-            <img src={iconFolder} alt="folder icon" />
-            <p className="menutext">File Manager</p>
-          </div>
-        </Link>
-
-        <div className="menuGrp" onClick={toggleTheme}>
-          <img src={!isToggled ? moon : sun} alt="theme icon" className="h-5" />
-          <p>{!isToggled ? "Dark mode" : "Light mode"}</p>
-        </div>
-      </div>
-
-      <div className="menuCollection">
-        <div
-          className="menuGrp"
-          ref={menuRefs[5]}
-          data-value="5"
-          onClick={toggleMenuClass}
-        >
-          <img src={iconHelp} alt="help icon" />
-          <p className="menutext">Help/support</p>
+          {navItems.map(({ path, label, icon: Icon, exact }) => (
+            <Link key={path} to={path} onClick={onClose}>
+              <div
+                className={`sidebar-link ${isActive(path, exact) ? "active" : ""}`}
+              >
+                <Icon className="w-4 h-4 flex-shrink-0" />
+                <span>{label}</span>
+              </div>
+            </Link>
+          ))}
         </div>
 
-        <div
-          className="menuGrp"
-          ref={menuRefs[6]}
-          data-value="6"
-          onClick={toggleMenuClass}
-        >
-          <img src={iconSettings} alt="settings icon" />
-          <p className="menutext">Setting</p>
-        </div>
+        {/* Bottom section */}
+        <div className="sidebar-group">
+          {bottomItems.map(({ label, icon: Icon }) => (
+            <div key={label} className="sidebar-link">
+              <Icon className="w-4 h-4 flex-shrink-0" />
+              <span>{label}</span>
+            </div>
+          ))}
 
-        <div
-          className="menuGrp"
-          ref={menuRefs[7]}
-          data-value="7"
-          onClick={(e) => {
-            e.preventDefault();
-            toggleMenuClass(e);
-            props.logOut();
-          }}
-        >
-          <img src={iconLogout} alt="log out icon" />
-          <p className="menutext">Log out</p>
+          {/* Dark mode toggle */}
+          <button
+            className="sidebar-link w-full text-left"
+            onClick={toggleTheme}
+          >
+            {isDark ? (
+              <Sun className="w-4 h-4 flex-shrink-0" />
+            ) : (
+              <Moon className="w-4 h-4 flex-shrink-0" />
+            )}
+            <span>{isDark ? "Light mode" : "Dark mode"}</span>
+          </button>
+
+          {/* Logout */}
+          <button
+            className="sidebar-link w-full text-left text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600"
+            onClick={() => setLogoutOpen(true)}
+          >
+            <LogOut className="w-4 h-4 flex-shrink-0" />
+            <span>Log out</span>
+          </button>
         </div>
-      </div>
-    </section>
+      </nav>
+
+      <ConfirmModal
+        isOpen={logoutOpen}
+        onClose={() => setLogoutOpen(false)}
+        onConfirm={async () => {
+          await logOut();
+          setLogoutOpen(false);
+        }}
+        title="Log out"
+        message="Are you sure you want to log out of HR Sphere?"
+        confirmText="Log out"
+        isDanger
+      />
+    </>
   );
 };
 

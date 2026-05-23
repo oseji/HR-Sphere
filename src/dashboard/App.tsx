@@ -1,15 +1,9 @@
-import { SpeedInsights } from "@vercel/speed-insights/react";
-import { ChakraProvider } from "@chakra-ui/react";
+import { useState } from "react";
 import { Route, Switch } from "react-router-dom";
-import { useEffect, useRef, useState } from "react";
-import { db, auth } from "../config/firebase";
-import { getDocs, collection } from "firebase/firestore";
+import { Toaster } from "sonner";
+import { SpeedInsights } from "@vercel/speed-insights/react";
 
-import {
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-} from "firebase/auth";
+import { AppProvider, useApp } from "../context/AppContext";
 
 import LoginPage from "./LoginPage";
 import Menu from "./Menu";
@@ -18,292 +12,139 @@ import Employees from "./Employees";
 import Performance from "./Performance";
 import Payroll from "./Payroll";
 import FileManager from "./FileManager";
+import Schedule from "./Schedule";
 
+import searchIcon from "../assets/circum_search.png";
+import avatar from "../assets/esther.png";
 import menuIcon from "../assets/menu.svg";
 import closeMenu from "../assets/closeMenu.svg";
 import logo from "../assets/logo.png";
-import searchIcon from "../assets/circum_search.png";
-import avatar from "../assets/esther.png";
 
-export type dataType = {
-  employeeName: string;
-  employeeEmail: string;
-  employmentContract: string;
-  employeeFinances: {
-    monthlySalary: number;
-    totalSalary: number;
-    taxes: number;
-    netSalary: number;
-    isSalaryPaid: boolean;
-  };
-  department: string;
-  role: string;
-  workMode: string;
-  numberOfKPIs: number;
-  requests: {
-    sickLeave: boolean;
-    maternityLeave: boolean;
-    annualLeave: boolean;
-    resumeUpdate: boolean;
-    profileUpdate: boolean;
-  };
-  id: string;
-}[];
+// ─── Dashboard shell ──────────────────────────────────────────────────────────
 
-function App() {
-  const appRef = useRef<HTMLDivElement>(null);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  const [loginLoading, setIsLoginLoading] = useState<boolean>(false);
-
-  const [menuToggled, setMenuToggled] = useState<boolean>(false);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [admin, setAdmin] = useState(auth.currentUser?.email);
-
-  const [userEmail, setUserEmail] = useState<string>("");
-  const [userPassword, setUserPassword] = useState<string>("");
-
-  const [loginEmail, setLoginEmail] = useState<string>("fake@gmail.com");
-  const [loginPassword, setLoginPassword] = useState<string>("fakepassword");
-  const [confirmPassword, setConfirmPassword] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const errorMessageRef = [
-    useRef<HTMLParagraphElement>(null),
-    useRef<HTMLParagraphElement>(null),
-  ];
-
-  const [dbData, setDbData] = useState<dataType>([]);
-
-  const openCloseMenu = () => {
-    setMenuToggled(!menuToggled);
-    const menuBtn = menuRef.current;
-    menuBtn?.classList.toggle("menuClosed");
-  };
-
-  const errorMessageCleanUp = (text: string) => {
-    return text
-      .replace("Firebase: ", "")
-      .replace("Error ", "")
-      .replace("auth/", "")
-      .replace("(", "")
-      .replace(")", "")
-      .replace(/-/g, " ");
-  };
-
-  const createAccount = async () => {
-    try {
-      if (userPassword === confirmPassword) {
-        await createUserWithEmailAndPassword(auth, userEmail, userPassword);
-
-        setIsLoggedIn(true);
-        setUserEmail("");
-        setUserPassword("");
-
-        errorMessageRef[0].current?.classList.add("hidden");
-      } else {
-        throw new Error("Password does not match");
-      }
-    } catch (err: unknown) {
-      setIsLoggedIn(false);
-      if (err instanceof Error) {
-        setErrorMessage(errorMessageCleanUp(err.message));
-      } else {
-        setErrorMessage("An unexpected error occurred.");
-      }
-
-      errorMessageRef[0].current?.classList.remove("hidden");
-    }
-  };
-
-  const signIn = async () => {
-    setIsLoginLoading(true);
-
-    try {
-      await signInWithEmailAndPassword(auth, loginEmail, loginPassword);
-      setIsLoggedIn(true);
-
-      setLoginEmail("");
-      setLoginPassword("");
-
-      errorMessageRef[1].current?.classList.add("hidden");
-    } catch (err: unknown) {
-      console.error(err);
-
-      setIsLoggedIn(false);
-
-      if (err instanceof Error) {
-        setErrorMessage(errorMessageCleanUp(err.message));
-      } else {
-        setErrorMessage("An unexpected error occurred.");
-      }
-
-      errorMessageRef[1].current?.classList.remove("hidden");
-    } finally {
-      setIsLoginLoading(false);
-    }
-  };
-
-  const logOut = async () => {
-    setIsLoginLoading(true);
-
-    try {
-      await signOut(auth);
-      setIsLoggedIn(false);
-
-      setLoginEmail("");
-      setLoginPassword("");
-    } catch (err) {
-      console.error(err);
-      setIsLoggedIn(true);
-    } finally {
-      setIsLoginLoading(false);
-    }
-  };
-
-  const getEmployeeData = async () => {
-    const user = auth.currentUser;
-
-    try {
-      if (user) {
-        const q = collection(db, `users/${user.email}/employeeData`);
-
-        const data = (await getDocs(q)).docs;
-        const filteredData = data.map((doc) => ({
-          ...doc.data(),
-          id: doc.id,
-        })) as dataType;
-
-        setDbData(filteredData);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  // get employee data and current username once logged in
-  useEffect(() => {
-    console.log(dbData);
-
-    if (isLoggedIn) {
-      getEmployeeData();
-    }
-
-    if (auth.currentUser?.email) {
-      const name = auth.currentUser?.email?.split("@");
-      setAdmin(name[0]);
-    }
-
-    console.log(dbData);
-  }, [isLoggedIn]);
+function DashboardShell() {
+  const { admin, employeesLoading } = useApp();
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="App" ref={appRef}>
-      <ChakraProvider>
-        {/* login screen */}
-        {!isLoggedIn && (
-          <LoginPage
-            loginLoading={loginLoading}
-            setIsLoginLoading={setIsLoginLoading}
-            userEmail={userEmail}
-            setUserEmail={setUserEmail}
-            userPassword={userPassword}
-            setUserPassword={setUserPassword}
-            loginEmail={loginEmail}
-            setLoginEmail={setLoginEmail}
-            loginPassword={loginPassword}
-            setLoginPassword={setLoginPassword}
-            confirmPassword={confirmPassword}
-            setConfirmPassword={setConfirmPassword}
-            signIn={signIn}
-            createAccount={createAccount}
-            errorMessage={errorMessage}
-            setErrorMessage={setErrorMessage}
-            errorMessageRef={errorMessageRef}
-          ></LoginPage>
-        )}
+    <div className="flex flex-col min-h-screen">
+      {/* Header */}
+      <header>
+        <div className="flex items-center gap-4">
+          {/* Mobile sidebar toggle */}
+          <button
+            className="lg:hidden btn-icon"
+            onClick={() => setSidebarOpen((v) => !v)}
+            aria-label="Toggle sidebar"
+          >
+            <img src={sidebarOpen ? closeMenu : menuIcon} alt="" className="h-5 w-5" />
+          </button>
 
-        {/* dashboard interface */}
-        {isLoggedIn && (
-          <div className="dashboardInterface">
-            <header>
-              <div className=" flex flex-row items-center gap-10">
-                <img
-                  src={menuToggled ? closeMenu : menuIcon}
-                  alt="menu icon"
-                  className="lg:hidden h-8"
-                  onClick={openCloseMenu}
-                />
-
-                <div className="logoGrp">
-                  <img src={logo} alt="logo" className="block" />
-                  <h1 className="font-bold text-black dark:text-white w-[150px]">
-                    HR Sphere
-                  </h1>
-                </div>
-              </div>
-
-              <div className="w-full flex flex-row items-center justify-end lg:justify-between">
-                {/* <img
-                  src={menuToggled ? closeMenu : menuIcon}
-                  alt="menu icon"
-                  className="md:hidden h-8"
-                  onClick={openCloseMenu}
-                /> */}
-
-                <div className="inputGrp">
-                  <img src={searchIcon} alt="search icon" className="h-5" />
-                  <input
-                    type="text"
-                    placeholder="Search"
-                    className="w-full text-sm placeholder:text-sm dark:placeholder:text-white"
-                  />
-                </div>
-
-                <div className="flex flex-row items-center gap-5">
-                  <div className="profileGrp">
-                    <img src={avatar} alt="profile image" className="w-8" />
-                    <div className="profileName">
-                      {admin !== "" ? `Welcome back, ${admin}` : ""}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </header>
-
-            <main className="lg:flex flex-row lg:max-h-screen max-w-[100dvw] relative ">
-              <Menu menu={menuRef} app={appRef} logOut={logOut}></Menu>
-
-              <Switch>
-                <Route exact path="/">
-                  <Overview dbData={dbData}></Overview>
-                </Route>
-
-                <Route path={"/Employees"}>
-                  <Employees
-                    getEmployeeData={getEmployeeData}
-                    dbData={dbData}
-                  ></Employees>
-                </Route>
-
-                <Route path="/Performance">
-                  <Performance dbData={dbData}></Performance>
-                </Route>
-
-                <Route path="/Payroll">
-                  <Payroll dbData={dbData}></Payroll>
-                </Route>
-
-                <Route path="/FileManager">
-                  <FileManager></FileManager>
-                </Route>
-              </Switch>
-            </main>
+          {/* Logo */}
+          <div className="flex items-center gap-2.5">
+            <img src={logo} alt="HR Sphere" className="h-7 w-7" />
+            <span className="font-bold text-slate-900 dark:text-white text-base hidden md:block">
+              HR Sphere
+            </span>
           </div>
+        </div>
+
+        {/* Search */}
+        <div className="header-search">
+          <img src={searchIcon} alt="" className="h-4 w-4 opacity-50" />
+          <input
+            type="text"
+            placeholder="Search employees, reports…"
+            className="bg-transparent outline-none text-slate-700 dark:text-slate-300 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm w-full"
+          />
+        </div>
+
+        {/* Profile */}
+        <div className="flex items-center gap-3">
+          {employeesLoading && <span className="spinner" aria-label="Loading" />}
+          <div className="flex items-center gap-2.5 cursor-pointer group">
+            <img
+              src={avatar}
+              alt="Avatar"
+              className="w-8 h-8 rounded-full object-cover ring-2 ring-transparent group-hover:ring-buttonGreen/30 transition"
+            />
+            <span className="hidden md:block text-sm font-medium text-slate-700 dark:text-slate-300 capitalize">
+              {admin || "Admin"}
+            </span>
+          </div>
+        </div>
+      </header>
+
+      {/* Body */}
+      <div className="flex flex-1 relative">
+        {/* Sidebar overlay for mobile */}
+        {sidebarOpen && (
+          <div
+            className="fixed inset-0 z-20 bg-black/30 lg:hidden"
+            onClick={() => setSidebarOpen(false)}
+          />
         )}
 
-        <SpeedInsights framework="react" />
-      </ChakraProvider>
+        <Menu sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+        <Switch>
+          <Route exact path="/">
+            <Overview />
+          </Route>
+          <Route path="/employees">
+            <Employees />
+          </Route>
+          <Route path="/performance">
+            <Performance />
+          </Route>
+          <Route path="/payroll">
+            <Payroll />
+          </Route>
+          <Route path="/files">
+            <FileManager />
+          </Route>
+          <Route path="/schedule">
+            <Schedule />
+          </Route>
+          {/* Legacy capitalized routes */}
+          <Route path="/Employees">
+            <Employees />
+          </Route>
+          <Route path="/Performance">
+            <Performance />
+          </Route>
+          <Route path="/Payroll">
+            <Payroll />
+          </Route>
+          <Route path="/FileManager">
+            <FileManager />
+          </Route>
+        </Switch>
+      </div>
     </div>
+  );
+}
+
+// ─── Root ─────────────────────────────────────────────────────────────────────
+
+function AppInner() {
+  const { isLoggedIn } = useApp();
+  return isLoggedIn ? <DashboardShell /> : <LoginPage />;
+}
+
+function App() {
+  return (
+    <AppProvider>
+      <div className="App">
+        <Toaster
+          position="top-right"
+          richColors
+          toastOptions={{ duration: 3500 }}
+        />
+        <AppInner />
+        <SpeedInsights framework="react" />
+      </div>
+    </AppProvider>
   );
 }
 

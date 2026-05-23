@@ -1,367 +1,326 @@
-import { PieChart, Pie, Cell, ResponsiveContainer } from "recharts";
-
-import { LineChart, Line, XAxis, YAxis } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+} from "recharts";
+import { ChangeEvent, useState } from "react";
+import { TrendingUp, Award } from "lucide-react";
 
 import { data, efficiencyData, keyIndicator } from "../types";
-
-import { useState, useRef, ChangeEvent } from "react";
-
+import { useApp } from "../context/AppContext";
 import eomImg from "../assets/employee of the month.png";
 import upArrow from "../assets/up growth.svg";
-import avatar from "../assets/arlene.png";
 
-import { dataType } from "./App";
-type performanceProps = {
-  dbData: dataType;
+// ─── Helpers ─────────────────────────────────────────────────────────────────
+
+// Stable performance score based on employee ID hash
+const stableScore = (id: string): 1 | 2 | 3 | 4 => {
+  const hash = id.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0);
+  return ((hash % 4) + 1) as 1 | 2 | 3 | 4;
 };
 
-const Performance = (props: performanceProps) => {
-  const COLORS = ["#06D6A0", "#095256"];
-  const efficiencyCOLORS = ["#06D6A0", "#EBEBEB"];
+const performanceLabel = (score: 1 | 2 | 3 | 4) => {
+  const map = {
+    1: { label: "Poor",          cls: "badge-danger" },
+    2: { label: "Average",       cls: "badge-warning" },
+    3: { label: "Above Average", cls: "badge-info" },
+    4: { label: "Excellent",     cls: "badge-success" },
+  };
+  return map[score];
+};
 
-  const [departmentFilter, setDepartmentFilter] = useState<string>();
+// ─── Component ────────────────────────────────────────────────────────────────
 
-  const employeeSortBtnRefs = [
-    useRef<HTMLButtonElement>(null),
-    useRef<HTMLButtonElement>(null),
-  ];
+const Performance = () => {
+  const { dbData } = useApp();
 
-  // handle pagination
+  const COLORS           = ["#095256", "#06D6A0"];
+  const EFFICIENCY_COLORS = ["#06D6A0", "#f1f5f9"];
+
+  const [departmentFilter, setDepartmentFilter] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const numberOfPages = Math.ceil(
-    Object.values(props.dbData).filter(
-      (e) =>
-        !departmentFilter || e.department.toLowerCase() === departmentFilter
-    ).length / itemsPerPage
-  );
-
-  const handlePrevBtn = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handleNextBtn = () => {
-    if (
-      endIndex <
-      Object.values(props.dbData).filter(
-        (e) =>
-          !departmentFilter || e.department.toLowerCase() === departmentFilter
-      ).length
-    ) {
-      setCurrentPage(currentPage + 1);
-    }
-  };
 
   const listOfDepartments = [
-    ...new Set(props.dbData.map((item) => item.department.toLowerCase())),
+    ...new Set(dbData.map((e) => e.department.toLowerCase())),
+  ];
+
+  const filtered = dbData.filter(
+    (e) => !departmentFilter || e.department.toLowerCase() === departmentFilter
+  );
+  const numberOfPages = Math.ceil(filtered.length / itemsPerPage);
+  const pageSlice = filtered.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
+  // Pie data derived from real dbData
+  const contractCount  = dbData.filter((e) => e.employmentContract.toLowerCase() !== "full-time").length;
+  const fulltimeCount  = dbData.filter((e) => e.employmentContract.toLowerCase() === "full-time").length;
+  const realPieData    = [
+    { name: "Contract staff", value: contractCount || data[0].value },
+    { name: "Full-time staff", value: fulltimeCount || data[1].value },
   ];
 
   return (
-    <section className="performanceSection screenSection">
-      <div className="flex flex-col gap-3 w-full xl:w-auto">
-        <div className="flex flex-col lg:flex-row gap-3">
-          <div className="totalEmployeeChart  min-w-[227px]">
-            <div className="flex flex-row justify-between items-center boxHeading">
-              <h2>Total Employee</h2>
-              <h2>400</h2>
+    <div className="performance-section page-section">
+      {/* ── Left column ────────────────────────────────────────────── */}
+      <div className="flex flex-col gap-5 flex-1 min-w-0">
+        {/* Charts row */}
+        <div className="flex flex-col lg:flex-row gap-5">
+          {/* Total employee pie */}
+          <div className="card p-5 lg:w-60 flex-shrink-0">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="section-title">Total Employees</h3>
+              <span className="text-lg font-bold text-slate-900 dark:text-white">
+                {dbData.length}
+              </span>
             </div>
 
-            <PieChart width={200} height={200} className="mx-auto">
+            <PieChart width={200} height={180} className="mx-auto">
               <Pie
-                data={data}
-                cx={100}
-                cy={100}
-                innerRadius={60}
-                outerRadius={80}
-                fill="#8884d8"
-                paddingAngle={7}
+                data={realPieData}
+                cx={100} cy={90}
+                innerRadius={55} outerRadius={75}
+                paddingAngle={6}
                 dataKey="value"
               >
-                {data.map((_, index) => (
-                  <Cell
-                    key={`cell-${index}`}
-                    fill={COLORS[index % COLORS.length]}
-                  />
+                {realPieData.map((_, i) => (
+                  <Cell key={i} fill={COLORS[i % COLORS.length]} />
                 ))}
               </Pie>
+              <Tooltip
+                contentStyle={{
+                  fontSize: 11,
+                  borderRadius: 8,
+                  border: "1px solid #e2e8f0",
+                }}
+              />
             </PieChart>
 
-            <div className="barChartInfo text-[10px] mt-5">
-              <div className="flex flex-row items-center gap-2">
-                <span className="h-3 w-3 rounded bg-buttonGreen"></span>
-                <div>Contract staff</div>
+            <div className="chart-legend">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-sm bg-buttonGreen flex-shrink-0" />
+                <span className="text-xs text-slate-500 dark:text-slate-400">Contract</span>
               </div>
-
-              <div className="flex flex-row items-center gap-2">
-                <span className="h-3 w-3 rounded bg-[#06D6A0]"></span>
-                <div>Full time staff</div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-sm bg-[#06D6A0] flex-shrink-0" />
+                <span className="text-xs text-slate-500 dark:text-slate-400">Full-time</span>
               </div>
             </div>
           </div>
 
-          <div className="overflow-x-scroll lg:overflow-x-hidden">
-            <div className="keyIndicatorsChart">
-              <div className="flex flex-row items-center justify-between text-black mb-5">
-                <h2 className="boxHeading">Key Performance Indicators</h2>
+          {/* KPI line chart */}
+          <div className="card p-5 flex-1 min-w-0 overflow-x-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="section-title">Key Performance Indicators</h3>
+              <select className="form-select w-auto py-1.5 text-xs">
+                <option>All departments</option>
+                <option>Product</option>
+                <option>Engineering</option>
+              </select>
+            </div>
 
-                <select className="capitalize">
-                  <option value="all departments">all departments</option>
-                  <option value="product">product</option>
-                  <option value="engineering">engineering</option>
-                </select>
-              </div>
+            <ResponsiveContainer width="100%" height={170}>
+              <LineChart data={keyIndicator} margin={{ right: 15, top: 5, left: -30 }}>
+                <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 10, fill: "#94a3b8" }} axisLine={false} tickLine={false} />
+                <Tooltip
+                  contentStyle={{ fontSize: 11, borderRadius: 8, border: "1px solid #e2e8f0" }}
+                />
+                <Line type="monotone" dataKey="val1" stroke="#818CF8" strokeWidth={2} dot={false} activeDot={{ r: 5 }} />
+                <Line type="monotone" dataKey="val2" stroke="#FBBF24" strokeWidth={2} dot={false} activeDot={{ r: 5 }} />
+                <Line type="monotone" dataKey="val3" stroke="#A855F7" strokeWidth={2} dot={false} activeDot={{ r: 5 }} />
+              </LineChart>
+            </ResponsiveContainer>
 
-              <ResponsiveContainer height={200} width="100%">
-                <LineChart data={keyIndicator} margin={{ right: 25, top: 10 }}>
-                  <XAxis dataKey="month" className="text-xs" />
-                  <YAxis dataKey="val1" className="text-xs" />
-                  <Line
-                    type="monotone"
-                    dataKey="val1"
-                    stroke="#A5A5F9"
-                    activeDot={{ r: 8 }}
-                  />
-                  <Line type="monotone" dataKey="val2" stroke="#FFED4B" />
-                  <Line type="monotone" dataKey="val3" stroke="#990EE1" />
-                </LineChart>
-              </ResponsiveContainer>
-
-              <div className="flex flex-row items-center justify-center gap-5">
-                <div className="labelContainer">
-                  <div className="colorBox bg-[#A5A5F9]"></div>
-                  <p className="labelText">Monthly Active Users (MAUs)</p>
+            <div className="chart-legend">
+              {[
+                { color: "#818CF8", label: "Monthly Active Users" },
+                { color: "#FBBF24", label: "Customer Satisfaction" },
+                { color: "#A855F7", label: "Churn Rate" },
+              ].map(({ color, label }) => (
+                <div key={label} className="flex items-center gap-1.5">
+                  <span className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ background: color }} />
+                  <span className="text-xs text-slate-500 dark:text-slate-400">{label}</span>
                 </div>
-                <div className="labelContainer">
-                  <div className="colorBox bg-[#FFED4B]"></div>
-                  <p className="labelText">Customer Satisfaction</p>
-                </div>
-                <div className="labelContainer">
-                  <div className="colorBox bg-[#990EE1]"></div>
-                  <p className="labelText">Churn Rate</p>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
 
-        <div className="min-h-[371px] overflow-x-scroll lg:overflow-x-hidden">
-          <div className="employeePerformanceTable">
-            <div className="flex flex-row items-center justify-between mb-5">
-              <h2 className="boxHeading">Performance Overview</h2>
-
-              <div className="flex flex-row items-center gap-3">
-                <select>
-                  <option value="qtr1">quater 1</option>
-                  <option value="qtr2">quater 2</option>
-                  <option value="qtr3">quater 3</option>
-                  <option value="qtr4">quater 4</option>
-                </select>
-
-                <select
-                  onChange={(e: ChangeEvent<HTMLSelectElement>) => {
-                    setDepartmentFilter(e.currentTarget.value);
-                  }}
-                >
-                  <option value="">all departments</option>
-
-                  {listOfDepartments.map((element) => (
-                    <option key={element} value={element.toLowerCase()}>
-                      {element}
-                    </option>
-                  ))}
-                </select>
-              </div>
+        {/* Performance table */}
+        <div className="card overflow-hidden">
+          <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+            <h3 className="section-title">Performance Overview</h3>
+            <div className="flex items-center gap-2">
+              <select className="form-select w-auto py-1.5 text-xs">
+                <option value="qtr1">Q1</option>
+                <option value="qtr2">Q2</option>
+                <option value="qtr3">Q3</option>
+                <option value="qtr4">Q4</option>
+              </select>
+              <select
+                className="form-select w-auto py-1.5 text-xs"
+                onChange={(e: ChangeEvent<HTMLSelectElement>) => {
+                  setDepartmentFilter(e.target.value);
+                  setCurrentPage(1);
+                }}
+              >
+                <option value="">All departments</option>
+                {listOfDepartments.map((d) => (
+                  <option key={d} value={d}>{d}</option>
+                ))}
+              </select>
             </div>
+          </div>
 
-            <table className="text-xs w-full">
+          <div className="overflow-x-auto">
+            <table className="modern-table">
               <thead>
                 <tr>
-                  <th>employee</th>
-                  <th>job title</th>
-                  <th>performance</th>
+                  <th>Employee</th>
+                  <th>Job title</th>
+                  <th>Department</th>
+                  <th>Performance</th>
                 </tr>
               </thead>
-
               <tbody>
-                {Object.values(props.dbData)
-                  .filter(
-                    (e) =>
-                      !departmentFilter ||
-                      e.department.toLowerCase() === departmentFilter
-                  )
-                  .slice(startIndex, endIndex)
-                  .map((value, index) => (
-                    <tr key={index}>
-                      <td className="employeeName">
-                        <img src={avatar} alt="profile image" />
-                        <p> {value.employeeName}</p>
-                      </td>
-                      <td>{value.role}</td>
-                      <td>
-                        {((num) =>
-                          num === 1
-                            ? "Poor"
-                            : num === 2
-                            ? "Average"
-                            : num === 3
-                            ? "Above Average"
-                            : "Excellent")(Math.floor(Math.random() * 4) + 1)}
-                      </td>
-                    </tr>
-                  ))}
+                {pageSlice.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="py-16 text-center text-slate-400">
+                      No data available
+                    </td>
+                  </tr>
+                ) : (
+                  pageSlice.map((emp) => {
+                    const score = stableScore(emp.id);
+                    const { label, cls } = performanceLabel(score);
+                    return (
+                      <tr key={emp.id}>
+                        <td>
+                          <div className="employee-cell">
+                            <div className="employee-avatar">
+                              {emp.employeeName.slice(0, 2).toUpperCase()}
+                            </div>
+                            <span className="capitalize">{emp.employeeName}</span>
+                          </div>
+                        </td>
+                        <td className="capitalize">{emp.role}</td>
+                        <td className="capitalize">{emp.department}</td>
+                        <td>
+                          <span className={cls}>{label}</span>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
-        </div>
 
-        <div className="employeeSort pb-3">
-          <div className="flex flex-row items-center gap-5">
-            <button
-              className={`employeeSortBtn activeSortBtn ${
-                currentPage === 1 ? "hidden" : ""
-              }`}
-              onClick={handlePrevBtn}
-              ref={employeeSortBtnRefs[0]}
-              value={0}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </button>
-
-            <button
-              className={`employeeSortBtn ${
-                endIndex >=
-                Object.values(props.dbData).filter(
-                  (e) =>
-                    !departmentFilter ||
-                    e.department.toLowerCase() === departmentFilter
-                ).length
-                  ? "hidden"
-                  : ""
-              }`}
-              onClick={handleNextBtn}
-              ref={employeeSortBtnRefs[1]}
-              value={1}
-            >
-              Next
-            </button>
-          </div>
-
-          <div className="pageNumGrp">
-            {Array.from({ length: numberOfPages }, (_, index) => (
-              <button
-                key={index + 1}
-                className={`pageNum ${
-                  currentPage === index + 1 ? "activePageNum" : "bg-white"
-                }`}
-              >
-                {index + 1}
-              </button>
-            ))}
-          </div>
+          {numberOfPages > 1 && (
+            <div className="px-5 py-3 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <p className="text-xs text-slate-500">
+                {(currentPage - 1) * itemsPerPage + 1}–{Math.min(currentPage * itemsPerPage, filtered.length)} of {filtered.length}
+              </p>
+              <div className="pagination">
+                <button className="btn btn-ghost btn-xs" onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))} disabled={currentPage === 1}>Prev</button>
+                {Array.from({ length: numberOfPages }, (_, i) => (
+                  <button key={i} className={`page-btn ${currentPage === i + 1 ? "active" : ""}`} onClick={() => setCurrentPage(i + 1)}>{i + 1}</button>
+                ))}
+                <button className="btn btn-ghost btn-xs" onClick={() => setCurrentPage((p) => Math.min(p + 1, numberOfPages))} disabled={currentPage === numberOfPages}>Next</button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
-      <div className="flex flex-col gap-3">
-        <div className="teamEfficiencyGrp ">
-          <h2 className="boxHeading">Team Efficiency</h2>
+      {/* ── Right column ───────────────────────────────────────────── */}
+      <div className="flex flex-col gap-5 xl:w-64 flex-shrink-0">
+        {/* Team efficiency gauge */}
+        <div className="card p-5">
+          <h3 className="section-title mb-3">Team Efficiency</h3>
 
-          <PieChart width={260} height={150} className="mx-auto">
+          <PieChart width={220} height={130} className="mx-auto">
             <Pie
               data={efficiencyData}
-              cx={130}
-              cy={100}
-              startAngle={180}
-              endAngle={0}
-              innerRadius={60}
-              outerRadius={80}
-              fill="#8884d8"
+              cx={110} cy={110}
+              startAngle={180} endAngle={0}
+              innerRadius={55} outerRadius={75}
               paddingAngle={0}
               dataKey="value"
             >
-              {data.map((_, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={efficiencyCOLORS[index % efficiencyCOLORS.length]}
-                />
+              {efficiencyData.map((_, i) => (
+                <Cell key={i} fill={EFFICIENCY_COLORS[i % EFFICIENCY_COLORS.length]} />
               ))}
             </Pie>
           </PieChart>
 
-          <div className="text-center relative bottom-16">
-            <p className="text-black dark:text-white font-semibold text-xl">
-              80%
-            </p>
-
-            <div className="flex flex-row justify-center gap-1 text-xs">
-              <img src={upArrow} alt="growth icon" />
-              <p>+9.0% increase</p>
+          <div className="text-center -mt-8">
+            <p className="text-2xl font-bold text-slate-900 dark:text-white">80%</p>
+            <div className="flex items-center justify-center gap-1 text-xs text-slate-500">
+              <img src={upArrow} alt="" className="h-3" />
+              +9.0% this month
             </div>
           </div>
 
-          <div className="efficiencyTextGrp">
-            <h2 className="boxHeading">Great Job!</h2>
-
-            <p className="text-xs mb-2">
-              There has been 9.0% increase in your team’s efficiency versus the
-              previous month and the next training is slated for 22nd march
-              2024.
+          <div className="mt-4 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800">
+            <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 mb-1">
+              Great job!
             </p>
-
-            <button className="rounded text-white bg-[#095256] dark:bg-[#A9F2F6] dark:text-black px-3 py-1.5 w-fit text-sm">
-              Compare scores
-            </button>
+            <p className="text-xs text-emerald-600 dark:text-emerald-500 leading-relaxed">
+              9% efficiency increase vs last month. Next training: 22 Mar.
+            </p>
           </div>
+
+          <button className="btn btn-primary btn-sm w-full justify-center mt-3">
+            <TrendingUp className="w-3.5 h-3.5" /> Compare scores
+          </button>
         </div>
 
-        <div className="employeeOfTheMonth">
-          <h2 className="boxHeading">employee of the month</h2>
-
-          <div className="text-center">
-            <img
-              className="mx-auto mt-6 "
-              src={eomImg}
-              alt="employee of the month"
-            />
-
-            <h4 className="text-sm font-semibold text-black dark:text-white mt-3">
-              Ronald Richards
-            </h4>
-            <p className="text-xs">Product Designer</p>
+        {/* Employee of the month */}
+        <div className="card p-5">
+          <div className="flex items-center gap-2 mb-4">
+            <Award className="w-4 h-4 text-amber-500" />
+            <h3 className="section-title">Employee of the Month</h3>
           </div>
 
-          <div className="eomPerformanceGrp">
-            <div>
-              <h3 className="eomHeading">performance</h3>
+          <div className="text-center mb-4">
+            <img
+              src={eomImg}
+              alt="Employee of the month"
+              className="mx-auto w-20 h-20 rounded-full object-cover ring-4 ring-faintGreen dark:ring-darkModeGreen mb-3"
+            />
+            <p className="text-sm font-semibold text-slate-900 dark:text-white">Ronald Richards</p>
+            <p className="text-xs text-slate-500 dark:text-slate-400">Product Designer</p>
+          </div>
 
-              <p className="eomNum">78%</p>
-
-              <p className="eomSmallText">average of 40%</p>
-            </div>
-
-            <div>
-              <h3 className="eomHeading">attendance</h3>
-
-              <p className="eomNum">99%</p>
-
-              <p className="eomSmallText">average of 75%</p>
-            </div>
-
-            <div>
-              <h3 className="eomHeading">KPIs</h3>
-
-              <p className="eomNum">14</p>
-
-              <p className="eomSmallText">average of 10</p>
-            </div>
+          <div className="grid grid-cols-3 gap-2 text-center">
+            {[
+              { label: "Performance", value: "78%", avg: "avg 40%" },
+              { label: "Attendance", value: "99%", avg: "avg 75%" },
+              { label: "KPIs",       value: "14",  avg: "avg 10" },
+            ].map(({ label, value, avg }) => (
+              <div
+                key={label}
+                className="bg-slate-50 dark:bg-slate-800/50 rounded-xl p-2"
+              >
+                <p className="text-[10px] text-slate-400 dark:text-slate-500 mb-0.5">{label}</p>
+                <p className="text-sm font-bold text-buttonGreen dark:text-[#A9F2F6]">{value}</p>
+                <p className="text-[9px] text-slate-400">{avg}</p>
+              </div>
+            ))}
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
