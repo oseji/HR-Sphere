@@ -123,7 +123,7 @@ const LoginPage = () => {
                 placeholder="you@company.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="form-input"
+                className="form-input w-full"
               />
             </div>
 
@@ -140,7 +140,7 @@ const LoginPage = () => {
                   placeholder="••••••••"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="form-input pr-10"
+                  className="form-input w-full pr-10"
                 />
                 <button
                   type="button"
@@ -168,7 +168,7 @@ const LoginPage = () => {
                   placeholder="••••••••"
                   value={confirm}
                   onChange={(e) => setConfirm(e.target.value)}
-                  className="form-input"
+                  className="form-input w-full"
                 />
               </div>
             )}
