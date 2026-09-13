@@ -12,7 +12,7 @@ import { ChangeEvent, useState } from "react";
 import {
     Users,
     UserMinus,
-    UserPlus,
+    Inbox,
     CheckCircle2,
     XCircle,
     ChevronRight,
@@ -145,7 +145,7 @@ const Stats = () => {
                             Resignations
                         </p>
                         <div className="stat-icon-wrap bg-red-50 dark:bg-red-900/20">
-                            <UserMinus className="w-5 h-5 text-red-500" />
+                            <UserMinus className="w-5 h-5 text-red-600 dark:text-red-400" />
                         </div>
                     </div>
                     <p className="text-3xl font-bold text-slate-900 dark:text-white">
@@ -161,7 +161,7 @@ const Stats = () => {
                             Pending Requests
                         </p>
                         <div className="stat-icon-wrap bg-amber-50 dark:bg-amber-900/20">
-                            <UserPlus className="w-5 h-5 text-amber-500" />
+                            <Inbox className="w-5 h-5 text-amber-600 dark:text-amber-400" />
                         </div>
                     </div>
                     <p className="text-3xl font-bold text-slate-900 dark:text-white">
@@ -334,10 +334,10 @@ const Stats = () => {
                                                                         actionLoading ===
                                                                         loadKey
                                                                     }
-                                                                    className="p-1 transition-colors rounded-md text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 disabled:opacity-50"
+                                                                    className="btn-icon !p-1.5 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 hover:text-emerald-800 disabled:opacity-50"
                                                                     aria-label={`Approve ${label.toLowerCase()} for ${emp.employeeName}`}
                                                                 >
-                                                                    <CheckCircle2 className="w-3.5 h-3.5" />
+                                                                    <CheckCircle2 className="w-4 h-4" />
                                                                 </button>
                                                                 <button
                                                                     onClick={() =>
@@ -351,10 +351,10 @@ const Stats = () => {
                                                                         actionLoading ===
                                                                         loadKey
                                                                     }
-                                                                    className="p-1 text-red-500 transition-colors rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50"
+                                                                    className="btn-icon !p-1.5 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-700 disabled:opacity-50"
                                                                     aria-label={`Deny ${label.toLowerCase()} for ${emp.employeeName}`}
                                                                 >
-                                                                    <XCircle className="w-3.5 h-3.5" />
+                                                                    <XCircle className="w-4 h-4" />
                                                                 </button>
                                                             </div>
                                                         </div>

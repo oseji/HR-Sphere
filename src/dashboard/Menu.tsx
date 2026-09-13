@@ -15,6 +15,7 @@ import {
 import { useApp } from "../context/AppContext";
 import { ConfirmModal } from "../components/Modal";
 import { useState } from "react";
+import { toast } from "sonner";
 
 interface MenuProps {
   sidebarOpen: boolean;
@@ -23,10 +24,10 @@ interface MenuProps {
 
 const navItems = [
   { path: "/", label: "Overview", icon: LayoutDashboard, exact: true },
-  { path: "/Employees", label: "Employees", icon: Users },
-  { path: "/Performance", label: "Performance", icon: TrendingUp },
-  { path: "/Payroll", label: "Payroll", icon: DollarSign },
-  { path: "/FileManager", label: "File Manager", icon: FolderOpen },
+  { path: "/employees", label: "Employees", icon: Users },
+  { path: "/performance", label: "Performance", icon: TrendingUp },
+  { path: "/payroll", label: "Payroll", icon: DollarSign },
+  { path: "/files", label: "File Manager", icon: FolderOpen },
   { path: "/schedule", label: "Schedule", icon: Calendar },
 ];
 
@@ -42,14 +43,15 @@ const Menu = ({ sidebarOpen, onClose }: MenuProps) => {
 
   const isActive = (path: string, exact?: boolean) => {
     if (exact) return location.pathname === path;
-    return location.pathname.startsWith(path);
+    return location.pathname.toLowerCase().startsWith(path);
   };
 
   return (
     <>
       <nav
+        id="sidebar-nav"
         className={`sidebar ${sidebarOpen ? "open" : ""}`}
-        aria-label="Sidebar navigation"
+        aria-label="Main"
       >
         {/* Main nav */}
         <div className="sidebar-group">
@@ -57,46 +59,59 @@ const Menu = ({ sidebarOpen, onClose }: MenuProps) => {
             Menu
           </p>
 
-          {navItems.map(({ path, label, icon: Icon, exact }) => (
-            <Link key={path} to={path} onClick={onClose}>
-              <div
-                className={`sidebar-link ${isActive(path, exact) ? "active" : ""}`}
+          {navItems.map(({ path, label, icon: Icon, exact }) => {
+            const active = isActive(path, exact);
+            return (
+              <Link
+                key={path}
+                to={path}
+                onClick={onClose}
+                className={`sidebar-link ${active ? "active" : ""}`}
+                aria-current={active ? "page" : undefined}
               >
-                <Icon className="w-4 h-4 flex-shrink-0" />
+                <Icon className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
                 <span>{label}</span>
-              </div>
-            </Link>
-          ))}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Bottom section */}
         <div className="sidebar-group">
           {bottomItems.map(({ label, icon: Icon }) => (
-            <div key={label} className="sidebar-link">
-              <Icon className="w-4 h-4 flex-shrink-0" />
+            <button
+              key={label}
+              type="button"
+              className="sidebar-link w-full text-left"
+              onClick={() => toast.info(`${label} is coming soon`)}
+            >
+              <Icon className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
               <span>{label}</span>
-            </div>
+            </button>
           ))}
 
           {/* Dark mode toggle */}
           <button
+            type="button"
             className="sidebar-link w-full text-left"
             onClick={toggleTheme}
+            aria-pressed={isDark}
           >
             {isDark ? (
-              <Sun className="w-4 h-4 flex-shrink-0" />
+              <Sun className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
             ) : (
-              <Moon className="w-4 h-4 flex-shrink-0" />
+              <Moon className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
             )}
             <span>{isDark ? "Light mode" : "Dark mode"}</span>
           </button>
 
           {/* Logout */}
           <button
-            className="sidebar-link w-full text-left text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600"
+            type="button"
+            className="sidebar-link w-full text-left text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-700"
             onClick={() => setLogoutOpen(true)}
           >
-            <LogOut className="w-4 h-4 flex-shrink-0" />
+            <LogOut className="w-4 h-4 flex-shrink-0" aria-hidden="true" />
             <span>Log out</span>
           </button>
         </div>

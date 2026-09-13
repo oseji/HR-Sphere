@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useId, useRef, useState } from "react";
 import { Search, Plus, FolderOpen, MoreHorizontal, Download, Trash2 } from "lucide-react";
 import { folders, files } from "../types";
 import { toast } from "sonner";
@@ -15,6 +15,30 @@ interface DocCardProps {
 
 const DocCard = ({ thumbnail, name, size, date, typeOfDoc }: DocCardProps) => {
   const [menuOpen, setMenuOpen] = useState(false);
+  const menuId = useId();
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Keyboard: Escape closes and returns focus; focus first item on open
+  useEffect(() => {
+    if (!menuOpen) return;
+    menuRef.current?.querySelector<HTMLButtonElement>("[role=menuitem]")?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setMenuOpen(false);
+        triggerRef.current?.focus();
+      }
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+        const items = [...(menuRef.current?.querySelectorAll<HTMLButtonElement>("[role=menuitem]") ?? [])];
+        const i = items.indexOf(document.activeElement as HTMLButtonElement);
+        const next = e.key === "ArrowDown" ? (i + 1) % items.length : (i - 1 + items.length) % items.length;
+        items[next]?.focus();
+        e.preventDefault();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [menuOpen]);
 
   return (
     <div className="doc-card relative">
@@ -25,29 +49,41 @@ const DocCard = ({ thumbnail, name, size, date, typeOfDoc }: DocCardProps) => {
         </span>
         <div className="relative">
           <button
-            className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+            ref={triggerRef}
+            className="btn-icon -m-2 text-slate-500"
             onClick={(e) => { e.stopPropagation(); setMenuOpen((v) => !v); }}
             aria-label={`Options for ${name}`}
+            aria-haspopup="menu"
+            aria-expanded={menuOpen}
+            aria-controls={menuId}
           >
-            <MoreHorizontal className="w-3.5 h-3.5" />
+            <MoreHorizontal className="w-4 h-4" />
           </button>
 
           {/* Dropdown */}
           {menuOpen && (
             <>
-              <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-              <div className="absolute right-0 top-7 z-20 bg-white dark:bg-darkCard border border-slate-100 dark:border-slate-800 rounded-xl shadow-card-hover p-1 min-w-[130px]">
+              <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} aria-hidden="true" />
+              <div
+                ref={menuRef}
+                id={menuId}
+                role="menu"
+                aria-label={`Options for ${name}`}
+                className="absolute right-0 top-8 z-20 bg-white dark:bg-darkCard border border-slate-200 dark:border-slate-700 rounded-xl shadow-card-hover p-1 min-w-[140px]"
+              >
                 <button
-                  className="flex items-center gap-2 w-full px-3 py-2 text-xs rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300"
+                  role="menuitem"
+                  className="flex items-center gap-2 w-full px-3 py-2 min-h-[36px] text-xs rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300 focus-visible:outline-none focus-visible:bg-slate-100 dark:focus-visible:bg-slate-800"
                   onClick={() => { toast.info("Download started"); setMenuOpen(false); }}
                 >
-                  <Download className="w-3 h-3" /> Download
+                  <Download className="w-3.5 h-3.5" aria-hidden="true" /> Download
                 </button>
                 <button
-                  className="flex items-center gap-2 w-full px-3 py-2 text-xs rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-500"
+                  role="menuitem"
+                  className="flex items-center gap-2 w-full px-3 py-2 min-h-[36px] text-xs rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 text-red-600 dark:text-red-400 focus-visible:outline-none focus-visible:bg-red-50 dark:focus-visible:bg-red-900/20"
                   onClick={() => { toast.error("Delete not available in demo"); setMenuOpen(false); }}
                 >
-                  <Trash2 className="w-3 h-3" /> Delete
+                  <Trash2 className="w-3.5 h-3.5" aria-hidden="true" /> Delete
                 </button>
               </div>
             </>
@@ -57,7 +93,7 @@ const DocCard = ({ thumbnail, name, size, date, typeOfDoc }: DocCardProps) => {
 
       {/* Icon */}
       <div className="flex flex-col items-center gap-1">
-        <img src={thumbnail} alt={typeOfDoc} className="h-9 w-9 object-contain" />
+        <img src={thumbnail} alt="" className="h-9 w-9 object-contain" />
         <p className="text-xs text-center text-slate-700 dark:text-slate-300 leading-tight line-clamp-2">
           {name}
         </p>
@@ -116,7 +152,7 @@ const FileManager = () => {
         <div className="flex items-center gap-2">
           {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500 pointer-events-none" aria-hidden="true" />
             <input
               type="text"
               placeholder="Search files…"
@@ -154,13 +190,13 @@ const FileManager = () => {
       <div>
         <div className="flex items-center justify-between mb-3">
           <h3 className="section-title flex items-center gap-2">
-            <FolderOpen className="w-4 h-4 text-amber-500" />
+            <FolderOpen className="w-4 h-4 text-amber-600 dark:text-amber-400" aria-hidden="true" />
             Folders
             <span className="text-xs font-normal text-slate-400">({filteredFolders.length})</span>
           </h3>
           {filteredFolders.length > DEFAULT_FOLDERS && (
             <button
-              className="text-xs text-buttonGreen dark:text-[#A9F2F6] hover:underline font-medium"
+              className="btn btn-ghost btn-xs text-buttonGreen dark:text-[#A9F2F6]"
               onClick={() => setShowAllFolders((v) => !v)}
             >
               {showAllFolders ? "Show less" : `See all (${filteredFolders.length})`}
@@ -188,7 +224,7 @@ const FileManager = () => {
           </h3>
           {filteredFiles.length > DEFAULT_FILES && (
             <button
-              className="text-xs text-buttonGreen dark:text-[#A9F2F6] hover:underline font-medium"
+              className="btn btn-ghost btn-xs text-buttonGreen dark:text-[#A9F2F6]"
               onClick={() => setShowAllFiles((v) => !v)}
             >
               {showAllFiles ? "Show less" : `See all (${filteredFiles.length})`}

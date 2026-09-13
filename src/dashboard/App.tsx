@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Route, Switch } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
+import { Redirect, Route, Switch, useHistory } from "react-router-dom";
 import { Toaster } from "sonner";
 import { SpeedInsights } from "@vercel/speed-insights/react";
 
@@ -25,6 +25,33 @@ import logo from "../assets/logo.png";
 function DashboardShell() {
   const { admin, employeesLoading } = useApp();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [query, setQuery] = useState("");
+  const history = useHistory();
+  const toggleRef = useRef<HTMLButtonElement>(null);
+
+  // Mobile sidebar: Escape closes and returns focus; lock body scroll while open
+  useEffect(() => {
+    if (!sidebarOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setSidebarOpen(false);
+        toggleRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [sidebarOpen]);
+
+  const submitSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = query.trim();
+    history.push(q ? `/employees?q=${encodeURIComponent(q)}` : "/employees");
+  };
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -33,9 +60,12 @@ function DashboardShell() {
         <div className="flex items-center gap-4">
           {/* Mobile sidebar toggle */}
           <button
+            ref={toggleRef}
             className="lg:hidden btn-icon"
             onClick={() => setSidebarOpen((v) => !v)}
-            aria-label="Toggle sidebar"
+            aria-label={sidebarOpen ? "Close navigation" : "Open navigation"}
+            aria-expanded={sidebarOpen}
+            aria-controls="sidebar-nav"
           >
             <img src={sidebarOpen ? closeMenu : menuIcon} alt="" className="h-5 w-5" />
           </button>
@@ -50,24 +80,26 @@ function DashboardShell() {
         </div>
 
         {/* Search */}
-        <div className="header-search">
-          <img src={searchIcon} alt="" className="h-4 w-4 opacity-50" />
+        <form className="header-search" role="search" onSubmit={submitSearch}>
+          <img src={searchIcon} alt="" className="h-4 w-4 opacity-60" />
           <input
-            type="text"
-            placeholder="Search employees, reports…"
-            aria-label="Search employees and reports"
-            className="bg-transparent outline-none text-slate-700 dark:text-slate-300 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm w-full"
+            type="search"
+            placeholder="Search employees…"
+            aria-label="Search employees"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            className="bg-transparent outline-none text-slate-700 dark:text-slate-300 placeholder:text-slate-500 dark:placeholder:text-slate-400 text-sm w-full"
           />
-        </div>
+        </form>
 
         {/* Profile */}
         <div className="flex items-center gap-3">
           {employeesLoading && <span className="spinner" aria-label="Loading" />}
-          <div className="flex items-center gap-2.5 cursor-pointer group">
+          <div className="flex items-center gap-2.5">
             <img
               src={avatar}
               alt=""
-              className="w-8 h-8 rounded-full object-cover ring-2 ring-transparent group-hover:ring-buttonGreen/30 transition"
+              className="w-8 h-8 rounded-full object-cover ring-2 ring-faintGreen dark:ring-darkModeGreen"
             />
             <span className="hidden md:block text-sm font-medium text-slate-700 dark:text-slate-300 capitalize">
               {admin || "Admin"}
@@ -81,8 +113,9 @@ function DashboardShell() {
         {/* Sidebar overlay for mobile */}
         {sidebarOpen && (
           <div
-            className="fixed inset-0 z-20 bg-black/30 lg:hidden"
+            className="fixed inset-0 z-20 bg-black/50 lg:hidden"
             onClick={() => setSidebarOpen(false)}
+            aria-hidden="true"
           />
         )}
 
@@ -108,18 +141,10 @@ function DashboardShell() {
             <Schedule />
           </Route>
           {/* Legacy capitalized routes */}
-          <Route path="/Employees">
-            <Employees />
-          </Route>
-          <Route path="/Performance">
-            <Performance />
-          </Route>
-          <Route path="/Payroll">
-            <Payroll />
-          </Route>
-          <Route path="/FileManager">
-            <FileManager />
-          </Route>
+          <Redirect from="/Employees" to="/employees" />
+          <Redirect from="/Performance" to="/performance" />
+          <Redirect from="/Payroll" to="/payroll" />
+          <Redirect from="/FileManager" to="/files" />
         </Switch>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { ChangeEvent, useState } from "react";
-import { Download, Printer, RefreshCw } from "lucide-react";
+import { Download, Printer, RefreshCw, Check, Circle } from "lucide-react";
 import { useApp } from "../context/AppContext";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -132,7 +132,7 @@ const Payroll = () => {
               onClick={() => window.print()}
               aria-label="Print"
             >
-              <Printer className="w-4 h-4" />
+              <Printer className="w-4 h-4" aria-hidden="true" />
               <span className="hidden sm:inline">Print</span>
             </button>
 
@@ -140,7 +140,7 @@ const Payroll = () => {
               className="btn btn-secondary btn-sm"
               onClick={() => exportCSV(filtered, period)}
             >
-              <Download className="w-4 h-4" />
+              <Download className="w-4 h-4" aria-hidden="true" />
               Export CSV
             </button>
           </div>
@@ -183,7 +183,7 @@ const Payroll = () => {
                 <th>Employee</th>
                 <th>Department</th>
                 <th>Annual salary</th>
-                <th>Per month</th>
+                <th>Monthly salary</th>
                 <th>Annual tax</th>
                 <th>Net salary</th>
                 <th>Status</th>
@@ -217,27 +217,25 @@ const Payroll = () => {
                     </td>
                     <td>
                       <button
+                        role="switch"
+                        aria-checked={emp.employeeFinances.isSalaryPaid}
+                        aria-label={`${emp.employeeName} salary paid`}
                         onClick={() => handleToggle(emp.id, emp.employeeFinances.isSalaryPaid)}
                         disabled={toggling === emp.id}
-                        className={`badge cursor-pointer transition-all hover:opacity-80 active:scale-95 ${
+                        className={`btn btn-xs gap-1.5 border transition-all active:scale-95 ${
                           emp.employeeFinances.isSalaryPaid
-                            ? "badge-success"
-                            : "badge-danger"
+                            ? "bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100 dark:bg-emerald-900/20 dark:text-emerald-400 dark:border-emerald-700"
+                            : "bg-white text-slate-600 border-slate-300 hover:border-buttonGreen hover:text-buttonGreen dark:bg-transparent dark:text-slate-400 dark:border-slate-600 dark:hover:text-[#A9F2F6]"
                         }`}
-                        aria-label={
-                          emp.employeeFinances.isSalaryPaid
-                            ? "Mark as unpaid"
-                            : "Mark as paid"
-                        }
-                        title="Click to toggle payment status"
                       >
                         {toggling === emp.id ? (
-                          <RefreshCw className="w-3 h-3 animate-spin" />
+                          <RefreshCw className="w-3.5 h-3.5 animate-spin" aria-hidden="true" />
                         ) : emp.employeeFinances.isSalaryPaid ? (
-                          "Paid"
+                          <Check className="w-3.5 h-3.5" aria-hidden="true" />
                         ) : (
-                          "Not paid"
+                          <Circle className="w-3.5 h-3.5" aria-hidden="true" />
                         )}
+                        {emp.employeeFinances.isSalaryPaid ? "Paid" : "Mark paid"}
                       </button>
                     </td>
                   </tr>

@@ -1,11 +1,12 @@
 import { useState, useId, ChangeEvent } from "react";
-import { Search, Plus, Pencil, Trash2, X, Users } from "lucide-react";
+import { useLocation } from "react-router-dom";
+import { Search, Plus, Pencil, Trash2, Users } from "lucide-react";
 import {
     useApp,
     NewEmployeeInput,
     EmployeeRecord,
 } from "../context/AppContext";
-import { ConfirmModal } from "../components/Modal";
+import { Modal, ConfirmModal } from "../components/Modal";
 
 //Helpers
 const initials = (name: string) =>
@@ -209,7 +210,7 @@ const EmployeeForm = ({
                     onClick={onCancel}
                     className="flex-1 btn btn-ghost btn-sm"
                 >
-                    <X className="w-3.5 h-3.5" /> Cancel
+                    Cancel
                 </button>
                 <button
                     type="submit"
@@ -246,14 +247,18 @@ const Employees = () => {
         deleteEmployee,
     } = useApp();
 
-    const [searchFilter, setSearchFilter] = useState("");
+    // Header search navigates here with ?q=
+    const initialQuery =
+        new URLSearchParams(useLocation().search).get("q") ?? "";
+
+    const [searchFilter, setSearchFilter] = useState(initialQuery);
     const [contractFilter, setContractFilter] = useState("");
     const [workModeFilter, setWorkModeFilter] = useState("");
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = window.innerWidth < 640 ? 3 : 6;
 
-    const [panelMode, setPanelMode] = useState<"add" | "edit" | null>("add");
+    const [formOpen, setFormOpen] = useState(false);
     const [editTarget, setEditTarget] = useState<EmployeeRecord | null>(null);
 
     const [deleteTarget, setDeleteTarget] = useState<EmployeeRecord | null>(
@@ -286,28 +291,27 @@ const Employees = () => {
         currentPage * itemsPerPage,
     );
 
+    const openAdd = () => {
+        setEditTarget(null);
+        setFormOpen(true);
+    };
+
     const openEdit = (emp: EmployeeRecord) => {
         setEditTarget(emp);
-        setPanelMode("edit");
+        setFormOpen(true);
     };
 
-    const handleAdd = async (data: NewEmployeeInput) => {
-        setFormLoading(true);
-        try {
-            await addEmployee(data);
-            setPanelMode("add");
-        } finally {
-            setFormLoading(false);
-        }
+    const closeForm = () => {
+        setFormOpen(false);
+        setEditTarget(null);
     };
 
-    const handleEdit = async (data: NewEmployeeInput) => {
-        if (!editTarget) return;
+    const handleSubmit = async (data: NewEmployeeInput) => {
         setFormLoading(true);
         try {
-            await updateEmployee(editTarget.id, data);
-            setPanelMode("add");
-            setEditTarget(null);
+            if (editTarget) await updateEmployee(editTarget.id, data);
+            else await addEmployee(data);
+            closeForm();
         } finally {
             setFormLoading(false);
         }
@@ -340,259 +344,229 @@ const Employees = () => {
         : undefined;
 
     return (
-        <div className="flex flex-col gap-5 page-section xl:flex-row">
-            {/* Employee list  */}
-            <div className="flex flex-col flex-1 min-w-0 gap-4">
-                {/* Header row */}
-                <div className="flex flex-wrap items-center justify-between gap-3">
-                    <h2 className="page-heading">Employees</h2>
+        <div className="flex flex-col gap-4 page-section">
+            {/* Header row */}
+            <div className="flex flex-wrap items-center justify-between gap-3">
+                <h2 className="page-heading">Employees</h2>
 
-                    <div className="flex flex-wrap items-center gap-2">
-                        {/* Search */}
-                        <div className="relative hidden md:block">
-                            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" />
-
-                            <input
-                                type="text"
-                                placeholder="Search…"
-                                aria-label="Search employees by name"
-                                className="form-input !pl-9 pr-3 py-1.5 w-44 text-xs"
-                                value={searchFilter}
-                                onChange={(e) => {
-                                    setSearchFilter(e.target.value);
-                                    setCurrentPage(1);
-                                }}
-                            />
-                        </div>
-
-                        {/* Work mode */}
-                        <select
-                            className="form-select py-1.5 text-xs w-auto"
-                            aria-label="Filter by work mode"
+                <div className="flex flex-wrap items-center gap-2">
+                    {/* Search */}
+                    <div className="relative">
+                        <Search
+                            className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-500 pointer-events-none"
+                            aria-hidden="true"
+                        />
+                        <input
+                            type="search"
+                            placeholder="Search…"
+                            aria-label="Search employees by name"
+                            className="form-input pl-9 pr-3 py-1.5 w-44 text-xs"
+                            value={searchFilter}
                             onChange={(e) => {
-                                setWorkModeFilter(e.target.value);
+                                setSearchFilter(e.target.value);
                                 setCurrentPage(1);
                             }}
-                        >
-                            <option value="">All modes</option>
-                            {listOfWorkmodes.map((m) => (
-                                <option key={m} value={m}>
-                                    {m}
-                                </option>
-                            ))}
-                        </select>
-
-                        {/* Contract */}
-                        <select
-                            className="form-select py-1.5 text-xs w-auto"
-                            aria-label="Filter by contract type"
-                            onChange={(e) => {
-                                setContractFilter(e.target.value);
-                                setCurrentPage(1);
-                            }}
-                        >
-                            <option value="">All contracts</option>
-                            {listOfContracts.map((c) => (
-                                <option key={c} value={c}>
-                                    {c}
-                                </option>
-                            ))}
-                        </select>
+                        />
                     </div>
-                </div>
 
-                {/* Employee cards */}
-                {employeesLoading ? (
-                    <div className="flex items-center justify-center py-24">
-                        <span className="spinner spinner-lg" />
-                    </div>
-                ) : pageSlice.length === 0 ? (
-                    <div className="py-24 empty-state card">
-                        <div className="flex flex-col items-center mx-auto w-fit">
-                            <Users className="w-10 h-10 mb-3 text-slate-300 dark:text-slate-600" />
-                            <p className="section-title">No employees found</p>
-                            <p className="mt-1 text-sm text-slate-400">
-                                {dbData.length === 0
-                                    ? "Add your first employee using the form."
-                                    : "Try adjusting your filters."}
-                            </p>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
-                        {pageSlice.map((emp) => (
-                            <div key={emp.id} className="employee-card group">
-                                {/* Card header */}
-                                <div className="flex items-start justify-between gap-2">
-                                    <div className="flex items-center min-w-0 gap-3">
-                                        <div className="w-10 h-10 text-sm employee-avatar">
-                                            {initials(emp.employeeName)}
-                                        </div>
-                                        <div className="min-w-0">
-                                            <p className="text-sm font-semibold capitalize truncate text-slate-900 dark:text-white">
-                                                {emp.employeeName}
-                                            </p>
-                                            <p className="text-xs capitalize truncate text-slate-500 dark:text-slate-400">
-                                                {emp.role}
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    {/* Action buttons */}
-                                    <div className="flex-shrink-0 employee-card-actions">
-                                        <button
-                                            className="btn-icon"
-                                            onClick={() => openEdit(emp)}
-                                            aria-label={`Edit ${emp.employeeName}`}
-                                        >
-                                            <Pencil className="w-3.5 h-3.5" />
-                                        </button>
-                                        <button
-                                            className="text-red-400 btn-icon hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600"
-                                            onClick={() => setDeleteTarget(emp)}
-                                            aria-label={`Delete ${emp.employeeName}`}
-                                        >
-                                            <Trash2 className="w-3.5 h-3.5" />
-                                        </button>
-                                    </div>
-                                </div>
-
-                                {/* Details */}
-                                <div className="flex flex-col gap-1 text-xs text-slate-500 dark:text-slate-400">
-                                    <div className="flex items-center justify-between">
-                                        <span>Dept.</span>
-                                        <span className="capitalize text-slate-700 dark:text-slate-300">
-                                            {emp.department}
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <span>Salary</span>
-                                        <span className="font-medium text-slate-700 dark:text-slate-300">
-                                            ₦
-                                            {emp.employeeFinances.monthlySalary.toLocaleString()}
-                                            /mo
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center justify-between">
-                                        <span>Email</span>
-                                        <span className="text-slate-700 dark:text-slate-300 truncate max-w-[130px]">
-                                            {emp.employeeEmail}
-                                        </span>
-                                    </div>
-                                </div>
-
-                                {/* Badges */}
-                                <div className="flex flex-wrap items-center gap-2 pt-1">
-                                    <span
-                                        className={workModeBadge(emp.workMode)}
-                                    >
-                                        {emp.workMode}
-                                    </span>
-                                    <span
-                                        className={contractBadge(
-                                            emp.employmentContract,
-                                        )}
-                                    >
-                                        {emp.employmentContract}
-                                    </span>
-                                </div>
-                            </div>
+                    {/* Work mode */}
+                    <select
+                        className="form-select py-1.5 text-xs w-auto"
+                        aria-label="Filter by work mode"
+                        onChange={(e) => {
+                            setWorkModeFilter(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                    >
+                        <option value="">All modes</option>
+                        {listOfWorkmodes.map((m) => (
+                            <option key={m} value={m}>
+                                {m}
+                            </option>
                         ))}
-                    </div>
-                )}
+                    </select>
 
-                {/* Pagination */}
-                {numberOfPages > 1 && (
-                    <div className="flex items-center justify-between pt-2 mt-auto">
-                        <p className="text-xs text-slate-500 dark:text-slate-400">
-                            {(currentPage - 1) * itemsPerPage + 1}–
-                            {Math.min(
-                                currentPage * itemsPerPage,
-                                filtered.length,
-                            )}{" "}
-                            of {filtered.length}
-                        </p>
-                        <div className="pagination">
-                            <button
-                                className="btn btn-ghost btn-xs"
-                                onClick={() =>
-                                    setCurrentPage((p) => Math.max(p - 1, 1))
-                                }
-                                disabled={currentPage === 1}
-                            >
-                                Prev
-                            </button>
-                            {Array.from({ length: numberOfPages }, (_, i) => (
-                                <button
-                                    key={i}
-                                    className={`page-btn ${currentPage === i + 1 ? "active" : ""}`}
-                                    onClick={() => setCurrentPage(i + 1)}
-                                >
-                                    {i + 1}
-                                </button>
-                            ))}
-                            <button
-                                className="btn btn-ghost btn-xs"
-                                onClick={() =>
-                                    setCurrentPage((p) =>
-                                        Math.min(p + 1, numberOfPages),
-                                    )
-                                }
-                                disabled={currentPage === numberOfPages}
-                            >
-                                Next
-                            </button>
-                        </div>
-                    </div>
-                )}
+                    {/* Contract */}
+                    <select
+                        className="form-select py-1.5 text-xs w-auto"
+                        aria-label="Filter by contract type"
+                        onChange={(e) => {
+                            setContractFilter(e.target.value);
+                            setCurrentPage(1);
+                        }}
+                    >
+                        <option value="">All contracts</option>
+                        {listOfContracts.map((c) => (
+                            <option key={c} value={c}>
+                                {c}
+                            </option>
+                        ))}
+                    </select>
+
+                    <button className="btn btn-primary btn-sm" onClick={openAdd}>
+                        <Plus className="w-3.5 h-3.5" aria-hidden="true" />
+                        Add employee
+                    </button>
+                </div>
             </div>
 
-            {/* Add / Edit panel  */}
-            <div className="w-full xl:w-[340px] flex-shrink-0">
-                <div className="sticky card top-5">
-                    <div className="flex items-center justify-between px-6 pt-5 pb-3 border-b border-slate-100 dark:border-slate-800">
-                        <h3 className="section-title">
-                            {panelMode === "edit" && editTarget
-                                ? `Edit: ${editTarget.employeeName.split(" ")[0]}`
-                                : "Add employee"}
-                        </h3>
-                        {panelMode === "edit" && (
-                            <button
-                                className="btn-icon"
-                                aria-label="Cancel editing"
-                                onClick={() => {
-                                    setPanelMode("add");
-                                    setEditTarget(null);
-                                }}
-                            >
-                                <X className="w-4 h-4" />
+            {/* Employee cards */}
+            {employeesLoading ? (
+                <div className="flex items-center justify-center py-24">
+                    <span className="spinner spinner-lg" aria-label="Loading employees" />
+                </div>
+            ) : pageSlice.length === 0 ? (
+                <div className="py-24 card">
+                    <div className="flex flex-col items-center mx-auto text-center w-fit">
+                        <Users className="w-10 h-10 mb-3 text-slate-300 dark:text-slate-600" aria-hidden="true" />
+                        <p className="section-title">No employees found</p>
+                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
+                            {dbData.length === 0
+                                ? "Add your first employee to get started."
+                                : "Try adjusting your filters."}
+                        </p>
+                        {dbData.length === 0 && (
+                            <button className="mt-4 btn btn-primary btn-sm" onClick={openAdd}>
+                                <Plus className="w-3.5 h-3.5" aria-hidden="true" />
+                                Add employee
                             </button>
                         )}
                     </div>
-
-                    {panelMode === "edit" && editInitial ? (
-                        <EmployeeForm
-                            key={editTarget?.id}
-                            initial={editInitial}
-                            onSubmit={handleEdit}
-                            onCancel={() => {
-                                setPanelMode("add");
-                                setEditTarget(null);
-                            }}
-                            submitLabel="Save changes"
-                            loading={formLoading}
-                        />
-                    ) : (
-                        <EmployeeForm
-                            key="add"
-                            onSubmit={handleAdd}
-                            onCancel={() => {}}
-                            submitLabel="Add employee"
-                            loading={formLoading}
-                        />
-                    )}
                 </div>
-            </div>
+            ) : (
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                    {pageSlice.map((emp) => (
+                        <div key={emp.id} className="employee-card group">
+                            {/* Card header */}
+                            <div className="flex items-start justify-between gap-2">
+                                <div className="flex items-center min-w-0 gap-3">
+                                    <div className="w-10 h-10 text-sm employee-avatar" aria-hidden="true">
+                                        {initials(emp.employeeName)}
+                                    </div>
+                                    <div className="min-w-0">
+                                        <p className="text-sm font-semibold capitalize truncate text-slate-900 dark:text-white">
+                                            {emp.employeeName}
+                                        </p>
+                                        <p className="text-xs capitalize truncate text-slate-500 dark:text-slate-400">
+                                            {emp.role}
+                                        </p>
+                                    </div>
+                                </div>
+
+                                {/* Action buttons */}
+                                <div className="flex-shrink-0 employee-card-actions">
+                                    <button
+                                        className="btn-icon"
+                                        onClick={() => openEdit(emp)}
+                                        aria-label={`Edit ${emp.employeeName}`}
+                                    >
+                                        <Pencil className="w-3.5 h-3.5" />
+                                    </button>
+                                    <button
+                                        className="text-red-600 btn-icon hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-700 dark:text-red-400"
+                                        onClick={() => setDeleteTarget(emp)}
+                                        aria-label={`Delete ${emp.employeeName}`}
+                                    >
+                                        <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                </div>
+                            </div>
+
+                            {/* Details */}
+                            <dl className="flex flex-col gap-1 text-xs text-slate-500 dark:text-slate-400">
+                                <div className="flex items-center justify-between gap-3">
+                                    <dt>Dept.</dt>
+                                    <dd className="capitalize truncate text-slate-700 dark:text-slate-300">
+                                        {emp.department}
+                                    </dd>
+                                </div>
+                                <div className="flex items-center justify-between gap-3">
+                                    <dt>Salary</dt>
+                                    <dd className="font-medium text-slate-700 dark:text-slate-300">
+                                        ₦
+                                        {emp.employeeFinances.monthlySalary.toLocaleString()}
+                                        /mo
+                                    </dd>
+                                </div>
+                                <div className="flex items-center justify-between gap-3">
+                                    <dt>Email</dt>
+                                    <dd className="truncate text-slate-700 dark:text-slate-300" title={emp.employeeEmail}>
+                                        {emp.employeeEmail}
+                                    </dd>
+                                </div>
+                            </dl>
+
+                            {/* Badges */}
+                            <div className="flex flex-wrap items-center gap-2 pt-1">
+                                <span className={workModeBadge(emp.workMode)}>
+                                    {emp.workMode}
+                                </span>
+                                <span className={contractBadge(emp.employmentContract)}>
+                                    {emp.employmentContract}
+                                </span>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+
+            {/* Pagination */}
+            {numberOfPages > 1 && (
+                <nav
+                    className="flex items-center justify-between pt-2 mt-auto"
+                    aria-label="Employee pages"
+                >
+                    <p className="text-xs text-slate-500 dark:text-slate-400">
+                        {(currentPage - 1) * itemsPerPage + 1}–
+                        {Math.min(currentPage * itemsPerPage, filtered.length)}{" "}
+                        of {filtered.length}
+                    </p>
+                    <div className="pagination">
+                        <button
+                            className="btn btn-ghost btn-xs"
+                            onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                            disabled={currentPage === 1}
+                        >
+                            Prev
+                        </button>
+                        {Array.from({ length: numberOfPages }, (_, i) => (
+                            <button
+                                key={i}
+                                className={`page-btn ${currentPage === i + 1 ? "active" : ""}`}
+                                aria-current={currentPage === i + 1 ? "page" : undefined}
+                                onClick={() => setCurrentPage(i + 1)}
+                            >
+                                {i + 1}
+                            </button>
+                        ))}
+                        <button
+                            className="btn btn-ghost btn-xs"
+                            onClick={() =>
+                                setCurrentPage((p) => Math.min(p + 1, numberOfPages))
+                            }
+                            disabled={currentPage === numberOfPages}
+                        >
+                            Next
+                        </button>
+                    </div>
+                </nav>
+            )}
+
+            {/* Add / Edit modal */}
+            <Modal
+                isOpen={formOpen}
+                onClose={closeForm}
+                title={editTarget ? `Edit ${editTarget.employeeName}` : "Add employee"}
+            >
+                <EmployeeForm
+                    key={editTarget?.id ?? "add"}
+                    initial={editInitial}
+                    onSubmit={handleSubmit}
+                    onCancel={closeForm}
+                    submitLabel={editTarget ? "Save changes" : "Add employee"}
+                    loading={formLoading}
+                />
+            </Modal>
 
             {/* Delete confirm */}
             <ConfirmModal

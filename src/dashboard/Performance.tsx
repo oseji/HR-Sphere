@@ -14,6 +14,7 @@ import { TrendingUp, Award } from "lucide-react";
 
 import { data, efficiencyData, keyIndicator } from "../types";
 import { useApp } from "../context/AppContext";
+import { tooltipStyle, tickColor } from "../lib/chart";
 import eomImg from "../assets/employee of the month.png";
 import upArrow from "../assets/up growth.svg";
 
@@ -38,10 +39,10 @@ const performanceLabel = (score: 1 | 2 | 3 | 4) => {
 //  Component
 
 const Performance = () => {
-    const { dbData } = useApp();
+    const { dbData, isDark } = useApp();
 
-    const COLORS = ["#095256", "#06D6A0"];
-    const EFFICIENCY_COLORS = ["#06D6A0", "#f1f5f9"];
+    const COLORS = [isDark ? "#0E7C82" : "#095256", "#059669"];
+    const EFFICIENCY_COLORS = ["#059669", isDark ? "#27272a" : "#e2e8f0"];
 
     const [departmentFilter, setDepartmentFilter] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -106,24 +107,18 @@ const Performance = () => {
                                     />
                                 ))}
                             </Pie>
-                            <Tooltip
-                                contentStyle={{
-                                    fontSize: 11,
-                                    borderRadius: 8,
-                                    border: "1px solid #e2e8f0",
-                                }}
-                            />
+                            <Tooltip contentStyle={tooltipStyle(isDark)} />
                         </PieChart>
 
                         <div className="chart-legend">
                             <div className="flex items-center gap-1.5">
-                                <span className="w-2.5 h-2.5 rounded-sm bg-buttonGreen flex-shrink-0" />
+                                <span className="w-2.5 h-2.5 rounded-sm bg-buttonGreen dark:bg-[#0E7C82] flex-shrink-0" />
                                 <span className="text-xs text-slate-500 dark:text-slate-400">
                                     Contract
                                 </span>
                             </div>
                             <div className="flex items-center gap-1.5">
-                                <span className="w-2.5 h-2.5 rounded-sm bg-[#06D6A0] flex-shrink-0" />
+                                <span className="w-2.5 h-2.5 rounded-sm bg-[#059669] flex-shrink-0" />
                                 <span className="text-xs text-slate-500 dark:text-slate-400">
                                     Full-time
                                 </span>
@@ -151,22 +146,16 @@ const Performance = () => {
                             >
                                 <XAxis
                                     dataKey="month"
-                                    tick={{ fontSize: 11, fill: "#94a3b8" }}
+                                    tick={{ fontSize: 12, fill: tickColor(isDark) }}
                                     axisLine={false}
                                     tickLine={false}
                                 />
                                 <YAxis
-                                    tick={{ fontSize: 10, fill: "#94a3b8" }}
+                                    tick={{ fontSize: 12, fill: tickColor(isDark) }}
                                     axisLine={false}
                                     tickLine={false}
                                 />
-                                <Tooltip
-                                    contentStyle={{
-                                        fontSize: 11,
-                                        borderRadius: 8,
-                                        border: "1px solid #e2e8f0",
-                                    }}
-                                />
+                                <Tooltip contentStyle={tooltipStyle(isDark)} />
                                 <Line
                                     type="monotone"
                                     dataKey="val1"

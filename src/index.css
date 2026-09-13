@@ -20,6 +20,8 @@ input::-webkit-outer-spin-button {
 ::-webkit-scrollbar-thumb { @apply bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 rounded-full; }
 ::-webkit-scrollbar-track { @apply bg-transparent; }
 
+@layer components {
+
 /* ─── BASE ─────────────────────────────────────────────────────────── */
 
 .App {
@@ -86,15 +88,15 @@ input::-webkit-outer-spin-button {
 }
 
 .btn-sm {
-  @apply px-3 py-1.5 text-xs;
+  @apply px-3 py-2 text-xs min-h-[32px];
 }
 
 .btn-xs {
-  @apply px-2 py-1 text-xs;
+  @apply px-2.5 py-1.5 text-xs min-h-[32px];
 }
 
 .btn-icon {
-  @apply btn p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800
+  @apply btn p-2.5 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800
          hover:text-slate-700 dark:hover:text-slate-300;
 }
 
@@ -106,7 +108,7 @@ input::-webkit-outer-spin-button {
 
 .form-input {
   @apply px-3 py-2 text-sm rounded-lg
-         border border-slate-200 dark:border-slate-700
+         border border-slate-300 dark:border-slate-600
          bg-white dark:bg-[#1C1C1E]
          text-slate-900 dark:text-white
          placeholder:text-slate-500 dark:placeholder:text-slate-400
@@ -198,8 +200,8 @@ input::-webkit-outer-spin-button {
 }
 
 .page-btn {
-  @apply w-8 h-8 rounded-lg text-xs font-medium flex items-center justify-center
-         border border-slate-200 dark:border-slate-700
+  @apply min-w-[32px] h-8 px-2 rounded-lg text-xs font-medium flex items-center justify-center
+         border border-slate-300 dark:border-slate-600
          text-slate-600 dark:text-slate-400
          hover:border-buttonGreen hover:text-buttonGreen dark:hover:text-[#A9F2F6]
          transition-all duration-150;
@@ -226,7 +228,7 @@ header {
 
 .header-search {
   @apply hidden lg:flex items-center gap-2.5 w-72 px-3 py-2
-         rounded-lg border border-slate-200 dark:border-slate-700
+         rounded-lg border border-slate-300 dark:border-slate-600
          bg-slate-50 dark:bg-[#1C1C1E] text-sm;
 }
 
@@ -253,7 +255,7 @@ header {
 }
 
 .sidebar-link {
-  @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm
+  @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-buttonGreen/60
          text-slate-600 dark:text-slate-400
          hover:bg-slate-50 dark:hover:bg-slate-800
          hover:text-slate-900 dark:hover:text-white
@@ -292,9 +294,10 @@ header {
   @apply flex items-center gap-1.5 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-150;
 }
 
-/* Touch devices have no hover — keep actions visible */
+/* Touch devices: no hover, and targets should be ≥ 44px */
 @media (hover: none) {
   .employee-card-actions { @apply opacity-100; }
+  .btn-icon, .page-btn, .btn-sm, .btn-xs { @apply min-h-[44px] min-w-[44px]; }
 }
 
 /* ─── OVERVIEW ─────────────────────────────────────────────────────── */
@@ -339,7 +342,7 @@ header {
 /* ─── FILE MANAGER ─────────────────────────────────────────────────── */
 
 .doc-card {
-  @apply card card-hover p-3 flex flex-col justify-between h-[130px] cursor-pointer;
+  @apply card card-hover p-3 flex flex-col justify-between h-[130px];
 }
 
 /* ─── SCHEDULE ─────────────────────────────────────────────────────── */
@@ -407,3 +410,5 @@ header {
 .overviewScreen     { @apply overview-screen; }
 .screenSection      { @apply page-section; }
 .boxHeading         { @apply section-title; }
+
+} /* @layer components */
