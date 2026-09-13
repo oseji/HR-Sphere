@@ -55,6 +55,7 @@ function DashboardShell() {
           <input
             type="text"
             placeholder="Search employees, reports…"
+            aria-label="Search employees and reports"
             className="bg-transparent outline-none text-slate-700 dark:text-slate-300 placeholder:text-slate-400 dark:placeholder:text-slate-500 text-sm w-full"
           />
         </div>
@@ -65,7 +66,7 @@ function DashboardShell() {
           <div className="flex items-center gap-2.5 cursor-pointer group">
             <img
               src={avatar}
-              alt="Avatar"
+              alt=""
               className="w-8 h-8 rounded-full object-cover ring-2 ring-transparent group-hover:ring-buttonGreen/30 transition"
             />
             <span className="hidden md:block text-sm font-medium text-slate-700 dark:text-slate-300 capitalize">

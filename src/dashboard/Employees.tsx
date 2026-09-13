@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { useState, useId, ChangeEvent } from "react";
 import { Search, Plus, Pencil, Trash2, X, Users } from "lucide-react";
 import {
     useApp,
@@ -61,6 +61,8 @@ const EmployeeForm = ({
     loading,
 }: EmployeeFormProps) => {
     const [form, setForm] = useState<NewEmployeeInput>(initial);
+    const uid = useId();
+    const fid = (name: string) => `${uid}-${name}`;
 
     const set =
         (field: keyof NewEmployeeInput) =>
@@ -93,8 +95,9 @@ const EmployeeForm = ({
         <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6">
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <label className="form-label">First name</label>
+                    <label htmlFor={fid("firstName")} className="form-label">First name</label>
                     <input
+                        id={fid("firstName")}
                         className="w-full form-input"
                         placeholder="Jane"
                         value={form.firstName}
@@ -103,8 +106,9 @@ const EmployeeForm = ({
                     />
                 </div>
                 <div>
-                    <label className="form-label">Last name</label>
+                    <label htmlFor={fid("lastName")} className="form-label">Last name</label>
                     <input
+                        id={fid("lastName")}
                         className="w-full form-input"
                         placeholder="Smith"
                         value={form.lastName}
@@ -115,8 +119,9 @@ const EmployeeForm = ({
             </div>
 
             <div>
-                <label className="form-label">Email address</label>
+                <label htmlFor={fid("email")} className="form-label">Email address</label>
                 <input
+                    id={fid("email")}
                     type="email"
                     className="w-full form-input"
                     placeholder="jane@company.com"
@@ -128,8 +133,9 @@ const EmployeeForm = ({
 
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <label className="form-label">Department</label>
+                    <label htmlFor={fid("department")} className="form-label">Department</label>
                     <input
+                        id={fid("department")}
                         className="w-full form-input"
                         placeholder="Engineering"
                         value={form.department}
@@ -138,8 +144,9 @@ const EmployeeForm = ({
                     />
                 </div>
                 <div>
-                    <label className="form-label">Job title</label>
+                    <label htmlFor={fid("role")} className="form-label">Job title</label>
                     <input
+                        id={fid("role")}
                         className="w-full form-input"
                         placeholder="Software Engineer"
                         value={form.role}
@@ -151,8 +158,9 @@ const EmployeeForm = ({
 
             <div className="grid grid-cols-2 gap-4">
                 <div>
-                    <label className="form-label">Contract type</label>
+                    <label htmlFor={fid("employmentContract")} className="form-label">Contract type</label>
                     <select
+                        id={fid("employmentContract")}
                         className="w-full form-select"
                         value={form.employmentContract}
                         onChange={set("employmentContract")}
@@ -163,8 +171,9 @@ const EmployeeForm = ({
                     </select>
                 </div>
                 <div>
-                    <label className="form-label">Work mode</label>
+                    <label htmlFor={fid("workMode")} className="form-label">Work mode</label>
                     <select
+                        id={fid("workMode")}
                         className="w-full form-select"
                         value={form.workMode}
                         onChange={set("workMode")}
@@ -177,8 +186,9 @@ const EmployeeForm = ({
             </div>
 
             <div>
-                <label className="form-label">Monthly salary (₦)</label>
+                <label htmlFor={fid("monthlySalary")} className="form-label">Monthly salary (₦)</label>
                 <input
+                    id={fid("monthlySalary")}
                     type="number"
                     className="w-full form-input"
                     placeholder="150000"
@@ -187,7 +197,7 @@ const EmployeeForm = ({
                     required
                 />
                 {form.monthlySalary > 0 && (
-                    <p className="mt-1 text-xs text-slate-400 dark:text-slate-500">
+                    <p className="mt-1 text-xs text-slate-500 dark:text-slate-400">
                         Annual: ₦{(form.monthlySalary * 12).toLocaleString()}
                     </p>
                 )}
@@ -345,6 +355,7 @@ const Employees = () => {
                             <input
                                 type="text"
                                 placeholder="Search…"
+                                aria-label="Search employees by name"
                                 className="form-input !pl-9 pr-3 py-1.5 w-44 text-xs"
                                 value={searchFilter}
                                 onChange={(e) => {
@@ -357,6 +368,7 @@ const Employees = () => {
                         {/* Work mode */}
                         <select
                             className="form-select py-1.5 text-xs w-auto"
+                            aria-label="Filter by work mode"
                             onChange={(e) => {
                                 setWorkModeFilter(e.target.value);
                                 setCurrentPage(1);
@@ -373,6 +385,7 @@ const Employees = () => {
                         {/* Contract */}
                         <select
                             className="form-select py-1.5 text-xs w-auto"
+                            aria-label="Filter by contract type"
                             onChange={(e) => {
                                 setContractFilter(e.target.value);
                                 setCurrentPage(1);
@@ -430,14 +443,14 @@ const Employees = () => {
                                         <button
                                             className="btn-icon"
                                             onClick={() => openEdit(emp)}
-                                            aria-label="Edit employee"
+                                            aria-label={`Edit ${emp.employeeName}`}
                                         >
                                             <Pencil className="w-3.5 h-3.5" />
                                         </button>
                                         <button
                                             className="text-red-400 btn-icon hover:bg-red-50 dark:hover:bg-red-900/20 hover:text-red-600"
                                             onClick={() => setDeleteTarget(emp)}
-                                            aria-label="Delete employee"
+                                            aria-label={`Delete ${emp.employeeName}`}
                                         >
                                             <Trash2 className="w-3.5 h-3.5" />
                                         </button>
@@ -546,6 +559,7 @@ const Employees = () => {
                         {panelMode === "edit" && (
                             <button
                                 className="btn-icon"
+                                aria-label="Cancel editing"
                                 onClick={() => {
                                     setPanelMode("add");
                                     setEditTarget(null);

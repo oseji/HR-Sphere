@@ -3,6 +3,8 @@ import {
     Bar,
     Rectangle,
     XAxis,
+    YAxis,
+    CartesianGrid,
     Tooltip,
     ResponsiveContainer,
 } from "recharts";
@@ -18,6 +20,7 @@ import {
 
 import { chartData } from "../types";
 import { useApp, RequestType } from "../context/AppContext";
+import { tooltipStyle, tickColor, gridColor } from "../lib/chart";
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -51,7 +54,7 @@ const REQUEST_TYPES: RequestMeta[] = [
 // ─── Component ────────────────────────────────────────────────────────────────
 
 const Stats = () => {
-    const { dbData, toggleRequest } = useApp();
+    const { dbData, toggleRequest, isDark } = useApp();
 
     const [chartYears, setChartYears] = useState(5);
     const currentChartData = chartData.slice(chartData.length - chartYears);
@@ -132,7 +135,7 @@ const Stats = () => {
                     <p className="text-3xl font-bold text-slate-900 dark:text-white">
                         {dbData.length}
                     </p>
-                    <p className="text-xs text-slate-400">Active headcount</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Active headcount</p>
                 </div>
 
                 {/* Resignations */}
@@ -148,7 +151,7 @@ const Stats = () => {
                     <p className="text-3xl font-bold text-slate-900 dark:text-white">
                         0
                     </p>
-                    <p className="text-xs text-slate-400">This month</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">This month</p>
                 </div>
 
                 {/* Pending requests */}
@@ -164,7 +167,7 @@ const Stats = () => {
                     <p className="text-3xl font-bold text-slate-900 dark:text-white">
                         {totalPending}
                     </p>
-                    <p className="text-xs text-slate-400">Awaiting review</p>
+                    <p className="text-xs text-slate-500 dark:text-slate-400">Awaiting review</p>
                 </div>
             </div>
 
@@ -178,6 +181,7 @@ const Stats = () => {
                         </h3>
                         <select
                             className="form-select w-auto text-xs py-1.5"
+                            aria-label="Chart time range"
                             onChange={(e: ChangeEvent<HTMLSelectElement>) =>
                                 setChartYears(Number(e.target.value))
                             }
@@ -196,48 +200,58 @@ const Stats = () => {
                             margin={{
                                 top: 10,
                                 right: 10,
-                                left: -20,
+                                left: 0,
                                 bottom: 0,
                             }}
                         >
+                            <CartesianGrid
+                                vertical={false}
+                                stroke={gridColor(isDark)}
+                            />
                             <XAxis
                                 dataKey="name"
-                                tick={{ fontSize: 11, fill: "#94a3b8" }}
+                                tick={{ fontSize: 12, fill: tickColor(isDark) }}
                                 axisLine={false}
                                 tickLine={false}
                             />
+                            <YAxis
+                                tick={{ fontSize: 12, fill: tickColor(isDark) }}
+                                axisLine={false}
+                                tickLine={false}
+                                width={36}
+                                unit="%"
+                            />
                             <Tooltip
-                                contentStyle={{
-                                    background: "var(--tw-bg-opacity, #fff)",
-                                    border: "1px solid #e2e8f0",
-                                    borderRadius: 8,
-                                    fontSize: 12,
-                                }}
+                                cursor={{ fill: isDark ? "#ffffff0d" : "#0f172a0a" }}
+                                contentStyle={tooltipStyle(isDark)}
+                                formatter={(v: number) => `${v}%`}
                             />
                             <Bar
                                 dataKey="RetentionRate"
-                                fill="#095256"
+                                name="Retention rate"
+                                fill={isDark ? "#0E7C82" : "#095256"}
                                 radius={[4, 4, 0, 0]}
-                                activeBar={<Rectangle fill="#074144" />}
+                                activeBar={<Rectangle fill={isDark ? "#139AA2" : "#074144"} />}
                             />
                             <Bar
                                 dataKey="TurnoverRate"
-                                fill="#06D6A0"
+                                name="Turnover rate"
+                                fill="#059669"
                                 radius={[4, 4, 0, 0]}
-                                activeBar={<Rectangle fill="#05B587" />}
+                                activeBar={<Rectangle fill="#047857" />}
                             />
                         </BarChart>
                     </ResponsiveContainer>
 
                     <div className="chart-legend">
                         <div className="flex items-center gap-2 chart-legend-item">
-                            <span className="chart-legend-dot bg-buttonGreen" />
+                            <span className="chart-legend-dot bg-buttonGreen dark:bg-[#0E7C82]" />
                             <span className="text-xs text-slate-500 dark:text-slate-400">
                                 Retention Rate
                             </span>
                         </div>
                         <div className="flex items-center gap-2 chart-legend-item">
-                            <span className="chart-legend-dot bg-[#06D6A0]" />
+                            <span className="chart-legend-dot bg-[#059669]" />
                             <span className="text-xs text-slate-500 dark:text-slate-400">
                                 Turnover Rate
                             </span>
@@ -261,6 +275,7 @@ const Stats = () => {
                                 <div key={key}>
                                     <button
                                         className="w-full request-row"
+                                        aria-expanded={isExpanded}
                                         onClick={() =>
                                             setExpandedRequest(
                                                 isExpanded ? null : key,
@@ -290,7 +305,7 @@ const Stats = () => {
                                     {isExpanded && (
                                         <div className="ml-2 mb-2 flex flex-col gap-1.5">
                                             {count === 0 ? (
-                                                <p className="px-2 py-1 text-xs text-slate-400">
+                                                <p className="px-2 py-1 text-xs text-slate-500 dark:text-slate-400">
                                                     No pending requests
                                                 </p>
                                             ) : (
@@ -320,7 +335,7 @@ const Stats = () => {
                                                                         loadKey
                                                                     }
                                                                     className="p-1 transition-colors rounded-md text-emerald-600 hover:bg-emerald-50 dark:hover:bg-emerald-900/20 disabled:opacity-50"
-                                                                    aria-label="Approve"
+                                                                    aria-label={`Approve ${label.toLowerCase()} for ${emp.employeeName}`}
                                                                 >
                                                                     <CheckCircle2 className="w-3.5 h-3.5" />
                                                                 </button>
@@ -337,7 +352,7 @@ const Stats = () => {
                                                                         loadKey
                                                                     }
                                                                     className="p-1 text-red-500 transition-colors rounded-md hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50"
-                                                                    aria-label="Deny"
+                                                                    aria-label={`Deny ${label.toLowerCase()} for ${emp.employeeName}`}
                                                                 >
                                                                     <XCircle className="w-3.5 h-3.5" />
                                                                 </button>
@@ -365,6 +380,7 @@ const Stats = () => {
                         <input
                             type="text"
                             placeholder="Search…"
+                            aria-label="Search employees by name"
                             className="form-input w-44 py-1.5 text-xs"
                             value={searchFilter}
                             onChange={(e) => {
@@ -375,6 +391,7 @@ const Stats = () => {
 
                         <select
                             className="form-select w-auto py-1.5 text-xs"
+                            aria-label="Filter by work mode"
                             onChange={(e) => {
                                 setWorkTypeFilter(e.target.value.toLowerCase());
                                 setCurrentPage(1);
@@ -390,6 +407,7 @@ const Stats = () => {
 
                         <select
                             className="form-select w-auto py-1.5 text-xs"
+                            aria-label="Filter by job title"
                             onChange={(e) => {
                                 setJobTitleFilter(e.target.value.toLowerCase());
                                 setCurrentPage(1);
@@ -405,6 +423,7 @@ const Stats = () => {
 
                         <select
                             className="form-select w-auto py-1.5 text-xs"
+                            aria-label="Filter by department"
                             onChange={(e) => {
                                 setDepartmentFilter(
                                     e.target.value.toLowerCase(),
@@ -439,7 +458,7 @@ const Stats = () => {
                                 <tr>
                                     <td
                                         colSpan={5}
-                                        className="py-16 text-center text-slate-400"
+                                        className="py-16 text-center text-slate-500 dark:text-slate-400"
                                     >
                                         {dbData.length === 0
                                             ? "No employees yet. Add your first employee."

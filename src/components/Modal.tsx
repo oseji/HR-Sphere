@@ -1,8 +1,11 @@
 import { ReactNode } from "react";
+import * as Dialog from "@radix-ui/react-dialog";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
 // ─── Base Modal ───────────────────────────────────────────────────────────────
+// Radix Dialog supplies role="dialog", aria-modal, focus trap, Escape-to-close,
+// scroll lock and return-focus. framer-motion handles the enter/exit animation.
 
 interface ModalProps {
   isOpen: boolean;
@@ -19,45 +22,55 @@ export const Modal = ({
   children,
   maxWidth = "max-w-lg",
 }: ModalProps) => (
-  <AnimatePresence>
-    {isOpen && (
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        {/* Backdrop */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.15 }}
-          className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-          onClick={onClose}
-        />
+  <Dialog.Root open={isOpen} onOpenChange={(open) => !open && onClose()}>
+    <AnimatePresence>
+      {isOpen && (
+        <Dialog.Portal forceMount>
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <Dialog.Overlay asChild forceMount>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.15 }}
+                className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+              />
+            </Dialog.Overlay>
 
-        {/* Panel */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96, y: 8 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.96, y: 8 }}
-          transition={{ duration: 0.15, ease: "easeOut" }}
-          className={`relative z-10 w-full ${maxWidth} card overflow-hidden`}
-        >
-          {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
-            <h2 className="text-sm font-semibold text-slate-900 dark:text-white">
-              {title}
-            </h2>
-            <button
-              onClick={onClose}
-              className="p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
-            >
-              <X className="w-4 h-4" />
-            </button>
+            {/* Panel */}
+            <Dialog.Content asChild forceMount aria-modal="true">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.96, y: 8 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.96, y: 8 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
+                className={`relative z-10 w-full ${maxWidth} card overflow-hidden focus:outline-none`}
+              >
+                {/* Header */}
+                <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 dark:border-slate-800">
+                  <Dialog.Title className="text-sm font-semibold text-slate-900 dark:text-white">
+                    {title}
+                  </Dialog.Title>
+                  <Dialog.Close asChild>
+                    <button
+                      type="button"
+                      className="btn-icon text-slate-500 hover:text-slate-700 dark:hover:text-slate-300"
+                      aria-label="Close dialog"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </Dialog.Close>
+                </div>
+
+                {children}
+              </motion.div>
+            </Dialog.Content>
           </div>
-
-          {children}
-        </motion.div>
-      </div>
-    )}
-  </AnimatePresence>
+        </Dialog.Portal>
+      )}
+    </AnimatePresence>
+  </Dialog.Root>
 );
 
 // ─── Confirm Modal ────────────────────────────────────────────────────────────
@@ -85,12 +98,13 @@ export const ConfirmModal = ({
 }: ConfirmModalProps) => (
   <Modal isOpen={isOpen} onClose={onClose} title={title} maxWidth="max-w-md">
     <div className="p-6">
-      <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+      <Dialog.Description className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
         {message}
-      </p>
+      </Dialog.Description>
 
       <div className="flex items-center justify-end gap-3 mt-6">
         <button
+          type="button"
           onClick={onClose}
           disabled={loading}
           className="btn btn-ghost btn-sm"
@@ -98,6 +112,7 @@ export const ConfirmModal = ({
           Cancel
         </button>
         <button
+          type="button"
           onClick={onConfirm}
           disabled={loading}
           className={isDanger ? "btn btn-danger btn-sm" : "btn btn-primary btn-sm"}

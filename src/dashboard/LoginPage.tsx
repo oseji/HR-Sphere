@@ -115,8 +115,9 @@ const LoginPage = () => {
           <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             {/* Email */}
             <div>
-              <label className="form-label">Email address</label>
+              <label htmlFor="login-email" className="form-label">Email address</label>
               <input
+                id="login-email"
                 type="email"
                 required
                 autoComplete="email"
@@ -129,9 +130,10 @@ const LoginPage = () => {
 
             {/* Password */}
             <div>
-              <label className="form-label">Password</label>
+              <label htmlFor="login-password" className="form-label">Password</label>
               <div className="relative">
                 <input
+                  id="login-password"
                   type={showPassword ? "text" : "password"}
                   required
                   autoComplete={
@@ -160,8 +162,9 @@ const LoginPage = () => {
             {/* Confirm password (register only) */}
             {mode === "register" && (
               <div>
-                <label className="form-label">Confirm password</label>
+                <label htmlFor="login-confirm" className="form-label">Confirm password</label>
                 <input
+                  id="login-confirm"
                   type="password"
                   required
                   autoComplete="new-password"
@@ -175,7 +178,7 @@ const LoginPage = () => {
 
             {/* Error */}
             {authError && (
-              <p className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg px-3 py-2 capitalize">
+              <p className="text-sm text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg px-3 py-2" role="alert">
                 {authError}
               </p>
             )}
@@ -187,7 +190,7 @@ const LoginPage = () => {
                   <p className="text-xs font-semibold text-buttonGreen dark:text-[#A9F2F6] mb-0.5">
                     Demo account
                   </p>
-                  <p className="text-[11px] text-buttonGreen/70 dark:text-[#A9F2F6]/70 font-mono">
+                  <p className="text-xs text-buttonGreen dark:text-[#A9F2F6] font-mono">
                     {DEMO_EMAIL} · {DEMO_PASSWORD}
                   </p>
                 </div>

@@ -137,7 +137,7 @@ const Performance = () => {
                             <h3 className="section-title">
                                 Key Performance Indicators
                             </h3>
-                            <select className="form-select w-auto py-1.5 text-xs">
+                            <select className="form-select w-auto py-1.5 text-xs" aria-label="KPI department filter">
                                 <option>All departments</option>
                                 <option>Product</option>
                                 <option>Engineering</option>
@@ -228,7 +228,7 @@ const Performance = () => {
                     <div className="flex items-center justify-between p-5 border-b border-slate-100 dark:border-slate-800">
                         <h3 className="section-title">Performance Overview</h3>
                         <div className="flex items-center gap-2">
-                            <select className="form-select w-auto py-1.5 text-xs">
+                            <select className="form-select w-auto py-1.5 text-xs" aria-label="Quarter">
                                 <option value="qtr1">Q1</option>
                                 <option value="qtr2">Q2</option>
                                 <option value="qtr3">Q3</option>
@@ -236,6 +236,7 @@ const Performance = () => {
                             </select>
                             <select
                                 className="form-select w-fit py-1.5 text-xs"
+                                aria-label="Filter by department"
                                 onChange={(
                                     e: ChangeEvent<HTMLSelectElement>,
                                 ) => {
@@ -268,7 +269,7 @@ const Performance = () => {
                                     <tr>
                                         <td
                                             colSpan={4}
-                                            className="py-16 text-center text-slate-400"
+                                            className="py-16 text-center text-slate-500 dark:text-slate-400"
                                         >
                                             No data available
                                         </td>
@@ -313,7 +314,7 @@ const Performance = () => {
 
                     {numberOfPages > 1 && (
                         <div className="flex items-center justify-between px-5 py-3 border-t border-slate-100 dark:border-slate-800">
-                            <p className="text-xs text-slate-500">
+                            <p className="text-xs text-slate-500 dark:text-slate-400">
                                 {(currentPage - 1) * itemsPerPage + 1}–
                                 {Math.min(
                                     currentPage * itemsPerPage,
@@ -399,7 +400,7 @@ const Performance = () => {
                         <p className="text-2xl font-bold text-slate-900 dark:text-white">
                             80%
                         </p>
-                        <div className="flex items-center justify-center gap-1 text-xs text-slate-500">
+                        <div className="flex items-center justify-center gap-1 text-xs text-slate-500 dark:text-slate-400">
                             <img src={upArrow} alt="" className="h-3" />
                             +9.0% this month
                         </div>
@@ -459,13 +460,13 @@ const Performance = () => {
                                 key={label}
                                 className="p-2 bg-slate-50 dark:bg-slate-800/50 rounded-xl"
                             >
-                                <p className="text-[10px] text-slate-400 dark:text-slate-500 mb-0.5">
+                                <p className="text-xs text-slate-500 dark:text-slate-400 mb-0.5">
                                     {label}
                                 </p>
                                 <p className="text-sm font-bold text-buttonGreen dark:text-[#A9F2F6]">
                                     {value}
                                 </p>
-                                <p className="text-[9px] text-slate-400">
+                                <p className="text-xs text-slate-500 dark:text-slate-400">
                                     {avg}
                                 </p>
                             </div>

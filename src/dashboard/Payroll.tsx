@@ -97,17 +97,17 @@ const Payroll = () => {
         <div className="card p-5">
           <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Total Net Payroll</p>
           <p className="text-2xl font-bold text-slate-900 dark:text-white">{fmt(totalNet)}</p>
-          <p className="text-xs text-slate-400 mt-1">For {filtered.length} employees</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">For {filtered.length} employees</p>
         </div>
         <div className="card p-5">
           <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Paid</p>
           <p className="text-2xl font-bold text-emerald-600">{totalPaid}</p>
-          <p className="text-xs text-slate-400 mt-1">Employees marked paid</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Employees marked paid</p>
         </div>
         <div className="card p-5">
           <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Pending</p>
           <p className="text-2xl font-bold text-amber-600">{totalNotPaid}</p>
-          <p className="text-xs text-slate-400 mt-1">Awaiting payment</p>
+          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Awaiting payment</p>
         </div>
       </div>
 
@@ -117,6 +117,7 @@ const Payroll = () => {
         <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex flex-wrap items-center justify-between gap-3">
           <select
             className="form-select py-1.5 text-sm font-medium w-auto"
+            aria-label="Payroll period"
             value={period}
             onChange={(e) => setPeriod(e.target.value)}
           >
@@ -149,6 +150,7 @@ const Payroll = () => {
         <div className="px-5 py-3 border-b border-slate-50 dark:border-slate-800/50 flex flex-wrap gap-2">
           <select
             className="form-select py-1.5 text-xs w-auto"
+            aria-label="Filter by contract type"
             onChange={(e: ChangeEvent<HTMLSelectElement>) =>
               setContractFilter(e.target.value)
             }
@@ -161,6 +163,7 @@ const Payroll = () => {
 
           <select
             className="form-select py-1.5 text-xs w-auto"
+            aria-label="Filter by department"
             onChange={(e: ChangeEvent<HTMLSelectElement>) =>
               setDeptFilter(e.target.value)
             }
@@ -189,7 +192,7 @@ const Payroll = () => {
             <tbody>
               {filtered.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-16 text-center text-slate-400">
+                  <td colSpan={7} className="py-16 text-center text-slate-500 dark:text-slate-400">
                     No payroll data available
                   </td>
                 </tr>
@@ -201,14 +204,14 @@ const Payroll = () => {
                         <div className="employee-avatar">{initials(emp.employeeName)}</div>
                         <div>
                           <p className="capitalize">{emp.employeeName}</p>
-                          <p className="text-xs text-slate-400 font-normal capitalize">{emp.role}</p>
+                          <p className="text-xs text-slate-500 dark:text-slate-400 font-normal capitalize">{emp.role}</p>
                         </div>
                       </div>
                     </td>
                     <td className="capitalize">{emp.department}</td>
                     <td>{fmt(emp.employeeFinances.totalSalary)}</td>
                     <td>{fmt(emp.employeeFinances.monthlySalary)}</td>
-                    <td className="text-red-500">{fmt(Math.round(emp.employeeFinances.taxes))}</td>
+                    <td className="text-red-700 dark:text-red-400">{fmt(Math.round(emp.employeeFinances.taxes))}</td>
                     <td className="font-medium text-slate-900 dark:text-white">
                       {fmt(Math.round(emp.employeeFinances.netSalary))}
                     </td>

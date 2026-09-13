@@ -20,14 +20,14 @@ const DocCard = ({ thumbnail, name, size, date, typeOfDoc }: DocCardProps) => {
     <div className="doc-card relative">
       {/* Top row */}
       <div className="flex items-center justify-between">
-        <span className="text-[10px] uppercase font-semibold text-slate-400 dark:text-slate-500 tracking-wide">
+        <span className="text-[11px] uppercase font-semibold text-slate-500 dark:text-slate-400 tracking-wide">
           {typeOfDoc}
         </span>
         <div className="relative">
           <button
             className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
             onClick={(e) => { e.stopPropagation(); setMenuOpen((v) => !v); }}
-            aria-label="File options"
+            aria-label={`Options for ${name}`}
           >
             <MoreHorizontal className="w-3.5 h-3.5" />
           </button>
@@ -64,7 +64,7 @@ const DocCard = ({ thumbnail, name, size, date, typeOfDoc }: DocCardProps) => {
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between text-[10px] text-slate-400 dark:text-slate-500">
+      <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
         <span>{size}</span>
         <span>{date}</span>
       </div>
@@ -120,6 +120,7 @@ const FileManager = () => {
             <input
               type="text"
               placeholder="Search files…"
+              aria-label="Search files"
               className="form-input pl-9 py-1.5 w-44 text-xs"
               value={search}
               onChange={(e: ChangeEvent<HTMLInputElement>) => setSearch(e.target.value)}
@@ -129,6 +130,7 @@ const FileManager = () => {
           {/* Filter */}
           <select
             className="form-select py-1.5 text-xs w-auto"
+            aria-label="Filter files"
             onChange={(e: ChangeEvent<HTMLSelectElement>) => setFilter(e.target.value)}
           >
             <option value="">All</option>
@@ -167,7 +169,7 @@ const FileManager = () => {
         </div>
 
         {visibleFolders.length === 0 ? (
-          <p className="text-sm text-slate-400 py-6 text-center">No folders match your search</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 py-6 text-center">No folders match your search</p>
         ) : (
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
             {visibleFolders.map((f, i) => (
@@ -195,7 +197,7 @@ const FileManager = () => {
         </div>
 
         {visibleFiles.length === 0 ? (
-          <p className="text-sm text-slate-400 py-6 text-center">No files match your search</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400 py-6 text-center">No files match your search</p>
         ) : (
           <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3">
             {visibleFiles.map((f, i) => (

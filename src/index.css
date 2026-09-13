@@ -109,8 +109,8 @@ input::-webkit-outer-spin-button {
          border border-slate-200 dark:border-slate-700
          bg-white dark:bg-[#1C1C1E]
          text-slate-900 dark:text-white
-         placeholder:text-slate-400 dark:placeholder:text-slate-500
-         focus:outline-none focus:ring-2 focus:ring-buttonGreen/20 focus:border-buttonGreen
+         placeholder:text-slate-500 dark:placeholder:text-slate-400
+         focus:outline-none focus:ring-2 focus:ring-buttonGreen/40 focus:border-buttonGreen
          transition-colors duration-150;
 }
 
@@ -289,7 +289,12 @@ header {
 }
 
 .employee-card-actions {
-  @apply flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-150;
+  @apply flex items-center gap-1.5 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity duration-150;
+}
+
+/* Touch devices have no hover — keep actions visible */
+@media (hover: none) {
+  .employee-card-actions { @apply opacity-100; }
 }
 
 /* ─── OVERVIEW ─────────────────────────────────────────────────────── */
@@ -374,7 +379,8 @@ header {
 .rdp-custom .rdp-caption_label { font-size: 14px; font-weight: 600; color: #0f172a; }
 .dark .rdp-custom .rdp-caption_label { color: #f8fafc; }
 
-.rdp-custom .rdp-head_cell { font-size: 11px; font-weight: 600; color: #94a3b8; text-transform: uppercase; }
+.rdp-custom .rdp-head_cell { font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; }
+.dark .rdp-custom .rdp-head_cell { color: #94a3b8; }
 
 .rdp-custom .rdp-day { border-radius: 8px; font-size: 12px; }
 .rdp-custom .rdp-day:hover:not(.rdp-day_disabled) { background: #E9FBFB; }

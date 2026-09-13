@@ -117,7 +117,7 @@ const Schedule = () => {
           {dayEvents.length === 0 ? (
             <div className="py-12 text-center">
               <Calendar className="w-8 h-8 text-slate-200 dark:text-slate-700 mx-auto mb-3" />
-              <p className="text-sm text-slate-400">No events scheduled for this day</p>
+              <p className="text-sm text-slate-500 dark:text-slate-400">No events scheduled for this day</p>
             </div>
           ) : (
             <div className="p-3 flex flex-col gap-2">
@@ -186,7 +186,7 @@ const Schedule = () => {
                     <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">
                       {event.title}
                     </p>
-                    <p className="text-[11px] text-slate-400 mt-0.5">
+                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
                       {isToday(event.date)
                         ? `Today · ${event.time}`
                         : `${event.date.toLocaleDateString("en-US", { month: "short", day: "numeric" })} · ${event.time}`}
