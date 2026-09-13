@@ -7,14 +7,15 @@ import {
     Line,
     XAxis,
     YAxis,
+    CartesianGrid,
     Tooltip,
 } from "recharts";
 import { ChangeEvent, useState } from "react";
 import { TrendingUp, Award } from "lucide-react";
 
-import { data, efficiencyData, keyIndicator } from "../types";
+import { data, efficiencyData, workforceTrend } from "../types";
 import { useApp } from "../context/AppContext";
-import { tooltipStyle, tickColor } from "../lib/chart";
+import { tooltipStyle, tickColor, gridColor } from "../lib/chart";
 import eomImg from "../assets/employee of the month.png";
 import upArrow from "../assets/up growth.svg";
 
@@ -43,6 +44,11 @@ const Performance = () => {
 
     const COLORS = [isDark ? "#0E7C82" : "#095256", "#059669"];
     const EFFICIENCY_COLORS = ["#059669", isDark ? "#27272a" : "#e2e8f0"];
+    const TREND_COLORS = {
+        headcount: isDark ? "#2DB1BA" : "#095256",
+        leaveDays: "#059669",
+        attrition: isDark ? "#fbbf24" : "#b45309",
+    };
 
     const [departmentFilter, setDepartmentFilter] = useState("");
     const [currentPage, setCurrentPage] = useState(1);
@@ -83,14 +89,14 @@ const Performance = () => {
                 <div className="flex flex-col gap-5 lg:flex-row">
                     {/* Total employee pie */}
                     <div className="flex-shrink-0 p-5 card lg:w-60">
-                        <div className="flex items-center justify-between mb-2">
-                            <h3 className="section-title">Total Employees</h3>
-                            <span className="text-lg font-bold text-slate-900 dark:text-white">
-                                {dbData.length}
-                            </span>
-                        </div>
+                        <h3 className="section-title mb-2">Staff mix</h3>
 
-                        <PieChart width={200} height={180} className="mx-auto">
+                        <div
+                            className="relative w-[200px] mx-auto"
+                            role="img"
+                            aria-label={`${dbData.length} employees: ${realPieData[0].value} contract, ${realPieData[1].value} full-time`}
+                        >
+                        <PieChart width={200} height={180}>
                             <Pie
                                 data={realPieData}
                                 cx={100}
@@ -99,6 +105,7 @@ const Performance = () => {
                                 outerRadius={75}
                                 paddingAngle={6}
                                 dataKey="value"
+                                isAnimationActive={false}
                             >
                                 {realPieData.map((_, i) => (
                                     <Cell
@@ -109,6 +116,15 @@ const Performance = () => {
                             </Pie>
                             <Tooltip contentStyle={tooltipStyle(isDark)} />
                         </PieChart>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                            <span className="text-2xl font-bold text-slate-900 dark:text-white leading-none">
+                                {dbData.length}
+                            </span>
+                            <span className="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                                employees
+                            </span>
+                        </div>
+                        </div>
 
                         <div className="chart-legend">
                             <div className="flex items-center gap-1.5">
@@ -126,24 +142,25 @@ const Performance = () => {
                         </div>
                     </div>
 
-                    {/* KPI line chart */}
+                    {/* Workforce trends */}
                     <div className="flex-1 min-w-0 p-5 overflow-x-auto card">
                         <div className="flex items-center justify-between mb-4">
-                            <h3 className="section-title">
-                                Key Performance Indicators
-                            </h3>
-                            <select className="form-select w-auto py-1.5 text-xs" aria-label="KPI department filter">
-                                <option>All departments</option>
-                                <option>Product</option>
-                                <option>Engineering</option>
-                            </select>
+                            <h3 className="section-title">Workforce trends</h3>
+                            <span className="text-xs text-slate-500 dark:text-slate-400">
+                                Last 6 months
+                            </span>
                         </div>
 
+                        <div
+                            role="img"
+                            aria-label="Line chart of headcount, attrition rate and leave days over the last six months"
+                        >
                         <ResponsiveContainer width="100%" height={170}>
                             <LineChart
-                                data={keyIndicator}
-                                margin={{ right: 15, top: 5, left: -30 }}
+                                data={workforceTrend}
+                                margin={{ right: 10, top: 5, left: 0 }}
                             >
+                                <CartesianGrid vertical={false} stroke={gridColor(isDark)} />
                                 <XAxis
                                     dataKey="month"
                                     tick={{ fontSize: 12, fill: tickColor(isDark) }}
@@ -151,58 +168,73 @@ const Performance = () => {
                                     tickLine={false}
                                 />
                                 <YAxis
+                                    yAxisId="count"
                                     tick={{ fontSize: 12, fill: tickColor(isDark) }}
                                     axisLine={false}
                                     tickLine={false}
+                                    width={32}
+                                />
+                                <YAxis
+                                    yAxisId="pct"
+                                    orientation="right"
+                                    tick={{ fontSize: 12, fill: tickColor(isDark) }}
+                                    axisLine={false}
+                                    tickLine={false}
+                                    width={36}
+                                    unit="%"
                                 />
                                 <Tooltip contentStyle={tooltipStyle(isDark)} />
+                                {/* Series differ by colour AND by dash/marker so they read without colour */}
                                 <Line
+                                    yAxisId="count"
                                     type="monotone"
-                                    dataKey="val1"
-                                    stroke="#818CF8"
-                                    strokeWidth={2}
-                                    dot={false}
+                                    dataKey="headcount"
+                                    name="Headcount"
+                                    stroke={TREND_COLORS.headcount}
+                                    strokeWidth={2.5}
+                                    dot={{ r: 3, strokeWidth: 0, fill: TREND_COLORS.headcount }}
                                     activeDot={{ r: 5 }}
+                                    isAnimationActive={false}
                                 />
                                 <Line
+                                    yAxisId="count"
                                     type="monotone"
-                                    dataKey="val2"
-                                    stroke="#FBBF24"
+                                    dataKey="leaveDays"
+                                    name="Leave days"
+                                    stroke={TREND_COLORS.leaveDays}
                                     strokeWidth={2}
+                                    strokeDasharray="6 3"
                                     dot={false}
                                     activeDot={{ r: 5 }}
+                                    isAnimationActive={false}
                                 />
                                 <Line
+                                    yAxisId="pct"
                                     type="monotone"
-                                    dataKey="val3"
-                                    stroke="#A855F7"
+                                    dataKey="attrition"
+                                    name="Attrition"
+                                    unit="%"
+                                    stroke={TREND_COLORS.attrition}
                                     strokeWidth={2}
-                                    dot={false}
+                                    strokeDasharray="2 3"
+                                    dot={{ r: 3, strokeWidth: 0, fill: TREND_COLORS.attrition }}
                                     activeDot={{ r: 5 }}
+                                    isAnimationActive={false}
                                 />
                             </LineChart>
                         </ResponsiveContainer>
+                        </div>
 
-                        <div className="chart-legend">
+                        <div className="chart-legend" aria-hidden="true">
                             {[
-                                {
-                                    color: "#818CF8",
-                                    label: "Monthly Active Users",
-                                },
-                                {
-                                    color: "#FBBF24",
-                                    label: "Customer Satisfaction",
-                                },
-                                { color: "#A855F7", label: "Churn Rate" },
-                            ].map(({ color, label }) => (
-                                <div
-                                    key={label}
-                                    className="flex items-center gap-1.5"
-                                >
-                                    <span
-                                        className="w-2.5 h-2.5 rounded-sm flex-shrink-0"
-                                        style={{ background: color }}
-                                    />
+                                { color: TREND_COLORS.headcount, label: "Headcount", dash: "" },
+                                { color: TREND_COLORS.leaveDays, label: "Leave days", dash: "6 3" },
+                                { color: TREND_COLORS.attrition, label: "Attrition %", dash: "2 3" },
+                            ].map(({ color, label, dash }) => (
+                                <div key={label} className="flex items-center gap-1.5">
+                                    <svg width="20" height="6" className="flex-shrink-0">
+                                        <line x1="0" y1="3" x2="20" y2="3" stroke={color} strokeWidth="2.5" strokeDasharray={dash} />
+                                    </svg>
                                     <span className="text-xs text-slate-500 dark:text-slate-400">
                                         {label}
                                     </span>
@@ -217,12 +249,6 @@ const Performance = () => {
                     <div className="flex items-center justify-between p-5 border-b border-slate-100 dark:border-slate-800">
                         <h3 className="section-title">Performance Overview</h3>
                         <div className="flex items-center gap-2">
-                            <select className="form-select w-auto py-1.5 text-xs" aria-label="Quarter">
-                                <option value="qtr1">Q1</option>
-                                <option value="qtr2">Q2</option>
-                                <option value="qtr3">Q3</option>
-                                <option value="qtr4">Q4</option>
-                            </select>
                             <select
                                 className="form-select w-fit py-1.5 text-xs"
                                 aria-label="Filter by department"
@@ -360,9 +386,11 @@ const Performance = () => {
                 <div className="p-5 card">
                     <h3 className="mb-3 section-title">Team Efficiency</h3>
 
-                    <PieChart width={220} height={130} className="mx-auto">
+                    <div role="img" aria-label="Team efficiency gauge at 80 percent" className="w-[220px] mx-auto">
+                    <PieChart width={220} height={130}>
                         <Pie
                             data={efficiencyData}
+                            isAnimationActive={false}
                             cx={110}
                             cy={110}
                             startAngle={180}
@@ -384,6 +412,7 @@ const Performance = () => {
                             ))}
                         </Pie>
                     </PieChart>
+                    </div>
 
                     <div className="-mt-8 text-center">
                         <p className="text-2xl font-bold text-slate-900 dark:text-white">
@@ -406,14 +435,14 @@ const Performance = () => {
                     </div>
 
                     <button className="justify-center w-full mt-3 btn btn-primary btn-sm">
-                        <TrendingUp className="w-3.5 h-3.5" /> Compare scores
+                        <TrendingUp className="w-3.5 h-3.5" aria-hidden="true" /> Compare scores
                     </button>
                 </div>
 
                 {/* Employee of the month */}
                 <div className="p-5 card">
                     <div className="flex items-center gap-2 mb-4">
-                        <Award className="w-4 h-4 text-amber-500" />
+                        <Award className="w-4 h-4 text-amber-600 dark:text-amber-400" aria-hidden="true" />
                         <h3 className="section-title">Employee of the Month</h3>
                     </div>
 

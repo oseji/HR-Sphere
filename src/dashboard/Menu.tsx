@@ -55,7 +55,7 @@ const Menu = ({ sidebarOpen, onClose }: MenuProps) => {
       >
         {/* Main nav */}
         <div className="sidebar-group">
-          <p className="text-[11px] uppercase tracking-widest font-semibold text-slate-500 dark:text-slate-400 px-3 mb-2">
+          <p className="text-xs uppercase tracking-widest font-semibold text-slate-500 dark:text-slate-400 px-3 mb-2">
             Menu
           </p>
 

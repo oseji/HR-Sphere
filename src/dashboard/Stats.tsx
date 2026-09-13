@@ -120,6 +120,8 @@ const Stats = () => {
 
     return (
         <div className="flex flex-col gap-5 p-5">
+            <h2 className="page-heading">Overview</h2>
+
             {/* ── Stat cards ───────────────────────────────────────────── */}
             <div className="stats-grid">
                 {/* Employees */}
@@ -194,6 +196,10 @@ const Stats = () => {
                         </select>
                     </div>
 
+                    <div
+                        role="img"
+                        aria-label={`Bar chart of retention and turnover rate for the last ${chartYears} year${chartYears > 1 ? "s" : ""}`}
+                    >
                     <ResponsiveContainer width="100%" height={180}>
                         <BarChart
                             data={currentChartData}
@@ -231,6 +237,7 @@ const Stats = () => {
                                 name="Retention rate"
                                 fill={isDark ? "#0E7C82" : "#095256"}
                                 radius={[4, 4, 0, 0]}
+                                isAnimationActive={false}
                                 activeBar={<Rectangle fill={isDark ? "#139AA2" : "#074144"} />}
                             />
                             <Bar
@@ -238,12 +245,14 @@ const Stats = () => {
                                 name="Turnover rate"
                                 fill="#059669"
                                 radius={[4, 4, 0, 0]}
+                                isAnimationActive={false}
                                 activeBar={<Rectangle fill="#047857" />}
                             />
                         </BarChart>
                     </ResponsiveContainer>
+                    </div>
 
-                    <div className="chart-legend">
+                    <div className="chart-legend" aria-hidden="true">
                         <div className="flex items-center gap-2 chart-legend-item">
                             <span className="chart-legend-dot bg-buttonGreen dark:bg-[#0E7C82]" />
                             <span className="text-xs text-slate-500 dark:text-slate-400">

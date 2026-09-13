@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Eye, EyeOff, ArrowRight, Users, BarChart3, Shield } from "lucide-react";
 import { useApp } from "../context/AppContext";
-import logo from "../assets/logo.png";
+import { Logo } from "../components/Logo";
 
 const LoginPage = () => {
   const { signIn, createAccount, loginLoading, authError, setAuthError } =
@@ -39,7 +39,7 @@ const LoginPage = () => {
       <div className="login-brand-panel">
         <div>
           <div className="flex items-center gap-3 mb-16">
-            <img src={logo} alt="HR Sphere" className="h-8 w-8 brightness-[10]" />
+            <Logo className="h-8 w-8" primary="#ffffff" secondary="#A9F2F6" />
             <span className="text-xl font-bold">HR Sphere</span>
           </div>
 
@@ -76,7 +76,7 @@ const LoginPage = () => {
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <div className="flex items-center gap-2.5 mb-10 xl:hidden">
-            <img src={logo} alt="" className="h-7 w-7" />
+            <Logo className="h-7 w-7 text-slate-900 dark:text-[#A9F2F6]" />
             <span className="font-bold text-slate-900 dark:text-white text-lg">
               HR Sphere
             </span>

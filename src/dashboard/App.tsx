@@ -18,7 +18,7 @@ import searchIcon from "../assets/circum_search.png";
 import avatar from "../assets/esther.png";
 import menuIcon from "../assets/menu.svg";
 import closeMenu from "../assets/closeMenu.svg";
-import logo from "../assets/logo.png";
+import { Logo } from "../components/Logo";
 
 // ─── Dashboard shell ──────────────────────────────────────────────────────────
 
@@ -55,6 +55,10 @@ function DashboardShell() {
 
   return (
     <div className="flex flex-col min-h-screen">
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
+
       {/* Header */}
       <header>
         <div className="flex items-center gap-4">
@@ -72,7 +76,7 @@ function DashboardShell() {
 
           {/* Logo */}
           <div className="flex items-center gap-2.5">
-            <img src={logo} alt="HR Sphere" className="h-7 w-7" />
+            <Logo className="h-7 w-7 text-slate-900 dark:text-[#A9F2F6]" />
             <span className="font-bold text-slate-900 dark:text-white text-base hidden md:block">
               HR Sphere
             </span>
@@ -121,6 +125,7 @@ function DashboardShell() {
 
         <Menu sidebarOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
+        <main id="main-content" className="flex flex-1 min-w-0" tabIndex={-1}>
         <Switch>
           <Route exact path="/">
             <Overview />
@@ -146,6 +151,7 @@ function DashboardShell() {
           <Redirect from="/Payroll" to="/payroll" />
           <Redirect from="/FileManager" to="/files" />
         </Switch>
+        </main>
       </div>
     </div>
   );

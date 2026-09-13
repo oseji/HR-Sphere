@@ -16,7 +16,7 @@ module.exports = {
     },
     extend: {
       screens: { xl: "1200px" },
-      fontFamily: { Poppins: ["Poppins"] },
+      fontFamily: { Poppins: ["Poppins", "system-ui", "sans-serif"] },
       colors: {
         darkBg: "#0A0A0B",
         darkCard: "#161618",

@@ -45,11 +45,11 @@ export type pieChartData = {
   value: number;
 };
 
-export type keyIndicatorDataType = {
+export type workforceTrendType = {
   month: string;
-  val1: number;
-  val2: number;
-  val3: number;
+  headcount: number;
+  attrition: number; // % of headcount that left
+  leaveDays: number; // total leave days taken
 };
 
 export type documentType = {
@@ -446,43 +446,13 @@ export const efficiencyData: pieChartData[] = [
   { name: "notEfficient", value: 20 },
 ];
 
-export const keyIndicator: keyIndicatorDataType[] = [
-  {
-    month: "Jan",
-    val1: 100,
-    val2: 75,
-    val3: 25,
-  },
-  {
-    month: "Feb",
-    val1: 85,
-    val2: 66,
-    val3: 72,
-  },
-  {
-    month: "Mar",
-    val1: 95,
-    val2: 53,
-    val3: 44,
-  },
-  {
-    month: "Apr",
-    val1: 29,
-    val2: 63,
-    val3: 95,
-  },
-  {
-    month: "May",
-    val1: 60,
-    val2: 96,
-    val3: 28,
-  },
-  {
-    month: "Jun",
-    val1: 84,
-    val2: 39,
-    val3: 49,
-  },
+export const workforceTrend: workforceTrendType[] = [
+  { month: "Jan", headcount: 42, attrition: 2.4, leaveDays: 18 },
+  { month: "Feb", headcount: 44, attrition: 1.1, leaveDays: 12 },
+  { month: "Mar", headcount: 47, attrition: 3.2, leaveDays: 21 },
+  { month: "Apr", headcount: 46, attrition: 4.3, leaveDays: 30 },
+  { month: "May", headcount: 49, attrition: 1.8, leaveDays: 16 },
+  { month: "Jun", headcount: 52, attrition: 0.9, leaveDays: 25 },
 ];
 
 export const folders: documentType[] = [

@@ -36,10 +36,10 @@ const EVENTS: ScheduleEvent[] = [
 // ─── Event styling ────────────────────────────────────────────────────────────
 
 const eventStyle: Record<EventType, { dot: string; badge: string; label: string }> = {
-  meeting:   { dot: "bg-blue-400",   badge: "badge-info",    label: "Meeting"   },
-  review:    { dot: "bg-purple-400", badge: "badge-neutral", label: "Review"    },
-  training:  { dot: "bg-amber-400",  badge: "badge-warning", label: "Training"  },
-  interview: { dot: "bg-emerald-400",badge: "badge-success", label: "Interview" },
+  meeting:   { dot: "bg-blue-500",   badge: "badge-info",    label: "Meeting"   },
+  review:    { dot: "bg-purple-500", badge: "badge-purple",  label: "Review"    },
+  training:  { dot: "bg-amber-500",  badge: "badge-warning", label: "Training"  },
+  interview: { dot: "bg-emerald-500",badge: "badge-success", label: "Interview" },
 };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
@@ -71,22 +71,23 @@ const Schedule = () => {
     .slice(0, 5);
 
   return (
-    <div className="page-section flex flex-col xl:flex-row gap-5">
+    <div className="page-section flex flex-col gap-4">
+      <div className="flex items-center justify-between gap-3">
+        <h2 className="page-heading">Schedule</h2>
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={() => toast.info("New event creation coming soon")}
+        >
+          <Plus className="w-3.5 h-3.5" aria-hidden="true" />
+          New event
+        </button>
+      </div>
+
+    <div className="flex flex-col xl:flex-row gap-5">
       {/* ── Left: calendar + day events ──────────────────────────── */}
       <div className="flex flex-col gap-5 flex-1 min-w-0">
         {/* Calendar card */}
         <div className="card p-5">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="page-heading">Schedule</h2>
-            <button
-              className="btn btn-primary btn-sm"
-              onClick={() => toast.info("New event creation coming soon")}
-            >
-              <Plus className="w-3.5 h-3.5" />
-              New event
-            </button>
-          </div>
-
           <div className="rdp-custom">
             <DayPicker
               mode="single"
@@ -116,7 +117,7 @@ const Schedule = () => {
 
           {dayEvents.length === 0 ? (
             <div className="py-12 text-center">
-              <Calendar className="w-8 h-8 text-slate-200 dark:text-slate-700 mx-auto mb-3" />
+              <Calendar className="w-8 h-8 text-slate-300 dark:text-slate-600 mx-auto mb-3" aria-hidden="true" />
               <p className="text-sm text-slate-500 dark:text-slate-400">No events scheduled for this day</p>
             </div>
           ) : (
@@ -134,25 +135,25 @@ const Schedule = () => {
                         <p className="text-sm font-semibold text-slate-900 dark:text-white leading-tight">
                           {event.title}
                         </p>
-                        <span className={`${style.badge} flex-shrink-0 text-[10px]`}>
+                        <span className={`${style.badge} flex-shrink-0`}>
                           {style.label}
                         </span>
                       </div>
                       <div className="flex flex-wrap gap-x-4 gap-y-1">
                         <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
-                          <Clock className="w-3 h-3" />
+                          <Clock className="w-3 h-3" aria-hidden="true" />
                           {event.time} · {event.duration}
                         </div>
                         <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
                           {event.isVirtual ? (
-                            <Video className="w-3 h-3" />
+                            <Video className="w-3 h-3" aria-hidden="true" />
                           ) : (
-                            <MapPin className="w-3 h-3" />
+                            <MapPin className="w-3 h-3" aria-hidden="true" />
                           )}
                           {event.location}
                         </div>
                         <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
-                          <Users className="w-3 h-3" />
+                          <Users className="w-3 h-3" aria-hidden="true" />
                           {event.attendees} attendee{event.attendees > 1 ? "s" : ""}
                         </div>
                       </div>
@@ -186,13 +187,13 @@ const Schedule = () => {
                     <p className="text-xs font-semibold text-slate-800 dark:text-slate-200 truncate">
                       {event.title}
                     </p>
-                    <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                    <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
                       {isToday(event.date)
                         ? `Today · ${event.time}`
                         : `${event.date.toLocaleDateString("en-US", { month: "short", day: "numeric" })} · ${event.time}`}
                     </p>
                   </div>
-                  <span className={`${style.badge} text-[10px] flex-shrink-0`}>
+                  <span className={`${style.badge} flex-shrink-0`}>
                     {style.label}
                   </span>
                 </button>
@@ -216,6 +217,7 @@ const Schedule = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

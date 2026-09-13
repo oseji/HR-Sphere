@@ -94,19 +94,19 @@ const Payroll = () => {
     <div className="page-section flex flex-col gap-5">
       {/* ── Summary cards ────────────────────────────────────────── */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="card p-5">
+        <div className="stat-card">
           <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Total Net Payroll</p>
           <p className="text-2xl font-bold text-slate-900 dark:text-white">{fmt(totalNet)}</p>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">For {filtered.length} employees</p>
         </div>
-        <div className="card p-5">
+        <div className="stat-card">
           <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Paid</p>
-          <p className="text-2xl font-bold text-emerald-600">{totalPaid}</p>
+          <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-400">{totalPaid}</p>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Employees marked paid</p>
         </div>
-        <div className="card p-5">
+        <div className="stat-card">
           <p className="text-xs font-medium text-slate-500 dark:text-slate-400 uppercase tracking-wide mb-2">Pending</p>
-          <p className="text-2xl font-bold text-amber-600">{totalNotPaid}</p>
+          <p className="text-2xl font-bold text-amber-700 dark:text-amber-400">{totalNotPaid}</p>
           <p className="text-xs text-slate-500 dark:text-slate-400 mt-1">Awaiting payment</p>
         </div>
       </div>

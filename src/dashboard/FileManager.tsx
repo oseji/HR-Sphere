@@ -44,7 +44,7 @@ const DocCard = ({ thumbnail, name, size, date, typeOfDoc }: DocCardProps) => {
     <div className="doc-card relative">
       {/* Top row */}
       <div className="flex items-center justify-between">
-        <span className="text-[11px] uppercase font-semibold text-slate-500 dark:text-slate-400 tracking-wide">
+        <span className="text-xs uppercase font-semibold text-slate-500 dark:text-slate-400 tracking-wide">
           {typeOfDoc}
         </span>
         <div className="relative">
@@ -100,7 +100,7 @@ const DocCard = ({ thumbnail, name, size, date, typeOfDoc }: DocCardProps) => {
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between text-[11px] text-slate-500 dark:text-slate-400">
+      <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400">
         <span>{size}</span>
         <span>{date}</span>
       </div>

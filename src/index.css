@@ -2,8 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Local fallback for the regular weight; 500–700 load from Google Fonts (see index.html) */
 @font-face {
   font-family: Poppins;
+  font-weight: 400;
+  font-display: swap;
   src: url("/fonts/Poppins-Regular.ttf");
 }
 
@@ -26,6 +29,13 @@ input::-webkit-outer-spin-button {
 
 .App {
   @apply font-Poppins text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-darkBg min-h-screen max-w-[100vw];
+}
+
+/* ─── SKIP LINK ────────────────────────────────────────────────────── */
+
+.skip-link {
+  @apply sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[60]
+         focus:px-4 focus:py-2 focus:rounded-lg focus:bg-buttonGreen focus:text-white focus:text-sm focus:font-medium;
 }
 
 /* ─── SPINNER ──────────────────────────────────────────────────────── */
@@ -156,6 +166,11 @@ input::-webkit-outer-spin-button {
          dark:bg-darkModeGreen dark:text-[#A9F2F6] dark:border-buttonGreen/30;
 }
 
+.badge-purple {
+  @apply badge bg-purple-50 text-purple-700 border-purple-200
+         dark:bg-purple-900/20 dark:text-purple-300 dark:border-purple-800;
+}
+
 /* ─── TABLES ───────────────────────────────────────────────────────── */
 
 .modern-table {
@@ -163,11 +178,11 @@ input::-webkit-outer-spin-button {
 }
 
 .modern-table thead tr {
-  @apply bg-slate-50 dark:bg-slate-800/40 border-b border-slate-100 dark:border-slate-800;
+  @apply bg-faintGreen/60 dark:bg-darkModeGreen/50 border-b border-buttonGreen/10 dark:border-slate-800;
 }
 
 .modern-table thead th {
-  @apply py-3 px-4 text-left text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wide whitespace-nowrap;
+  @apply py-3 px-4 text-left text-xs font-semibold text-buttonGreen dark:text-[#A9F2F6] uppercase tracking-wide whitespace-nowrap;
 }
 
 .modern-table tbody tr {
@@ -263,7 +278,12 @@ header {
 }
 
 .sidebar-link.active {
-  @apply bg-faintGreen dark:bg-darkModeGreen text-buttonGreen dark:text-[#A9F2F6] font-semibold;
+  @apply relative bg-faintGreen dark:bg-darkModeGreen text-buttonGreen dark:text-[#A9F2F6] font-semibold;
+}
+
+.sidebar-link.active::before {
+  content: "";
+  @apply absolute left-0 top-2 bottom-2 w-[3px] rounded-full bg-buttonGreen dark:bg-[#A9F2F6];
 }
 
 .sidebar-link img {
@@ -277,7 +297,7 @@ header {
 }
 
 .stat-card {
-  @apply card p-5;
+  @apply card p-5 border-t-2 border-t-buttonGreen dark:border-t-[#0E7C82];
 }
 
 .stat-icon-wrap {
@@ -378,11 +398,11 @@ header {
   font-size: 13px;
 }
 
-.rdp-custom .rdp-months { justify-content: flex-start; }
+.rdp-custom .rdp-months { justify-content: center; }
 .rdp-custom .rdp-caption_label { font-size: 14px; font-weight: 600; color: #0f172a; }
 .dark .rdp-custom .rdp-caption_label { color: #f8fafc; }
 
-.rdp-custom .rdp-head_cell { font-size: 11px; font-weight: 600; color: #64748b; text-transform: uppercase; }
+.rdp-custom .rdp-head_cell { font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; }
 .dark .rdp-custom .rdp-head_cell { color: #94a3b8; }
 
 .rdp-custom .rdp-day { border-radius: 8px; font-size: 12px; }
